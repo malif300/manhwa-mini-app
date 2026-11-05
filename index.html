@@ -32,19 +32,20 @@
     tg.expand();
     tg.setHeaderColor('#17212b');
 
+    // ✅ FIXED: Both URLs now point to your actual Railway bot
+    const RAILWAY_URL = 'https://manhwa-opehh-production-2708.up.railway.app';
+
     const initData = tg.initData;
-    // 🛑 REPLACE YOUR_RAILWAY_URL HERE
-    fetch('https://YOUR_RAILWAY_URL.up.railway.app/api/auth', {
+    fetch(`${RAILWAY_URL}/api/auth`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ initData })
     }).then(res => res.json()).then(data => {
       if(data.ok) console.log("Authenticated user:", data.user.username);
-    });
+    }).catch(e => console.log("Auth skipped (running in browser)"));
 
     let allManga = [];
-    // 🛑 REPLACE YOUR_RAILWAY_URL HERE
-    fetch('https://manhwa-opehh-production-2708.up.railway.app/api/popular')
+    fetch(`${RAILWAY_URL}/api/popular`)
       .then(res => {
          if (!res.ok) throw new Error("Server error");
          return res.json();
@@ -75,8 +76,11 @@
           tg.close();
         };
         
+        // Add error handling for broken images
+        const imgSrc = manga.thumbnailUrl ? (manga.thumbnailUrl.startsWith('http') ? manga.thumbnailUrl : `${RAILWAY_URL}${manga.thumbnailUrl}`) : 'https://via.placeholder.com/150';
+
         card.innerHTML = `
-          <img src="${manga.thumbnailUrl}" class="w-full h-48 object-cover" />
+          <img src="${imgSrc}" class="w-full h-48 object-cover" onerror="this.src='https://via.placeholder.com/150'" />
           <p class="text-sm p-2 font-semibold truncate">${manga.title}</p>
         `;
         grid.appendChild(card);
