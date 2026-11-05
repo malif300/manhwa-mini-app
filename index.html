@@ -93,6 +93,13 @@
           </div>
         </div>
       </div>
+      
+      <!-- 🛑 ADD TO LIBRARY BUTTON -->
+      <button id="addToLibraryBtn" onclick="addToLibrary()" class="w-full bg-[#1e293b] text-blue-400 py-3 rounded-xl font-semibold text-sm mb-6 border border-[#2d3a4a] active:scale-95 transition-transform flex items-center justify-center">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        Add to Library
+      </button>
+
       <div id="detailGenres" class="flex flex-wrap gap-2 mb-6"></div>
       <div class="bg-[#1e293b] rounded-xl p-4 mb-6 border border-[#2d3a4a]">
         <h3 class="font-bold text-gray-200 mb-2 text-sm">Synopsis</h3>
@@ -173,7 +180,6 @@
       if (tabName === 'browse') { document.getElementById('searchInput').value = ''; loadBrowse(); }
     }
 
-    // 🛑 LOAD BROWSE (With Pagination)
     async function loadBrowse(page = 1) {
       try {
         const res = await fetch(`${RAILWAY_URL}/api/popular?page=${page}`);
@@ -338,6 +344,23 @@
       }
     }
 
+    // 🛑 ADD TO LIBRARY FUNCTION
+    async function addToLibrary() {
+      if (!currentMangaId) return;
+      const btn = document.getElementById('addToLibraryBtn');
+      btn.innerHTML = "Adding...";
+      btn.disabled = true;
+      
+      try {
+        await fetch(`${RAILWAY_URL}/api/library/${currentMangaId}`, { method: 'POST' });
+        btn.innerHTML = "✅ Added to Library";
+        btn.classList.add('text-green-400');
+      } catch (e) {
+        btn.innerHTML = "Error! Try again.";
+        btn.disabled = false;
+      }
+    }
+
     function closeDetails() {
       document.getElementById('detailsView').classList.add('hidden');
       document.getElementById('detailsView').classList.remove('flex');
@@ -382,6 +405,10 @@
           });
           document.getElementById('readerSlider').value = 0;
           document.getElementById('pageCounter').innerText = `1/${totalImages}`;
+          
+          // 🛑 MARK CHAPTER AS READ (Saves to History)
+          fetch(`${RAILWAY_URL}/api/chapter/${chapter.id}/read`, { method: 'POST' }).catch(e => console.log(e));
+          
         } else {
           container.innerHTML = `<p class="text-white text-center mt-10">No images found for this chapter.</p>`;
         }
