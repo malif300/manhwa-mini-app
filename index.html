@@ -7,24 +7,17 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { background-color: #0f172a; color: white; margin: 0; padding: 0; height: 100vh; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: #0f172a; color: white; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     ::-webkit-scrollbar { width: 0px; background: transparent; }
-    
-    .scroll-container {
-      -webkit-overflow-scrolling: touch;
-      touch-action: pan-y;
-      overscroll-behavior-y: contain;
-    }
-
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
     .skeleton { background-color: #1e293b; animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
   </style>
 </head>
-<body class="flex flex-col">
+<body class="min-h-screen flex flex-col pb-10">
   
   <!-- 🔴 MAIN VIEW (Grid) -->
-  <div id="mainView" class="flex flex-col h-full w-full">
-    <div class="p-4 sticky top-0 bg-[#0f172a] z-10 shadow-sm flex-shrink-0">
+  <div id="mainView" class="flex flex-col w-full">
+    <div class="p-4 sticky top-0 bg-[#0f172a] z-20 shadow-md">
       <div class="relative">
         <input type="text" id="searchInput" placeholder="Search Manhwa..." 
                class="w-full bg-[#1e293b] text-white p-3 pl-10 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm border border-[#2d3a4a]"
@@ -35,21 +28,21 @@
       </div>
     </div>
 
-    <div id="loading" class="grid grid-cols-2 gap-4 p-4 overflow-y-auto scroll-container flex-1">
+    <div id="loading" class="grid grid-cols-2 gap-4 p-4">
       <div class="skeleton aspect-[3/4] rounded-xl"></div>
       <div class="skeleton aspect-[3/4] rounded-xl"></div>
       <div class="skeleton aspect-[3/4] rounded-xl"></div>
       <div class="skeleton aspect-[3/4] rounded-xl"></div>
     </div>
 
-    <div id="mangaGrid" class="hidden grid-cols-2 gap-4 p-4 overflow-y-auto scroll-container flex-1 pb-24">
+    <div id="mangaGrid" class="hidden grid-cols-2 gap-4 p-4">
       <!-- Cards injected here -->
     </div>
   </div>
 
   <!-- 🔵 DETAILS VIEW (Hidden by default) -->
-  <div id="detailsView" class="hidden flex-col h-full w-full overflow-y-auto scroll-container bg-[#0f172a]">
-    <div class="p-4 sticky top-0 bg-[#0f172a]/90 backdrop-blur-md z-10 flex items-center border-b border-[#1e293b]">
+  <div id="detailsView" class="hidden flex-col w-full bg-[#0f172a] min-h-screen">
+    <div class="p-4 sticky top-0 bg-[#0f172a]/95 backdrop-blur-md z-20 flex items-center border-b border-[#1e293b]">
       <button onclick="closeDetails()" class="flex items-center text-blue-400 font-semibold text-sm">
         <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
         Back to Browse
@@ -58,9 +51,10 @@
 
     <div class="p-6 flex flex-col items-center">
       <div class="w-48 aspect-[3/4] rounded-xl overflow-hidden shadow-2xl border border-[#2d3a4a] mb-6 relative bg-[#1e293b]">
-        <img id="detailCover" src="" alt="Cover" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/300x400/1e293b/94a3b8?text=No+Cover'">
+        <img id="detailCover" src="" alt="Cover" class="absolute inset-0 w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/300x400/1e293b/94a3b8?text=No+Cover'">
       </div>
-      <h1 id="detailTitle" class="text-2xl font-bold text-center mb-2 leading-tight"></h1>
+      
+      <h1 id="detailTitle" class="text-2xl font-bold text-center mb-2 leading-tight text-white"></h1>
       <p class="text-sm text-gray-400 mb-6">Manhwa • Ongoing</p>
       
       <div class="w-full bg-[#1e293b] rounded-xl p-4 mb-6 border border-[#2d3a4a]">
@@ -68,9 +62,9 @@
         <p id="detailDescription" class="text-sm text-gray-400 leading-relaxed line-clamp-6"></p>
       </div>
 
-      <button onclick="readInBot()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl shadow-lg transition-transform active:scale-95 flex justify-center items-center">
+      <button id="readBtn" onclick="requestChapters()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl shadow-lg transition-transform active:scale-95 flex justify-center items-center">
         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-        Read Chapters in Bot
+        Send Chapters to Chat
       </button>
     </div>
   </div>
@@ -85,7 +79,6 @@
     let allManga = [];
     let currentMangaId = null;
 
-    // 1. Fetch Data for Grid
     fetch(`${RAILWAY_URL}/api/popular`)
       .then(res => res.json())
       .then(data => {
@@ -97,10 +90,9 @@
       })
       .catch(err => {
         console.error("Fetch Error:", err);
-        document.getElementById('loading').innerHTML = `<p class="col-span-2 text-center text-red-400 mt-10">Failed to connect to Railway backend.</p>`;
+        document.getElementById('loading').innerHTML = `<p class="col-span-2 text-center text-red-400 mt-10">Failed to connect to backend.</p>`;
       });
 
-    // 2. Render Grid Cards
     function renderManga(mangaList) {
       const grid = document.getElementById('mangaGrid');
       grid.innerHTML = '';
@@ -126,7 +118,6 @@
       });
     }
 
-    // 3. Open Details View (SPA style)
     async function openDetails(mangaId) {
       currentMangaId = mangaId;
       document.getElementById('mainView').classList.add('hidden');
@@ -136,6 +127,8 @@
       document.getElementById('detailTitle').innerText = "Loading...";
       document.getElementById('detailDescription').innerText = "";
       document.getElementById('detailCover').src = "";
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
 
       try {
         const res = await fetch(`${RAILWAY_URL}/api/manga/${mangaId}`);
@@ -149,19 +142,35 @@
       }
     }
 
-    // 4. Close Details View
     function closeDetails() {
       document.getElementById('detailsView').classList.add('hidden');
       document.getElementById('detailsView').classList.remove('flex');
       document.getElementById('mainView').classList.remove('hidden');
       currentMangaId = null;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // 5. Send to Bot
-    function readInBot() {
-      if (currentMangaId) {
-        tg.sendData(JSON.stringify({ action: "read", mangaId: currentMangaId }));
-        tg.close();
+    async function requestChapters() {
+      if (!currentMangaId) return;
+      
+      const btn = document.getElementById('readBtn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = "Sending... Please check chat.";
+      btn.disabled = true;
+
+      try {
+        await fetch(`${RAILWAY_URL}/api/request-chapters`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: tg.initDataUnsafe?.user?.id, mangaId: currentMangaId })
+        });
+        
+        setTimeout(() => {
+          tg.close();
+        }, 1500);
+      } catch (e) {
+        btn.innerHTML = "Error! Try again.";
+        btn.disabled = false;
       }
     }
 
