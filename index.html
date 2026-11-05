@@ -81,8 +81,8 @@
         <div class="w-32 aspect-[3/4] rounded-lg overflow-hidden border border-[#2d3a4a] shrink-0">
           <img id="detailCover" src="" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/300x400/1e293b/94a3b8?text=No+Cover'">
         </div>
-        <div class="flex-1">
-          <h1 id="detailTitle" class="text-xl font-bold leading-tight mb-2"></h1>
+        <div class="flex-1 min-w-0">
+          <h1 id="detailTitle" class="text-xl font-bold leading-tight mb-2 truncate"></h1>
           <div class="text-xs text-gray-400 space-y-1">
             <p><span class="font-semibold text-gray-300">Author:</span> <span id="detailAuthor"></span></p>
             <p><span class="font-semibold text-gray-300">Artist:</span> <span id="detailArtist"></span></p>
@@ -105,20 +105,16 @@
   </div>
 
   <!-- 🟢 TACHIYOMI STYLE READER VIEW -->
-  <!-- 🛑 FIX: Removed 'flex' from initial class list to prevent it from showing on load -->
   <div id="readerView" class="hidden fixed inset-0 bg-black z-[60]">
-    <!-- Top Bar -->
     <div id="readerTopBar" class="reader-top-bar">
       <button onclick="closeReader()" class="flex items-center text-blue-400 font-semibold text-sm"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>Close</button>
       <span id="readerTitle" class="text-sm font-semibold text-gray-300 truncate max-w-[60%]">Reading...</span>
     </div>
 
-    <!-- Center Content (Clicking this toggles UI) -->
     <div id="readerContent" onclick="toggleReaderUI()" class="flex-1 overflow-y-auto w-full pt-16 pb-24">
       <!-- Images injected here -->
     </div>
 
-    <!-- Bottom Bar (Slider & Navigation) -->
     <div id="readerBottomBar" class="reader-bottom-bar">
       <div class="flex justify-between items-center mb-3">
         <button id="prevBtn" class="bg-[#1e293b] text-blue-400 px-4 py-2 rounded-lg font-semibold text-sm active:scale-95 transition-transform disabled:opacity-50" onclick="loadAdjacentChapter('prev')">Previous</button>
@@ -126,7 +122,6 @@
         <button id="nextBtn" class="bg-[#1e293b] text-blue-400 px-4 py-2 rounded-lg font-semibold text-sm active:scale-95 transition-transform disabled:opacity-50" onclick="loadAdjacentChapter('next')">Next</button>
       </div>
       
-      <!-- Progress Slider -->
       <div class="flex items-center gap-3">
         <input type="range" id="readerSlider" min="0" max="100" value="0" class="flex-1" oninput="handleSliderChange(this.value)">
         <span id="pageCounter" class="text-xs text-gray-400 min-w-[30px] text-right">0/0</span>
@@ -205,7 +200,8 @@
           const div = document.createElement('div');
           div.className = "flex items-center bg-[#1e293b] p-3 rounded-xl border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform";
           div.onclick = () => openDetails(item.mangaId);
-          div.innerHTML = `<img src="${item.thumbnailUrl}" class="w-12 h-16 object-cover rounded-md mr-4" /><div class="flex-1"><p class="font-semibold text-sm text-gray-200 truncate">${item.title}</p><p class="text-xs text-blue-400">${item.chapterName}</p></div>`;
+          // 🛑 FIX: Added min-w-0 to allow truncation
+          div.innerHTML = `<img src="${item.thumbnailUrl}" class="w-12 h-16 object-cover rounded-md mr-4 shrink-0" /><div class="flex-1 min-w-0"><p class="font-semibold text-sm text-gray-200 truncate">${item.title}</p><p class="text-xs text-blue-400 truncate">${item.chapterName}</p></div>`;
           container.appendChild(div);
         });
       } catch (e) { container.innerHTML = `<p class="text-red-400 text-center mt-4">Failed to load updates.</p>`; }
@@ -221,12 +217,40 @@
         if (data.length === 0) { container.innerHTML = `<p class="text-gray-400 text-center mt-4">No reading history.</p>`; return; }
         data.forEach(item => {
           const div = document.createElement('div');
-          div.className = "flex items-center bg-[#1e293b] p-3 rounded-xl border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform";
+          div.className = "flex items-center bg-[#1e293b] p-3 rounded-xl border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform relative";
           div.onclick = () => openDetails(item.mangaId);
-          div.innerHTML = `<img src="${item.thumbnailUrl}" class="w-12 h-16 object-cover rounded-md mr-4" /><div class="flex-1"><p class="font-semibold text-sm text-gray-200 truncate">${item.title}</p><p class="text-xs text-gray-400">Read recently</p></div>`;
+          // 🛑 FIX: Added min-w-0 for truncation & trash can for deletion
+          div.innerHTML = `
+            <img src="${item.thumbnailUrl}" class="w-12 h-16 object-cover rounded-md mr-4 shrink-0" />
+            <div class="flex-1 min-w-0 pr-8">
+              <p class="font-semibold text-sm text-gray-200 truncate">${item.title}</p>
+              <p class="text-xs text-gray-400">Read recently</p>
+            </div>
+            <button class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-red-400 p-2" onclick="deleteHistory(event, '${item.mangaId}')">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+            </button>
+          `;
           container.appendChild(div);
         });
       } catch (e) { container.innerHTML = `<p class="text-red-400 text-center mt-4">Failed to load history.</p>`; }
+    }
+
+    // 🛑 NEW: Delete History Function
+    async function deleteHistory(event, mangaId) {
+      event.stopPropagation(); // Prevent opening details
+      const btn = event.currentTarget;
+      const container = btn.closest('.flex.items-center');
+      
+      // Optimistic UI update (remove immediately)
+      container.style.opacity = '0.5';
+      
+      try {
+        await fetch(`${RAILWAY_URL}/api/history/${mangaId}`, { method: 'DELETE' });
+        container.remove();
+      } catch (e) {
+        container.style.opacity = '1';
+        tg.showAlert("Failed to delete history item.");
+      }
     }
 
     function renderGrid(containerId, mangaList) {
@@ -245,7 +269,7 @@
     async function openDetails(mangaId) {
       currentMangaId = mangaId;
       document.getElementById('detailsView').classList.remove('hidden');
-      document.getElementById('detailsView').classList.add('flex'); // Add flex here
+      document.getElementById('detailsView').classList.add('flex');
       document.getElementById('detailTitle').innerText = "Loading...";
       document.getElementById('detailDescription').innerText = "";
       document.getElementById('detailCover').src = "";
@@ -260,6 +284,7 @@
 
       try {
         const res = await fetch(`${RAILWAY_URL}/api/manga/${mangaId}`);
+        if (!res.ok) throw new Error("Failed to fetch");
         const data = await res.json();
         
         document.getElementById('detailTitle').innerText = data.title;
@@ -290,7 +315,7 @@
             const btn = document.createElement('div');
             btn.className = "flex justify-between items-center bg-[#1e293b] p-3 rounded-lg border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform mb-2";
             btn.onclick = () => openReader(index); 
-            btn.innerHTML = `<span class="text-sm text-gray-200">${ch.name || `Chapter ${ch.number}`}</span><span class="text-xs text-blue-400">Read In App</span>`;
+            btn.innerHTML = `<span class="text-sm text-gray-200 truncate pr-2">${ch.name || `Chapter ${ch.number}`}</span><span class="text-xs text-blue-400 shrink-0">Read In App</span>`;
             chapterContainer.appendChild(btn);
           });
         } else {
@@ -299,12 +324,13 @@
 
       } catch (e) {
         document.getElementById('detailTitle').innerText = "Error loading details";
+        document.getElementById('detailDescription').innerText = "Could not load manga info. The source might be offline.";
       }
     }
 
     function closeDetails() {
       document.getElementById('detailsView').classList.add('hidden');
-      document.getElementById('detailsView').classList.remove('flex'); // Remove flex here
+      document.getElementById('detailsView').classList.remove('flex');
       currentMangaId = null;
       currentChapters = [];
     }
@@ -313,11 +339,9 @@
       currentChapterIndex = index;
       const chapter = currentChapters[index];
       
-      // 🛑 FIX: Add 'flex' to show the reader
       document.getElementById('readerView').classList.remove('hidden');
       document.getElementById('readerView').classList.add('flex'); 
       
-      // Reset UI visibility
       document.getElementById('readerTopBar').classList.remove('hidden');
       document.getElementById('readerBottomBar').classList.remove('hidden');
       
@@ -389,7 +413,7 @@
 
     function closeReader() {
       document.getElementById('readerView').classList.add('hidden');
-      document.getElementById('readerView').classList.remove('flex'); // Remove flex here
+      document.getElementById('readerView').classList.remove('flex');
       document.getElementById('readerContent').innerHTML = '';
     }
 
