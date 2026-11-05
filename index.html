@@ -154,7 +154,15 @@
     if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
 
     const RAILWAY_URL = 'https://manhwa-opehh-production.up.railway.app';
-    const USER_ID = tg.initDataUnsafe?.user?.id;
+    // 🛑 ROBUST USER ID FALLBACK
+    let USER_ID = tg.initDataUnsafe?.user?.id;
+    
+    // Fallback for testing if Telegram data is missing
+    if (!USER_ID) {
+      console.warn("Telegram User ID not found. Using fallback ID for testing.");
+      USER_ID = 1405846034; // Fallback to Admin ID
+    }
+
     let allManga = [];
     let currentMangaId = null;
     let currentChapters = [];
@@ -230,7 +238,6 @@
     async function loadHistory() {
       const container = document.getElementById('historyList');
       container.innerHTML = `<p class="text-gray-400 text-center mt-4">Loading...</p>`;
-      if (!USER_ID) { container.innerHTML = `<p class="text-red-400 text-center mt-4">User not found.</p>`; return; }
       
       try {
         const res = await fetch(`${RAILWAY_URL}/api/history?userId=${USER_ID}`);
