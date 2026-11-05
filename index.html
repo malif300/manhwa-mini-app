@@ -107,7 +107,7 @@
     </div>
   </div>
 
-  <!-- 🟢 READER VIEW (Full Screen Lazy-Loading) -->
+  <!-- 🟢 READER VIEW (Full Screen Lazy-Loading & Navigation) -->
   <div id="readerView" class="hidden fixed inset-0 bg-black z-[60] flex-col w-full h-full overflow-y-auto">
     <div class="p-4 fixed top-0 left-0 right-0 bg-black/80 backdrop-blur-md z-[70] flex justify-between items-center border-b border-gray-800">
       <button onclick="closeReader()" class="flex items-center text-blue-400 font-semibold text-sm"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>Close</button>
@@ -116,6 +116,13 @@
     
     <div id="readerImages" class="pt-16 pb-10 w-full flex flex-col items-center">
       <!-- Images injected here -->
+    </div>
+
+    <!-- Next / Prev Navigation Buttons -->
+    <div id="readerNav" class="fixed bottom-0 left-0 right-0 p-4 bg-black/80 backdrop-blur-md flex justify-between items-center border-t border-gray-800 z-[70]">
+      <button id="prevBtn" class="bg-[#1e293b] text-blue-400 px-4 py-2 rounded-lg font-semibold text-sm active:scale-95 transition-transform disabled:opacity-50" onclick="loadAdjacentChapter('prev')">Previous</button>
+      <span id="chapterIndicator" class="text-xs text-gray-400">Chapter</span>
+      <button id="nextBtn" class="bg-[#1e293b] text-blue-400 px-4 py-2 rounded-lg font-semibold text-sm active:scale-95 transition-transform disabled:opacity-50" onclick="loadAdjacentChapter('next')">Next</button>
     </div>
   </div>
 
@@ -137,6 +144,8 @@
     const RAILWAY_URL = 'https://manhwa-opehh-production.up.railway.app';
     let allManga = [];
     let currentMangaId = null;
+    let currentChapters = [];
+    let currentChapterIndex = 0;
 
     document.addEventListener('DOMContentLoaded', () => {
       loadBrowse();
@@ -160,7 +169,7 @@
       try {
         const res = await fetch(`${RAILWAY_URL}/api/popular`);
         const data = await res.json();
-        allManga = data; // Store for local filtering
+        allManga = data;
         renderGrid('browseGrid', data);
       } catch (e) { console.error(e); }
     }
@@ -187,7 +196,7 @@
           const div = document.createElement('div');
           div.className = "flex items-center bg-[#1e293b] p-3 rounded-xl border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform";
           div.onclick = () => openDetails(item.mangaId);
-          div.innerHTML = `<img src="${RAILWAY_URL}${item.thumbnailUrl}" class="w-12 h-16 object-cover rounded-md mr-4" /><div class="flex-1"><p class="font-semibold text-sm text-gray-200 truncate">${item.title}</p><p class="text-xs text-blue-400">${item.chapterName}</p></div>`;
+          div.innerHTML = `<img src="${item.thumbnailUrl}" class="w-12 h-16 object-cover rounded-md mr-4" /><div class="flex-1"><p class="font-semibold text-sm text-gray-200 truncate">${item.title}</p><p class="text-xs text-blue-400">${item.chapterName}</p></div>`;
           container.appendChild(div);
         });
       } catch (e) { container.innerHTML = `<p class="text-red-400 text-center mt-4">Failed to load updates.</p>`; }
@@ -205,7 +214,7 @@
           const div = document.createElement('div');
           div.className = "flex items-center bg-[#1e293b] p-3 rounded-xl border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform";
           div.onclick = () => openDetails(item.mangaId);
-          div.innerHTML = `<img src="${RAILWAY_URL}${item.thumbnailUrl}" class="w-12 h-16 object-cover rounded-md mr-4" /><div class="flex-1"><p class="font-semibold text-sm text-gray-200 truncate">${item.title}</p><p class="text-xs text-gray-400">Read recently</p></div>`;
+          div.innerHTML = `<img src="${item.thumbnailUrl}" class="w-12 h-16 object-cover rounded-md mr-4" /><div class="flex-1"><p class="font-semibold text-sm text-gray-200 truncate">${item.title}</p><p class="text-xs text-gray-400">Read recently</p></div>`;
           container.appendChild(div);
         });
       } catch (e) { container.innerHTML = `<p class="text-red-400 text-center mt-4">Failed to load history.</p>`; }
@@ -219,7 +228,7 @@
         const card = document.createElement('div');
         card.className = "flex flex-col bg-[#1e293b] rounded-xl overflow-hidden cursor-pointer active:scale-95 transition-transform shadow-sm border border-[#2d3a4a]";
         card.onclick = () => openDetails(manga.id);
-        card.innerHTML = `<div class="relative w-full aspect-[3/4] overflow-hidden bg-[#0f172a]"><img src="${RAILWAY_URL}${manga.thumbnailUrl}" alt="${manga.title}" class="absolute inset-0 w-full h-full object-cover" loading="lazy" onerror="this.src='https://via.placeholder.com/300x400/1e293b/94a3b8?text=No+Cover';" /></div><div class="p-3"><p class="text-sm font-semibold text-gray-200 truncate leading-tight">${manga.title}</p></div>`;
+        card.innerHTML = `<div class="relative w-full aspect-[3/4] overflow-hidden bg-[#0f172a]"><img src="${manga.thumbnailUrl}" alt="${manga.title}" class="absolute inset-0 w-full h-full object-cover" loading="lazy" onerror="this.src='https://via.placeholder.com/300x400/1e293b/94a3b8?text=No+Cover';" /></div><div class="p-3"><p class="text-sm font-semibold text-gray-200 truncate leading-tight">${manga.title}</p></div>`;
         grid.appendChild(card);
       });
     }
@@ -245,7 +254,7 @@
         
         document.getElementById('detailTitle').innerText = data.title;
         document.getElementById('detailDescription').innerText = data.description;
-        document.getElementById('detailCover').src = `${RAILWAY_URL}${data.thumbnailUrl}`;
+        document.getElementById('detailCover').src = data.thumbnailUrl;
         document.getElementById('detailAuthor').innerText = data.author;
         document.getElementById('detailArtist').innerText = data.artist;
         document.getElementById('detailStatus').innerText = data.status;
@@ -261,15 +270,17 @@
           });
         }
 
+        // Store chapters for navigation
+        currentChapters = data.chapters || [];
         const chapterContainer = document.getElementById('chapterList');
         chapterContainer.innerHTML = '';
         
-        if (data.chapters && data.chapters.length > 0) {
-          document.getElementById('chapterCount').innerText = `${data.chapters.length} Chapters`;
-          data.chapters.forEach(ch => {
+        if (currentChapters.length > 0) {
+          document.getElementById('chapterCount').innerText = `${currentChapters.length} Chapters`;
+          currentChapters.forEach((ch, index) => {
             const btn = document.createElement('div');
             btn.className = "chapter-item cursor-pointer active:scale-95 transition-transform";
-            btn.onclick = () => openReader(ch.id, ch.name, data.title); 
+            btn.onclick = () => openReader(index); 
             btn.innerHTML = `<span class="text-sm text-gray-200">${ch.name || `Chapter ${ch.number}`}</span><span class="text-xs text-blue-400">Read In App</span>`;
             chapterContainer.appendChild(btn);
           });
@@ -285,25 +296,35 @@
     function closeDetails() {
       document.getElementById('detailsView').classList.add('hidden');
       currentMangaId = null;
+      currentChapters = [];
     }
 
-    async function openReader(chapterId, chapterName, mangaTitle) {
-      document.getElementById('readerView').classList.remove('hidden');
-      document.getElementById('readerTitle').innerText = chapterName || mangaTitle;
-      const container = document.getElementById('readerImages');
+    // 🛑 UPDATED READER WITH NEXT/PREV NAVIGATION
+    async function openReader(index) {
+      currentChapterIndex = index;
+      const chapter = currentChapters[index];
       
+      document.getElementById('readerView').classList.remove('hidden');
+      document.getElementById('readerTitle').innerText = chapter.name || `Chapter ${chapter.number}`;
+      document.getElementById('chapterIndicator').innerText = chapter.name || `Chapter ${chapter.number}`;
+      
+      // Enable/disable nav buttons
+      document.getElementById('prevBtn').disabled = (index === 0);
+      document.getElementById('nextBtn').disabled = (index === currentChapters.length - 1);
+
+      const container = document.getElementById('readerImages');
       container.innerHTML = `<div class="flex justify-center mt-20"><div class="animate-spin rounded-full h-10 w-10 border-b-2 border-white"></div></div>`;
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
       try {
-        const res = await fetch(`${RAILWAY_URL}/api/chapter/${chapterId}`);
+        const res = await fetch(`${RAILWAY_URL}/api/chapter/${chapter.id}`);
         const data = await res.json();
         
         container.innerHTML = '';
         if (data.pages && data.pages.length > 0) {
           data.pages.forEach((imgUrl) => {
             const img = document.createElement('img');
-            img.src = `${RAILWAY_URL}${imgUrl}`;
+            img.src = imgUrl;
             img.loading = "lazy";
             img.className = "w-full object-contain";
             img.onerror = function() { this.style.display = 'none'; };
@@ -314,6 +335,14 @@
         }
       } catch (e) {
         container.innerHTML = `<p class="text-red-400 text-center mt-10">Failed to load chapter images.</p>`;
+      }
+    }
+
+    function loadAdjacentChapter(direction) {
+      if (direction === 'next' && currentChapterIndex < currentChapters.length - 1) {
+        openReader(currentChapterIndex + 1);
+      } else if (direction === 'prev' && currentChapterIndex > 0) {
+        openReader(currentChapterIndex - 1);
       }
     }
 
