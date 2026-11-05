@@ -7,23 +7,45 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { background-color: #17212b; color: white; margin: 0; padding: 0; }
+    body { background-color: #17212b; color: white; margin: 0; padding: 0; overflow: hidden; }
     ::-webkit-scrollbar { width: 0px; background: transparent; }
+    
+    /* Skeleton loading animation */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .5; }
+    }
+    .skeleton {
+      background-color: #242f3d;
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
   </style>
 </head>
 <body class="h-screen flex flex-col">
   
+  <!-- Search Bar -->
   <div class="p-4 sticky top-0 bg-[#17212b] z-10 shadow-md">
-    <input type="text" id="searchInput" placeholder="Search Manhwa..." 
-           class="w-full bg-[#242f3d] text-white p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
-           oninput="filterManga()">
+    <div class="relative">
+      <input type="text" id="searchInput" placeholder="Search Manhwa..." 
+             class="w-full bg-[#242f3d] text-white p-3 pl-10 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+             oninput="filterManga()">
+      <svg class="w-5 h-5 text-gray-400 absolute left-3 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+      </svg>
+    </div>
   </div>
 
-  <div id="loading" class="flex justify-center mt-10">
-    <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-white"></div>
+  <!-- Loading State -->
+  <div id="loading" class="grid grid-cols-2 gap-4 p-4 overflow-y-auto" style="flex: 1;">
+    <!-- Skeleton Cards -->
+    <div class="skeleton h-64 rounded-xl"></div>
+    <div class="skeleton h-64 rounded-xl"></div>
+    <div class="skeleton h-64 rounded-xl"></div>
+    <div class="skeleton h-64 rounded-xl"></div>
   </div>
 
-  <div id="mangaGrid" class="grid grid-cols-2 gap-4 p-4 overflow-y-auto" style="flex: 1;">
+  <!-- Manga Grid -->
+  <div id="mangaGrid" class="hidden grid-cols-2 gap-4 p-4 overflow-y-auto" style="flex: 1;">
     <!-- Cards injected here -->
   </div>
 
@@ -32,19 +54,18 @@
     tg.expand();
     tg.setHeaderColor('#17212b');
 
-    // ✅ FIXED: Both URLs now point to your actual Railway bot
     const RAILWAY_URL = 'https://manhwa-opehh-production.up.railway.app';
 
-    const initData = tg.initData;
+    // Auth
     fetch(`${RAILWAY_URL}/api/auth`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ initData })
-    }).then(res => res.json()).then(data => {
-      if(data.ok) console.log("Authenticated user:", data.user.username);
-    }).catch(e => console.log("Auth skipped (running in browser)"));
+      body: JSON.stringify({ initData: tg.initData })
+    }).catch(e => console.log("Auth skipped"));
 
     let allManga = [];
+
+    // Fetch Data
     fetch(`${RAILWAY_URL}/api/popular`)
       .then(res => {
          if (!res.ok) throw new Error("Server error");
@@ -53,12 +74,15 @@
       .then(data => {
         allManga = data;
         renderManga(allManga);
-        document.getElementById('loading').style.display = 'none';
+        
+        // Hide loading skeletons, show grid
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('mangaGrid').classList.remove('hidden');
+        document.getElementById('mangaGrid').classList.add('grid');
       })
       .catch(err => {
         console.error("Fetch Error:", err);
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('mangaGrid').innerHTML = `
+        document.getElementById('loading').innerHTML = `
           <p class="col-span-2 text-center text-red-400 mt-10">
             Failed to connect to Railway backend.<br>Check if bot is online.
           </p>
@@ -70,18 +94,24 @@
       grid.innerHTML = '';
       mangaList.forEach(manga => {
         const card = document.createElement('div');
-        card.className = "bg-[#242f3d] rounded-lg overflow-hidden cursor-pointer active:scale-95 transition-transform";
+        card.className = "bg-[#242f3d] rounded-xl overflow-hidden cursor-pointer active:scale-95 transition-all shadow-lg border border-[#2d3a4a]";
         card.onclick = () => {
           tg.sendData(JSON.stringify({ mangaId: manga.id }));
           tg.close();
         };
         
-        // Add error handling for broken images
-        const imgSrc = manga.thumbnailUrl ? (manga.thumbnailUrl.startsWith('http') ? manga.thumbnailUrl : `${RAILWAY_URL}${manga.thumbnailUrl}`) : 'https://via.placeholder.com/150';
-
         card.innerHTML = `
-          <img src="${imgSrc}" class="w-full h-48 object-cover" onerror="this.src='https://via.placeholder.com/150'" />
-          <p class="text-sm p-2 font-semibold truncate">${manga.title}</p>
+          <div class="relative aspect-[3/4] overflow-hidden">
+            <img src="${manga.thumbnailUrl}" 
+                 alt="${manga.title}"
+                 class="w-full h-full object-cover"
+                 loading="lazy"
+                 onerror="this.onerror=null; this.src='https://via.placeholder.com/300x400/242f3d/ffffff?text=No+Cover';" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#17212b] via-transparent to-transparent opacity-60"></div>
+          </div>
+          <div class="p-3">
+            <p class="text-sm font-semibold text-white truncate leading-tight">${manga.title}</p>
+          </div>
         `;
         grid.appendChild(card);
       });
