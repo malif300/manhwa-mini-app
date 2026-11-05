@@ -7,19 +7,23 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { background-color: #0f172a; color: white; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #0f172a; color: white; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; overflow: hidden; }
     ::-webkit-scrollbar { width: 0px; background: transparent; }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
     .skeleton { background-color: #1e293b; animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
     .nav-tab { flex: 1; text-align: center; padding: 12px 0; font-size: 12px; color: #64748b; font-weight: 500; transition: all 0.2s; }
     .nav-tab.active { color: #3b82f6; }
     .nav-tab svg { width: 24px; height: 24px; margin: 0 auto 4px auto; display: block; }
+    
+    /* Reader specific styles */
+    #readerView { background-color: #000; }
+    #readerImages img { width: 100%; height: auto; display: block; object-fit: contain; margin: 0 auto; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col pb-20">
+<body class="h-screen flex flex-col">
   
   <!-- 🔴 MAIN VIEWS CONTAINER -->
-  <div id="viewsContainer" class="flex-1 w-full overflow-y-auto">
+  <div id="viewsContainer" class="flex-1 w-full overflow-y-auto pb-20">
 
     <!-- LIBRARY VIEW -->
     <div id="libraryView" class="hidden w-full">
@@ -71,24 +75,28 @@
     <!-- MORE VIEW -->
     <div id="moreView" class="hidden w-full">
       <div class="p-4 sticky top-0 bg-[#0f172a] z-20 shadow-md">
-        <h1 class="text-xl font-bold">More</h1>
+        <h1 class="text-xl font-bold">Bot Dashboard</h1>
       </div>
       <div class="p-4 space-y-4">
-        <div class="bg-[#1e293b] rounded-xl p-4 border border-[#2d3a4a]">
-          <h2 class="font-bold text-gray-200 mb-2">Profile</h2>
-          <p class="text-sm text-gray-400">Manage your account and preferences in the Telegram Bot.</p>
+        <div class="bg-[#1e293b] rounded-xl p-4 border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform" onclick="sendBotCommand('/start')">
+          <h2 class="font-bold text-gray-200 mb-1">📚 Open Bot Menu</h2>
+          <p class="text-xs text-gray-400">Returns to the main chat menu.</p>
         </div>
-        <div class="bg-[#1e293b] rounded-xl p-4 border border-[#2d3a4a]">
-          <h2 class="font-bold text-gray-200 mb-2">Premium</h2>
-          <p class="text-sm text-gray-400">Unlock unlimited HD reading and priority downloads.</p>
+        <div class="bg-[#1e293b] rounded-xl p-4 border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform" onclick="sendBotCommand('/library')">
+          <h2 class="font-bold text-gray-200 mb-1">📖 View Library in Chat</h2>
+          <p class="text-xs text-gray-400">Sends your library as a text list.</p>
+        </div>
+        <div class="bg-[#1e293b] rounded-xl p-4 border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform" onclick="sendBotCommand('/premium')">
+          <h2 class="font-bold text-gray-200 mb-1">⭐ Premium Status</h2>
+          <p class="text-xs text-gray-400">Check or upgrade your plan.</p>
         </div>
       </div>
     </div>
 
   </div>
 
-  <!-- 🔵 DETAILS VIEW (Hidden by default) -->
-  <div id="detailsView" class="hidden fixed inset-0 bg-[#0f172a] z-50 flex-col w-full h-full">
+  <!-- 🔵 DETAILS VIEW -->
+  <div id="detailsView" class="hidden fixed inset-0 bg-[#0f172a] z-50 flex-col w-full h-full overflow-y-auto pb-24">
     <div class="p-4 sticky top-0 bg-[#0f172a]/95 backdrop-blur-md z-20 flex items-center border-b border-[#1e293b]">
       <button onclick="closeDetails()" class="flex items-center text-blue-400 font-semibold text-sm">
         <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
@@ -96,7 +104,7 @@
       </button>
     </div>
 
-    <div class="p-6 flex flex-col items-center overflow-y-auto pb-24">
+    <div class="p-6 flex flex-col items-center">
       <div class="w-48 aspect-[3/4] rounded-xl overflow-hidden shadow-2xl border border-[#2d3a4a] mb-6 relative bg-[#1e293b]">
         <img id="detailCover" src="" alt="Cover" class="absolute inset-0 w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/300x400/1e293b/94a3b8?text=No+Cover'">
       </div>
@@ -109,13 +117,27 @@
         <p id="detailDescription" class="text-sm text-gray-400 leading-relaxed line-clamp-4"></p>
       </div>
 
-      <!-- Chapter List -->
       <div class="w-full">
         <h3 class="font-bold text-gray-200 mb-3 text-lg">Chapters</h3>
-        <div id="chapterList" class="space-y-2 max-h-80 overflow-y-auto pr-1">
+        <div id="chapterList" class="space-y-2">
           <!-- Chapter buttons injected here -->
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- 🟢 READER VIEW (Full Screen In-App Reading) -->
+  <div id="readerView" class="hidden fixed inset-0 bg-black z-[60] flex-col w-full h-full overflow-y-auto">
+    <div class="p-4 fixed top-0 left-0 right-0 bg-black/80 backdrop-blur-md z-[70] flex justify-between items-center border-b border-gray-800">
+      <button onclick="closeReader()" class="flex items-center text-blue-400 font-semibold text-sm">
+        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        Close
+      </button>
+      <span id="readerTitle" class="text-sm font-semibold text-gray-300 truncate max-w-[60%]">Reading...</span>
+    </div>
+    
+    <div id="readerImages" class="pt-16 pb-10 w-full flex flex-col items-center">
+      <!-- Images injected here -->
     </div>
   </div>
 
@@ -152,27 +174,31 @@
     const RAILWAY_URL = 'https://manhwa-opehh-production.up.railway.app';
     let allManga = [];
     let currentMangaId = null;
+    let currentTab = 'library';
 
     // 1. Initial Load
     document.addEventListener('DOMContentLoaded', () => {
       loadBrowse();
-      loadLibrary();
+      switchTab('library', document.querySelector('.nav-tab.active'));
     });
 
-    // 2. Switch Tabs
+    // 2. Switch Tabs (Re-fetches data to fix the empty library glitch)
     function switchTab(tabName, btn) {
-      // Hide all views
+      currentTab = tabName;
       document.querySelectorAll('#viewsContainer > div').forEach(el => el.classList.add('hidden'));
-      // Show selected
       document.getElementById(tabName + 'View').classList.remove('hidden');
       
-      // Update nav
       document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
       btn.classList.add('active');
 
-      // Load data if needed
+      // Always re-fetch when switching tabs
+      if (tabName === 'library') loadLibrary();
       if (tabName === 'updates') loadUpdates();
       if (tabName === 'history') loadHistory();
+      if (tabName === 'browse') {
+         document.getElementById('searchInput').value = '';
+         loadBrowse();
+      }
     }
 
     // 3. Load Browse (Popular)
@@ -186,19 +212,24 @@
 
     // 4. Load Library
     async function loadLibrary() {
+      const grid = document.getElementById('libraryGrid');
+      grid.innerHTML = `<div class="col-span-2 flex justify-center mt-10"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div></div>`;
       try {
         const res = await fetch(`${RAILWAY_URL}/api/library`);
         const data = await res.json();
         renderGrid('libraryGrid', data);
-      } catch (e) { console.error(e); }
+      } catch (e) { 
+        grid.innerHTML = `<p class="col-span-2 text-center text-red-400">Failed to load library.</p>`;
+      }
     }
 
     // 5. Load Updates
     async function loadUpdates() {
+      const container = document.getElementById('updatesList');
+      container.innerHTML = `<p class="text-gray-400 text-center mt-4">Loading...</p>`;
       try {
         const res = await fetch(`${RAILWAY_URL}/api/updates`);
         const data = await res.json();
-        const container = document.getElementById('updatesList');
         container.innerHTML = '';
         if (data.length === 0) {
           container.innerHTML = `<p class="text-gray-400 text-center mt-4">No recent updates.</p>`;
@@ -217,15 +248,16 @@
           `;
           container.appendChild(div);
         });
-      } catch (e) { console.error(e); }
+      } catch (e) { container.innerHTML = `<p class="text-red-400 text-center mt-4">Failed to load updates.</p>`; }
     }
 
     // 6. Load History
     async function loadHistory() {
+      const container = document.getElementById('historyList');
+      container.innerHTML = `<p class="text-gray-400 text-center mt-4">Loading...</p>`;
       try {
         const res = await fetch(`${RAILWAY_URL}/api/history`);
         const data = await res.json();
-        const container = document.getElementById('historyList');
         container.innerHTML = '';
         if (data.length === 0) {
           container.innerHTML = `<p class="text-gray-400 text-center mt-4">No reading history.</p>`;
@@ -244,7 +276,7 @@
           `;
           container.appendChild(div);
         });
-      } catch (e) { console.error(e); }
+      } catch (e) { container.innerHTML = `<p class="text-red-400 text-center mt-4">Failed to load history.</p>`; }
     }
 
     // 7. Render Grid
@@ -275,7 +307,6 @@
     async function openDetails(mangaId) {
       currentMangaId = mangaId;
       document.getElementById('detailsView').classList.remove('hidden');
-      document.getElementById('detailsView').classList.add('flex');
       
       document.getElementById('detailTitle').innerText = "Loading...";
       document.getElementById('detailDescription').innerText = "";
@@ -299,10 +330,11 @@
           data.chapters.forEach(ch => {
             const btn = document.createElement('div');
             btn.className = "flex justify-between items-center bg-[#1e293b] p-3 rounded-lg border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform";
-            btn.onclick = () => sendChapterToBot(ch.id, ch.name);
+            // 🛑 CHANGED: Now opens the in-app reader
+            btn.onclick = () => openReader(ch.id, ch.name, data.title); 
             btn.innerHTML = `
               <span class="text-sm text-gray-200">${ch.name || `Chapter ${ch.number}`}</span>
-              <span class="text-xs text-blue-400">Read</span>
+              <span class="text-xs text-blue-400">Read In App</span>
             `;
             chapterContainer.appendChild(btn);
           });
@@ -318,28 +350,58 @@
     // 9. Close Details
     function closeDetails() {
       document.getElementById('detailsView').classList.add('hidden');
-      document.getElementById('detailsView').classList.remove('flex');
       currentMangaId = null;
     }
 
-    // 10. Send Chapter to Bot
-    async function sendChapterToBot(chapterId, chapterName) {
-      const btn = document.getElementById('readBtn');
-      // We use tg.sendData or a direct deep link
-      // For now, let's just use the existing request-chapters endpoint
+    // 10. 🟢 OPEN IN-APP READER
+    async function openReader(chapterId, chapterName, mangaTitle) {
+      document.getElementById('readerView').classList.remove('hidden');
+      document.getElementById('readerTitle').innerText = chapterName || mangaTitle;
+      const container = document.getElementById('readerImages');
+      
+      container.innerHTML = `
+        <div class="flex justify-center mt-20">
+          <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-white"></div>
+        </div>
+      `;
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
       try {
-        await fetch(`${RAILWAY_URL}/api/request-chapters`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userId: tg.initDataUnsafe?.user?.id, mangaId: currentMangaId })
-        });
-        tg.showAlert(`Chapters for ${chapterName} sent to chat!`);
+        const res = await fetch(`${RAILWAY_URL}/api/chapter/${chapterId}`);
+        const data = await res.json();
+        
+        container.innerHTML = '';
+        if (data.pages && data.pages.length > 0) {
+          data.pages.forEach((imgUrl, index) => {
+            const img = document.createElement('img');
+            img.src = imgUrl;
+            img.loading = "lazy";
+            img.className = "w-full object-contain";
+            img.onerror = function() { this.style.display = 'none'; };
+            container.appendChild(img);
+          });
+        } else {
+          container.innerHTML = `<p class="text-white text-center mt-10">No images found for this chapter.</p>`;
+        }
       } catch (e) {
-        tg.showAlert("Error sending chapter.");
+        container.innerHTML = `<p class="text-red-400 text-center mt-10">Failed to load chapter images.</p>`;
       }
     }
 
-    // 11. Debounced Live Search
+    // 11. Close Reader
+    function closeReader() {
+      document.getElementById('readerView').classList.add('hidden');
+      document.getElementById('readerImages').innerHTML = ''; // Clear memory
+    }
+
+    // 12. Send Bot Command (For Bot Dashboard)
+    function sendBotCommand(cmd) {
+      tg.sendData(JSON.stringify({ action: "command", command: cmd }));
+      tg.close();
+    }
+
+    // 13. Debounced Live Search
     let searchTimeout = null;
     function handleSearch() {
       clearTimeout(searchTimeout);
