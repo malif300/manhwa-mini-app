@@ -270,7 +270,6 @@
           });
         }
 
-        // Store chapters for navigation
         currentChapters = data.chapters || [];
         const chapterContainer = document.getElementById('chapterList');
         chapterContainer.innerHTML = '';
@@ -299,7 +298,6 @@
       currentChapters = [];
     }
 
-    // 🛑 UPDATED READER WITH NEXT/PREV NAVIGATION
     async function openReader(index) {
       currentChapterIndex = index;
       const chapter = currentChapters[index];
@@ -308,7 +306,6 @@
       document.getElementById('readerTitle').innerText = chapter.name || `Chapter ${chapter.number}`;
       document.getElementById('chapterIndicator').innerText = chapter.name || `Chapter ${chapter.number}`;
       
-      // Enable/disable nav buttons
       document.getElementById('prevBtn').disabled = (index === 0);
       document.getElementById('nextBtn').disabled = (index === currentChapters.length - 1);
 
