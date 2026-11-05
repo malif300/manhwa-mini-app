@@ -200,7 +200,6 @@
           const div = document.createElement('div');
           div.className = "flex items-center bg-[#1e293b] p-3 rounded-xl border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform";
           div.onclick = () => openDetails(item.mangaId);
-          // 🛑 FIX: Added min-w-0 to allow truncation
           div.innerHTML = `<img src="${item.thumbnailUrl}" class="w-12 h-16 object-cover rounded-md mr-4 shrink-0" /><div class="flex-1 min-w-0"><p class="font-semibold text-sm text-gray-200 truncate">${item.title}</p><p class="text-xs text-blue-400 truncate">${item.chapterName}</p></div>`;
           container.appendChild(div);
         });
@@ -219,7 +218,6 @@
           const div = document.createElement('div');
           div.className = "flex items-center bg-[#1e293b] p-3 rounded-xl border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform relative";
           div.onclick = () => openDetails(item.mangaId);
-          // 🛑 FIX: Added min-w-0 for truncation & trash can for deletion
           div.innerHTML = `
             <img src="${item.thumbnailUrl}" class="w-12 h-16 object-cover rounded-md mr-4 shrink-0" />
             <div class="flex-1 min-w-0 pr-8">
@@ -235,13 +233,10 @@
       } catch (e) { container.innerHTML = `<p class="text-red-400 text-center mt-4">Failed to load history.</p>`; }
     }
 
-    // 🛑 NEW: Delete History Function
     async function deleteHistory(event, mangaId) {
-      event.stopPropagation(); // Prevent opening details
+      event.stopPropagation();
       const btn = event.currentTarget;
       const container = btn.closest('.flex.items-center');
-      
-      // Optimistic UI update (remove immediately)
       container.style.opacity = '0.5';
       
       try {
