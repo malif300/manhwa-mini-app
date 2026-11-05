@@ -137,7 +137,6 @@
     const RAILWAY_URL = 'https://manhwa-opehh-production.up.railway.app';
     let allManga = [];
     let currentMangaId = null;
-    let currentTab = 'library';
 
     document.addEventListener('DOMContentLoaded', () => {
       loadBrowse();
@@ -145,7 +144,6 @@
     });
 
     function switchTab(tabName, btn) {
-      currentTab = tabName;
       document.querySelectorAll('#viewsContainer > div').forEach(el => el.classList.add('hidden'));
       document.getElementById(tabName + 'View').classList.remove('hidden');
       
@@ -162,6 +160,7 @@
       try {
         const res = await fetch(`${RAILWAY_URL}/api/popular`);
         const data = await res.json();
+        allManga = data; // Store for local filtering
         renderGrid('browseGrid', data);
       } catch (e) { console.error(e); }
     }
@@ -188,7 +187,7 @@
           const div = document.createElement('div');
           div.className = "flex items-center bg-[#1e293b] p-3 rounded-xl border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform";
           div.onclick = () => openDetails(item.mangaId);
-          div.innerHTML = `<img src="${item.thumbnailUrl}" class="w-12 h-16 object-cover rounded-md mr-4" /><div class="flex-1"><p class="font-semibold text-sm text-gray-200 truncate">${item.title}</p><p class="text-xs text-blue-400">${item.chapterName}</p></div>`;
+          div.innerHTML = `<img src="${RAILWAY_URL}${item.thumbnailUrl}" class="w-12 h-16 object-cover rounded-md mr-4" /><div class="flex-1"><p class="font-semibold text-sm text-gray-200 truncate">${item.title}</p><p class="text-xs text-blue-400">${item.chapterName}</p></div>`;
           container.appendChild(div);
         });
       } catch (e) { container.innerHTML = `<p class="text-red-400 text-center mt-4">Failed to load updates.</p>`; }
@@ -206,7 +205,7 @@
           const div = document.createElement('div');
           div.className = "flex items-center bg-[#1e293b] p-3 rounded-xl border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform";
           div.onclick = () => openDetails(item.mangaId);
-          div.innerHTML = `<img src="${item.thumbnailUrl}" class="w-12 h-16 object-cover rounded-md mr-4" /><div class="flex-1"><p class="font-semibold text-sm text-gray-200 truncate">${item.title}</p><p class="text-xs text-gray-400">Read recently</p></div>`;
+          div.innerHTML = `<img src="${RAILWAY_URL}${item.thumbnailUrl}" class="w-12 h-16 object-cover rounded-md mr-4" /><div class="flex-1"><p class="font-semibold text-sm text-gray-200 truncate">${item.title}</p><p class="text-xs text-gray-400">Read recently</p></div>`;
           container.appendChild(div);
         });
       } catch (e) { container.innerHTML = `<p class="text-red-400 text-center mt-4">Failed to load history.</p>`; }
@@ -220,7 +219,7 @@
         const card = document.createElement('div');
         card.className = "flex flex-col bg-[#1e293b] rounded-xl overflow-hidden cursor-pointer active:scale-95 transition-transform shadow-sm border border-[#2d3a4a]";
         card.onclick = () => openDetails(manga.id);
-        card.innerHTML = `<div class="relative w-full aspect-[3/4] overflow-hidden bg-[#0f172a]"><img src="${manga.thumbnailUrl}" alt="${manga.title}" class="absolute inset-0 w-full h-full object-cover" loading="lazy" onerror="this.src='https://via.placeholder.com/300x400/1e293b/94a3b8?text=No+Cover';" /></div><div class="p-3"><p class="text-sm font-semibold text-gray-200 truncate leading-tight">${manga.title}</p></div>`;
+        card.innerHTML = `<div class="relative w-full aspect-[3/4] overflow-hidden bg-[#0f172a]"><img src="${RAILWAY_URL}${manga.thumbnailUrl}" alt="${manga.title}" class="absolute inset-0 w-full h-full object-cover" loading="lazy" onerror="this.src='https://via.placeholder.com/300x400/1e293b/94a3b8?text=No+Cover';" /></div><div class="p-3"><p class="text-sm font-semibold text-gray-200 truncate leading-tight">${manga.title}</p></div>`;
         grid.appendChild(card);
       });
     }
@@ -246,7 +245,7 @@
         
         document.getElementById('detailTitle').innerText = data.title;
         document.getElementById('detailDescription').innerText = data.description;
-        document.getElementById('detailCover').src = data.thumbnailUrl;
+        document.getElementById('detailCover').src = `${RAILWAY_URL}${data.thumbnailUrl}`;
         document.getElementById('detailAuthor').innerText = data.author;
         document.getElementById('detailArtist').innerText = data.artist;
         document.getElementById('detailStatus').innerText = data.status;
@@ -304,7 +303,7 @@
         if (data.pages && data.pages.length > 0) {
           data.pages.forEach((imgUrl) => {
             const img = document.createElement('img');
-            img.src = imgUrl;
+            img.src = `${RAILWAY_URL}${imgUrl}`;
             img.loading = "lazy";
             img.className = "w-full object-contain";
             img.onerror = function() { this.style.display = 'none'; };
