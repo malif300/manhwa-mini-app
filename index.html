@@ -4,44 +4,37 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Manhwa Reader</title>
-  <!-- Telegram WebApp Script -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <!-- Tailwind CSS for beautiful styling -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body { background-color: #17212b; color: white; margin: 0; padding: 0; }
-    /* Custom scrollbar for smooth scrolling */
     ::-webkit-scrollbar { width: 0px; background: transparent; }
   </style>
 </head>
 <body class="h-screen flex flex-col">
   
-  <!-- Search Bar -->
   <div class="p-4 sticky top-0 bg-[#17212b] z-10 shadow-md">
     <input type="text" id="searchInput" placeholder="Search Manhwa..." 
            class="w-full bg-[#242f3d] text-white p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
            oninput="filterManga()">
   </div>
 
-  <!-- Loading Spinner -->
   <div id="loading" class="flex justify-center mt-10">
     <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-white"></div>
   </div>
 
-  <!-- Manga Grid -->
   <div id="mangaGrid" class="grid grid-cols-2 gap-4 p-4 overflow-y-auto" style="flex: 1;">
-    <!-- Cards will be injected here -->
+    <!-- Cards injected here -->
   </div>
 
   <script>
-    // 1. Initialize Telegram WebApp
     const tg = window.Telegram.WebApp;
-    tg.expand(); // Make it full screen
+    tg.expand();
     tg.setHeaderColor('#17212b');
 
-    // 2. Authenticate User with your Railway Backend
     const initData = tg.initData;
-    fetch('YOUR-RAILWAY-URL/api/auth', {
+    // 🛑 REPLACE YOUR_RAILWAY_URL HERE
+    fetch('https://YOUR_RAILWAY_URL.up.railway.app/api/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ initData })
@@ -49,17 +42,28 @@
       if(data.ok) console.log("Authenticated user:", data.user.username);
     });
 
-    // 3. Fetch Manga Data
     let allManga = [];
-    fetch('YOUR-RAILWAY-URL/api/popular')
-      .then(res => res.json())
+    // 🛑 REPLACE YOUR_RAILWAY_URL HERE
+    fetch('https://YOUR_RAILWAY_URL.up.railway.app/api/popular')
+      .then(res => {
+         if (!res.ok) throw new Error("Server error");
+         return res.json();
+      })
       .then(data => {
         allManga = data;
         renderManga(allManga);
         document.getElementById('loading').style.display = 'none';
+      })
+      .catch(err => {
+        console.error("Fetch Error:", err);
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('mangaGrid').innerHTML = `
+          <p class="col-span-2 text-center text-red-400 mt-10">
+            Failed to connect to Railway backend.<br>Check if bot is online.
+          </p>
+        `;
       });
 
-    // 4. Render the Grid
     function renderManga(mangaList) {
       const grid = document.getElementById('mangaGrid');
       grid.innerHTML = '';
@@ -67,7 +71,6 @@
         const card = document.createElement('div');
         card.className = "bg-[#242f3d] rounded-lg overflow-hidden cursor-pointer active:scale-95 transition-transform";
         card.onclick = () => {
-          // Send data back to bot when clicked
           tg.sendData(JSON.stringify({ mangaId: manga.id }));
           tg.close();
         };
@@ -80,7 +83,6 @@
       });
     }
 
-    // 5. Search Filter
     function filterManga() {
       const query = document.getElementById('searchInput').value.toLowerCase();
       const filtered = allManga.filter(m => m.title.toLowerCase().includes(query));
