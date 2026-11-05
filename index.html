@@ -15,35 +15,41 @@
     .nav-tab.active { color: #3b82f6; }
     .nav-tab svg { width: 24px; height: 24px; margin: 0 auto 4px auto; display: block; }
     
-    /* Reader specific styles */
-    #readerView { background-color: #000; }
-    #readerImages img { width: 100%; height: auto; display: block; object-fit: contain; margin: 0 auto; }
-    .chapter-item { display: flex; justify-content: space-between; align-items: center; background-color: #1e293b; padding: 12px; border-radius: 8px; border: 1px solid #2d3a4a; margin-bottom: 8px; }
+    /* Tachiyomi Reader Styles */
+    #readerView { background-color: #000; position: fixed; inset: 0; z-index: 60; display: flex; flex-direction: column; }
+    #readerContent { flex: 1; overflow-y: auto; width: 100%; height: 100%; scroll-behavior: smooth; }
+    #readerContent img { width: 100%; height: auto; display: block; object-fit: contain; margin: 0 auto; }
+    
+    .reader-top-bar { position: absolute; top: 0; width: 100%; background: rgba(0,0,0,0.85); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 70; transition: opacity 0.3s; border-bottom: 1px solid #333; }
+    .reader-bottom-bar { position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.85); padding: 12px 16px; display: flex; flex-direction: column; z-index: 70; transition: opacity 0.3s; border-top: 1px solid #333; }
+    
+    .reader-top-bar.hidden, .reader-bottom-bar.hidden { opacity: 0; pointer-events: none; }
+
+    /* Slider Styles */
+    input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+    input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: #3b82f6; cursor: pointer; margin-top: -6px; }
+    input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #334155; border-radius: 2px; }
   </style>
 </head>
 <body class="h-screen flex flex-col">
   
   <!-- 🔴 MAIN VIEWS CONTAINER -->
   <div id="viewsContainer" class="flex-1 w-full overflow-y-auto pb-20">
-
     <!-- LIBRARY VIEW -->
     <div id="libraryView" class="hidden w-full">
       <div class="p-4 sticky top-0 bg-[#0f172a] z-20 shadow-md"><h1 class="text-xl font-bold">My Library</h1></div>
       <div id="libraryGrid" class="grid grid-cols-2 gap-4 p-4"></div>
     </div>
-
     <!-- UPDATES VIEW -->
     <div id="updatesView" class="hidden w-full">
       <div class="p-4 sticky top-0 bg-[#0f172a] z-20 shadow-md"><h1 class="text-xl font-bold">Updates</h1></div>
       <div id="updatesList" class="p-4 space-y-3"></div>
     </div>
-
     <!-- HISTORY VIEW -->
     <div id="historyView" class="hidden w-full">
       <div class="p-4 sticky top-0 bg-[#0f172a] z-20 shadow-md"><h1 class="text-xl font-bold">History</h1></div>
       <div id="historyList" class="p-4 space-y-3"></div>
     </div>
-
     <!-- BROWSE VIEW -->
     <div id="browseView" class="w-full">
       <div class="p-4 sticky top-0 bg-[#0f172a] z-20 shadow-md">
@@ -54,7 +60,6 @@
       </div>
       <div id="browseGrid" class="grid grid-cols-2 gap-4 p-4"></div>
     </div>
-
     <!-- MORE VIEW -->
     <div id="moreView" class="hidden w-full">
       <div class="p-4 sticky top-0 bg-[#0f172a] z-20 shadow-md"><h1 class="text-xl font-bold">Bot Dashboard</h1></div>
@@ -66,14 +71,12 @@
     </div>
   </div>
 
-  <!-- 🔵 DETAILS VIEW (Suwayomi Layout) -->
+  <!-- 🔵 DETAILS VIEW -->
   <div id="detailsView" class="hidden fixed inset-0 bg-[#0f172a] z-50 flex-col w-full h-full overflow-y-auto pb-24">
     <div class="p-4 sticky top-0 bg-[#0f172a]/95 backdrop-blur-md z-20 flex items-center border-b border-[#1e293b]">
       <button onclick="closeDetails()" class="flex items-center text-blue-400 font-semibold text-sm"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>Back</button>
     </div>
-
     <div class="p-6">
-      <!-- Top Section: Cover & Info -->
       <div class="flex gap-4 mb-6">
         <div class="w-32 aspect-[3/4] rounded-lg overflow-hidden border border-[#2d3a4a] shrink-0">
           <img id="detailCover" src="" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/300x400/1e293b/94a3b8?text=No+Cover'">
@@ -87,17 +90,11 @@
           </div>
         </div>
       </div>
-
-      <!-- Genres -->
       <div id="detailGenres" class="flex flex-wrap gap-2 mb-6"></div>
-
-      <!-- Description -->
       <div class="bg-[#1e293b] rounded-xl p-4 mb-6 border border-[#2d3a4a]">
         <h3 class="font-bold text-gray-200 mb-2 text-sm">Synopsis</h3>
         <p id="detailDescription" class="text-xs text-gray-400 leading-relaxed line-clamp-4"></p>
       </div>
-
-      <!-- Chapter List -->
       <div class="w-full">
         <div class="flex justify-between items-center mb-3">
           <h3 id="chapterCount" class="font-bold text-gray-200 text-lg">Chapters</h3>
@@ -107,22 +104,32 @@
     </div>
   </div>
 
-  <!-- 🟢 READER VIEW (Full Screen Lazy-Loading & Navigation) -->
-  <div id="readerView" class="hidden fixed inset-0 bg-black z-[60] flex-col w-full h-full overflow-y-auto">
-    <div class="p-4 fixed top-0 left-0 right-0 bg-black/80 backdrop-blur-md z-[70] flex justify-between items-center border-b border-gray-800">
+  <!-- 🟢 TACHIYOMI STYLE READER VIEW -->
+  <div id="readerView" class="hidden fixed inset-0 bg-black z-[60] flex flex-col">
+    <!-- Top Bar -->
+    <div id="readerTopBar" class="reader-top-bar">
       <button onclick="closeReader()" class="flex items-center text-blue-400 font-semibold text-sm"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>Close</button>
       <span id="readerTitle" class="text-sm font-semibold text-gray-300 truncate max-w-[60%]">Reading...</span>
     </div>
-    
-    <div id="readerImages" class="pt-16 pb-10 w-full flex flex-col items-center">
+
+    <!-- Center Content (Clicking this toggles UI) -->
+    <div id="readerContent" onclick="toggleReaderUI()" class="flex-1 overflow-y-auto w-full pt-16 pb-24">
       <!-- Images injected here -->
     </div>
 
-    <!-- Next / Prev Navigation Buttons -->
-    <div id="readerNav" class="fixed bottom-0 left-0 right-0 p-4 bg-black/80 backdrop-blur-md flex justify-between items-center border-t border-gray-800 z-[70]">
-      <button id="prevBtn" class="bg-[#1e293b] text-blue-400 px-4 py-2 rounded-lg font-semibold text-sm active:scale-95 transition-transform disabled:opacity-50" onclick="loadAdjacentChapter('prev')">Previous</button>
-      <span id="chapterIndicator" class="text-xs text-gray-400">Chapter</span>
-      <button id="nextBtn" class="bg-[#1e293b] text-blue-400 px-4 py-2 rounded-lg font-semibold text-sm active:scale-95 transition-transform disabled:opacity-50" onclick="loadAdjacentChapter('next')">Next</button>
+    <!-- Bottom Bar (Slider & Navigation) -->
+    <div id="readerBottomBar" class="reader-bottom-bar">
+      <div class="flex justify-between items-center mb-3">
+        <button id="prevBtn" class="bg-[#1e293b] text-blue-400 px-4 py-2 rounded-lg font-semibold text-sm active:scale-95 transition-transform disabled:opacity-50" onclick="loadAdjacentChapter('prev')">Previous</button>
+        <span id="chapterIndicator" class="text-xs text-gray-400">Chapter</span>
+        <button id="nextBtn" class="bg-[#1e293b] text-blue-400 px-4 py-2 rounded-lg font-semibold text-sm active:scale-95 transition-transform disabled:opacity-50" onclick="loadAdjacentChapter('next')">Next</button>
+      </div>
+      
+      <!-- Progress Slider -->
+      <div class="flex items-center gap-3">
+        <input type="range" id="readerSlider" min="0" max="100" value="0" class="flex-1" oninput="handleSliderChange(this.value)">
+        <span id="pageCounter" class="text-xs text-gray-400 min-w-[30px] text-right">0/0</span>
+      </div>
     </div>
   </div>
 
@@ -146,6 +153,7 @@
     let currentMangaId = null;
     let currentChapters = [];
     let currentChapterIndex = 0;
+    let totalImages = 0;
 
     document.addEventListener('DOMContentLoaded', () => {
       loadBrowse();
@@ -278,7 +286,7 @@
           document.getElementById('chapterCount').innerText = `${currentChapters.length} Chapters`;
           currentChapters.forEach((ch, index) => {
             const btn = document.createElement('div');
-            btn.className = "chapter-item cursor-pointer active:scale-95 transition-transform";
+            btn.className = "flex justify-between items-center bg-[#1e293b] p-3 rounded-lg border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform mb-2";
             btn.onclick = () => openReader(index); 
             btn.innerHTML = `<span class="text-sm text-gray-200">${ch.name || `Chapter ${ch.number}`}</span><span class="text-xs text-blue-400">Read In App</span>`;
             chapterContainer.appendChild(btn);
@@ -309,9 +317,9 @@
       document.getElementById('prevBtn').disabled = (index === 0);
       document.getElementById('nextBtn').disabled = (index === currentChapters.length - 1);
 
-      const container = document.getElementById('readerImages');
+      const container = document.getElementById('readerContent');
       container.innerHTML = `<div class="flex justify-center mt-20"><div class="animate-spin rounded-full h-10 w-10 border-b-2 border-white"></div></div>`;
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      container.scrollTop = 0;
 
       try {
         const res = await fetch(`${RAILWAY_URL}/api/chapter/${chapter.id}`);
@@ -319,7 +327,8 @@
         
         container.innerHTML = '';
         if (data.pages && data.pages.length > 0) {
-          data.pages.forEach((imgUrl) => {
+          totalImages = data.pages.length;
+          data.pages.forEach((imgUrl, i) => {
             const img = document.createElement('img');
             img.src = imgUrl;
             img.loading = "lazy";
@@ -327,6 +336,9 @@
             img.onerror = function() { this.style.display = 'none'; };
             container.appendChild(img);
           });
+          // Reset slider
+          document.getElementById('readerSlider').value = 0;
+          document.getElementById('pageCounter').innerText = `1/${totalImages}`;
         } else {
           container.innerHTML = `<p class="text-white text-center mt-10">No images found for this chapter.</p>`;
         }
@@ -334,6 +346,33 @@
         container.innerHTML = `<p class="text-red-400 text-center mt-10">Failed to load chapter images.</p>`;
       }
     }
+
+    // 🛑 TACHIYOMI UI TOGGLE
+    function toggleReaderUI() {
+      document.getElementById('readerTopBar').classList.toggle('hidden');
+      document.getElementById('readerBottomBar').classList.toggle('hidden');
+    }
+
+    // 🛑 SLIDER LOGIC
+    function handleSliderChange(value) {
+      const container = document.getElementById('readerContent');
+      const maxScroll = container.scrollHeight - container.clientHeight;
+      container.scrollTop = (value / 100) * maxScroll;
+    }
+
+    // Update slider on scroll
+    document.getElementById('readerContent').addEventListener('scroll', () => {
+      const container = document.getElementById('readerContent');
+      const maxScroll = container.scrollHeight - container.clientHeight;
+      if (maxScroll > 0) {
+        const percent = (container.scrollTop / maxScroll) * 100;
+        document.getElementById('readerSlider').value = percent;
+        
+        // Update page counter (rough estimate based on scroll)
+        const currentPage = Math.min(totalImages, Math.floor((container.scrollTop / maxScroll) * totalImages) + 1);
+        document.getElementById('pageCounter').innerText = `${currentPage}/${totalImages}`;
+      }
+    });
 
     function loadAdjacentChapter(direction) {
       if (direction === 'next' && currentChapterIndex < currentChapters.length - 1) {
@@ -345,7 +384,7 @@
 
     function closeReader() {
       document.getElementById('readerView').classList.add('hidden');
-      document.getElementById('readerImages').innerHTML = '';
+      document.getElementById('readerContent').innerHTML = '';
     }
 
     function sendBotCommand(cmd) {
