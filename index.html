@@ -59,6 +59,9 @@
         </div>
       </div>
       <div id="browseGrid" class="grid grid-cols-2 gap-4 p-4"></div>
+      <div class="flex justify-center pb-6">
+        <button id="loadMoreBtn" class="bg-[#1e293b] text-blue-400 px-6 py-3 rounded-xl font-semibold text-sm active:scale-95 transition-transform border border-[#2d3a4a]" onclick="loadMore()">Load More</button>
+      </div>
     </div>
     <!-- MORE VIEW -->
     <div id="moreView" class="hidden w-full">
@@ -150,6 +153,7 @@
     let currentChapters = [];
     let currentChapterIndex = 0;
     let totalImages = 0;
+    let currentPage = 1;
 
     document.addEventListener('DOMContentLoaded', () => {
       loadBrowse();
@@ -169,13 +173,24 @@
       if (tabName === 'browse') { document.getElementById('searchInput').value = ''; loadBrowse(); }
     }
 
-    async function loadBrowse() {
+    // 🛑 LOAD BROWSE (With Pagination)
+    async function loadBrowse(page = 1) {
       try {
-        const res = await fetch(`${RAILWAY_URL}/api/popular`);
+        const res = await fetch(`${RAILWAY_URL}/api/popular?page=${page}`);
         const data = await res.json();
-        allManga = data;
-        renderGrid('browseGrid', data);
+        if (page === 1) {
+          allManga = data;
+          renderGrid('browseGrid', data);
+        } else {
+          allManga = allManga.concat(data);
+          renderGrid('browseGrid', allManga);
+        }
+        currentPage = page;
       } catch (e) { console.error(e); }
+    }
+
+    function loadMore() {
+      loadBrowse(currentPage + 1);
     }
 
     async function loadLibrary() {
