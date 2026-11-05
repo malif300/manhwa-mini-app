@@ -18,6 +18,7 @@
     /* Reader specific styles */
     #readerView { background-color: #000; }
     #readerImages img { width: 100%; height: auto; display: block; object-fit: contain; margin: 0 auto; }
+    .chapter-item { display: flex; justify-content: space-between; align-items: center; background-color: #1e293b; padding: 12px; border-radius: 8px; border: 1px solid #2d3a4a; margin-bottom: 8px; }
   </style>
 </head>
 <body class="h-screen flex flex-col">
@@ -27,112 +28,89 @@
 
     <!-- LIBRARY VIEW -->
     <div id="libraryView" class="hidden w-full">
-      <div class="p-4 sticky top-0 bg-[#0f172a] z-20 shadow-md">
-        <h1 class="text-xl font-bold">My Library</h1>
-      </div>
-      <div id="libraryGrid" class="grid grid-cols-2 gap-4 p-4">
-        <!-- Cards injected -->
-      </div>
+      <div class="p-4 sticky top-0 bg-[#0f172a] z-20 shadow-md"><h1 class="text-xl font-bold">My Library</h1></div>
+      <div id="libraryGrid" class="grid grid-cols-2 gap-4 p-4"></div>
     </div>
 
     <!-- UPDATES VIEW -->
     <div id="updatesView" class="hidden w-full">
-      <div class="p-4 sticky top-0 bg-[#0f172a] z-20 shadow-md">
-        <h1 class="text-xl font-bold">Updates</h1>
-      </div>
-      <div id="updatesList" class="p-4 space-y-3">
-        <!-- Updates injected -->
-      </div>
+      <div class="p-4 sticky top-0 bg-[#0f172a] z-20 shadow-md"><h1 class="text-xl font-bold">Updates</h1></div>
+      <div id="updatesList" class="p-4 space-y-3"></div>
     </div>
 
     <!-- HISTORY VIEW -->
     <div id="historyView" class="hidden w-full">
-      <div class="p-4 sticky top-0 bg-[#0f172a] z-20 shadow-md">
-        <h1 class="text-xl font-bold">History</h1>
-      </div>
-      <div id="historyList" class="p-4 space-y-3">
-        <!-- History injected -->
-      </div>
+      <div class="p-4 sticky top-0 bg-[#0f172a] z-20 shadow-md"><h1 class="text-xl font-bold">History</h1></div>
+      <div id="historyList" class="p-4 space-y-3"></div>
     </div>
 
     <!-- BROWSE VIEW -->
     <div id="browseView" class="w-full">
       <div class="p-4 sticky top-0 bg-[#0f172a] z-20 shadow-md">
         <div class="relative">
-          <input type="text" id="searchInput" placeholder="Search Manhwa..." 
-                 class="w-full bg-[#1e293b] text-white p-3 pl-10 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm border border-[#2d3a4a]"
-                 oninput="handleSearch()">
-          <svg class="w-5 h-5 text-gray-400 absolute left-3 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-          </svg>
+          <input type="text" id="searchInput" placeholder="Search Manhwa..." class="w-full bg-[#1e293b] text-white p-3 pl-10 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm border border-[#2d3a4a]" oninput="handleSearch()">
+          <svg class="w-5 h-5 text-gray-400 absolute left-3 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
         </div>
       </div>
-      <div id="browseGrid" class="grid grid-cols-2 gap-4 p-4">
-        <!-- Popular mangas injected -->
-      </div>
+      <div id="browseGrid" class="grid grid-cols-2 gap-4 p-4"></div>
     </div>
 
     <!-- MORE VIEW -->
     <div id="moreView" class="hidden w-full">
-      <div class="p-4 sticky top-0 bg-[#0f172a] z-20 shadow-md">
-        <h1 class="text-xl font-bold">Bot Dashboard</h1>
-      </div>
+      <div class="p-4 sticky top-0 bg-[#0f172a] z-20 shadow-md"><h1 class="text-xl font-bold">Bot Dashboard</h1></div>
       <div class="p-4 space-y-4">
-        <div class="bg-[#1e293b] rounded-xl p-4 border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform" onclick="sendBotCommand('/start')">
-          <h2 class="font-bold text-gray-200 mb-1">📚 Open Bot Menu</h2>
-          <p class="text-xs text-gray-400">Returns to the main chat menu.</p>
-        </div>
-        <div class="bg-[#1e293b] rounded-xl p-4 border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform" onclick="sendBotCommand('/library')">
-          <h2 class="font-bold text-gray-200 mb-1">📖 View Library in Chat</h2>
-          <p class="text-xs text-gray-400">Sends your library as a text list.</p>
-        </div>
-        <div class="bg-[#1e293b] rounded-xl p-4 border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform" onclick="sendBotCommand('/premium')">
-          <h2 class="font-bold text-gray-200 mb-1">⭐ Premium Status</h2>
-          <p class="text-xs text-gray-400">Check or upgrade your plan.</p>
-        </div>
+        <div class="bg-[#1e293b] rounded-xl p-4 border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform" onclick="sendBotCommand('/start')"><h2 class="font-bold text-gray-200 mb-1">📚 Open Bot Menu</h2><p class="text-xs text-gray-400">Returns to the main chat menu.</p></div>
+        <div class="bg-[#1e293b] rounded-xl p-4 border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform" onclick="sendBotCommand('/library')"><h2 class="font-bold text-gray-200 mb-1">📖 View Library in Chat</h2><p class="text-xs text-gray-400">Sends your library as a text list.</p></div>
+        <div class="bg-[#1e293b] rounded-xl p-4 border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform" onclick="sendBotCommand('/premium')"><h2 class="font-bold text-gray-200 mb-1">⭐ Premium Status</h2><p class="text-xs text-gray-400">Check or upgrade your plan.</p></div>
       </div>
     </div>
-
   </div>
 
-  <!-- 🔵 DETAILS VIEW -->
+  <!-- 🔵 DETAILS VIEW (Suwayomi Layout) -->
   <div id="detailsView" class="hidden fixed inset-0 bg-[#0f172a] z-50 flex-col w-full h-full overflow-y-auto pb-24">
     <div class="p-4 sticky top-0 bg-[#0f172a]/95 backdrop-blur-md z-20 flex items-center border-b border-[#1e293b]">
-      <button onclick="closeDetails()" class="flex items-center text-blue-400 font-semibold text-sm">
-        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-        Back
-      </button>
+      <button onclick="closeDetails()" class="flex items-center text-blue-400 font-semibold text-sm"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>Back</button>
     </div>
 
-    <div class="p-6 flex flex-col items-center">
-      <div class="w-48 aspect-[3/4] rounded-xl overflow-hidden shadow-2xl border border-[#2d3a4a] mb-6 relative bg-[#1e293b]">
-        <img id="detailCover" src="" alt="Cover" class="absolute inset-0 w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/300x400/1e293b/94a3b8?text=No+Cover'">
-      </div>
-      
-      <h1 id="detailTitle" class="text-2xl font-bold text-center mb-2 leading-tight text-white"></h1>
-      <p class="text-sm text-gray-400 mb-6">Manhwa • Ongoing</p>
-      
-      <div class="w-full bg-[#1e293b] rounded-xl p-4 mb-6 border border-[#2d3a4a]">
-        <h3 class="font-bold text-gray-200 mb-2">Synopsis</h3>
-        <p id="detailDescription" class="text-sm text-gray-400 leading-relaxed line-clamp-4"></p>
+    <div class="p-6">
+      <!-- Top Section: Cover & Info -->
+      <div class="flex gap-4 mb-6">
+        <div class="w-32 aspect-[3/4] rounded-lg overflow-hidden border border-[#2d3a4a] shrink-0">
+          <img id="detailCover" src="" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/300x400/1e293b/94a3b8?text=No+Cover'">
+        </div>
+        <div class="flex-1">
+          <h1 id="detailTitle" class="text-xl font-bold leading-tight mb-2"></h1>
+          <div class="text-xs text-gray-400 space-y-1">
+            <p><span class="font-semibold text-gray-300">Author:</span> <span id="detailAuthor"></span></p>
+            <p><span class="font-semibold text-gray-300">Artist:</span> <span id="detailArtist"></span></p>
+            <p><span class="font-semibold text-gray-300">Status:</span> <span id="detailStatus"></span></p>
+          </div>
+        </div>
       </div>
 
+      <!-- Genres -->
+      <div id="detailGenres" class="flex flex-wrap gap-2 mb-6"></div>
+
+      <!-- Description -->
+      <div class="bg-[#1e293b] rounded-xl p-4 mb-6 border border-[#2d3a4a]">
+        <h3 class="font-bold text-gray-200 mb-2 text-sm">Synopsis</h3>
+        <p id="detailDescription" class="text-xs text-gray-400 leading-relaxed line-clamp-4"></p>
+      </div>
+
+      <!-- Chapter List -->
       <div class="w-full">
-        <h3 class="font-bold text-gray-200 mb-3 text-lg">Chapters</h3>
-        <div id="chapterList" class="space-y-2">
-          <!-- Chapter buttons injected here -->
+        <div class="flex justify-between items-center mb-3">
+          <h3 id="chapterCount" class="font-bold text-gray-200 text-lg">Chapters</h3>
         </div>
+        <div id="chapterList" class="space-y-2 max-h-[400px] overflow-y-auto pr-1"></div>
       </div>
     </div>
   </div>
 
-  <!-- 🟢 READER VIEW (Full Screen In-App Reading) -->
+  <!-- 🟢 READER VIEW (Full Screen Lazy-Loading) -->
   <div id="readerView" class="hidden fixed inset-0 bg-black z-[60] flex-col w-full h-full overflow-y-auto">
     <div class="p-4 fixed top-0 left-0 right-0 bg-black/80 backdrop-blur-md z-[70] flex justify-between items-center border-b border-gray-800">
-      <button onclick="closeReader()" class="flex items-center text-blue-400 font-semibold text-sm">
-        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-        Close
-      </button>
+      <button onclick="closeReader()" class="flex items-center text-blue-400 font-semibold text-sm"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>Close</button>
       <span id="readerTitle" class="text-sm font-semibold text-gray-300 truncate max-w-[60%]">Reading...</span>
     </div>
     
@@ -143,26 +121,11 @@
 
   <!-- 🔽 BOTTOM NAVIGATION -->
   <nav class="fixed bottom-0 left-0 right-0 bg-[#0f172a]/95 backdrop-blur-md border-t border-[#1e293b] flex justify-around items-center z-40 pb-safe">
-    <div class="nav-tab active" onclick="switchTab('library', this)">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-      Library
-    </div>
-    <div class="nav-tab" onclick="switchTab('updates', this)">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-      Updates
-    </div>
-    <div class="nav-tab" onclick="switchTab('history', this)">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-      History
-    </div>
-    <div class="nav-tab" onclick="switchTab('browse', this)">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-      Browse
-    </div>
-    <div class="nav-tab" onclick="switchTab('more', this)">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>
-      More
-    </div>
+    <div class="nav-tab active" onclick="switchTab('library', this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>Library</div>
+    <div class="nav-tab" onclick="switchTab('updates', this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Updates</div>
+    <div class="nav-tab" onclick="switchTab('history', this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>History</div>
+    <div class="nav-tab" onclick="switchTab('browse', this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>Browse</div>
+    <div class="nav-tab" onclick="switchTab('more', this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>More</div>
   </nav>
 
   <script>
@@ -176,13 +139,11 @@
     let currentMangaId = null;
     let currentTab = 'library';
 
-    // 1. Initial Load
     document.addEventListener('DOMContentLoaded', () => {
       loadBrowse();
       switchTab('library', document.querySelector('.nav-tab.active'));
     });
 
-    // 2. Switch Tabs (Re-fetches data to fix the empty library glitch)
     function switchTab(tabName, btn) {
       currentTab = tabName;
       document.querySelectorAll('#viewsContainer > div').forEach(el => el.classList.add('hidden'));
@@ -191,17 +152,12 @@
       document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
       btn.classList.add('active');
 
-      // Always re-fetch when switching tabs
       if (tabName === 'library') loadLibrary();
       if (tabName === 'updates') loadUpdates();
       if (tabName === 'history') loadHistory();
-      if (tabName === 'browse') {
-         document.getElementById('searchInput').value = '';
-         loadBrowse();
-      }
+      if (tabName === 'browse') { document.getElementById('searchInput').value = ''; loadBrowse(); }
     }
 
-    // 3. Load Browse (Popular)
     async function loadBrowse() {
       try {
         const res = await fetch(`${RAILWAY_URL}/api/popular`);
@@ -210,7 +166,6 @@
       } catch (e) { console.error(e); }
     }
 
-    // 4. Load Library
     async function loadLibrary() {
       const grid = document.getElementById('libraryGrid');
       grid.innerHTML = `<div class="col-span-2 flex justify-center mt-10"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div></div>`;
@@ -218,12 +173,9 @@
         const res = await fetch(`${RAILWAY_URL}/api/library`);
         const data = await res.json();
         renderGrid('libraryGrid', data);
-      } catch (e) { 
-        grid.innerHTML = `<p class="col-span-2 text-center text-red-400">Failed to load library.</p>`;
-      }
+      } catch (e) { grid.innerHTML = `<p class="col-span-2 text-center text-red-400">Failed to load library.</p>`; }
     }
 
-    // 5. Load Updates
     async function loadUpdates() {
       const container = document.getElementById('updatesList');
       container.innerHTML = `<p class="text-gray-400 text-center mt-4">Loading...</p>`;
@@ -231,27 +183,17 @@
         const res = await fetch(`${RAILWAY_URL}/api/updates`);
         const data = await res.json();
         container.innerHTML = '';
-        if (data.length === 0) {
-          container.innerHTML = `<p class="text-gray-400 text-center mt-4">No recent updates.</p>`;
-          return;
-        }
+        if (data.length === 0) { container.innerHTML = `<p class="text-gray-400 text-center mt-4">No recent updates.</p>`; return; }
         data.forEach(item => {
           const div = document.createElement('div');
           div.className = "flex items-center bg-[#1e293b] p-3 rounded-xl border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform";
           div.onclick = () => openDetails(item.mangaId);
-          div.innerHTML = `
-            <img src="${item.thumbnailUrl}" class="w-12 h-16 object-cover rounded-md mr-4" />
-            <div class="flex-1">
-              <p class="font-semibold text-sm text-gray-200 truncate">${item.title}</p>
-              <p class="text-xs text-blue-400">${item.chapterName}</p>
-            </div>
-          `;
+          div.innerHTML = `<img src="${item.thumbnailUrl}" class="w-12 h-16 object-cover rounded-md mr-4" /><div class="flex-1"><p class="font-semibold text-sm text-gray-200 truncate">${item.title}</p><p class="text-xs text-blue-400">${item.chapterName}</p></div>`;
           container.appendChild(div);
         });
       } catch (e) { container.innerHTML = `<p class="text-red-400 text-center mt-4">Failed to load updates.</p>`; }
     }
 
-    // 6. Load History
     async function loadHistory() {
       const container = document.getElementById('historyList');
       container.innerHTML = `<p class="text-gray-400 text-center mt-4">Loading...</p>`;
@@ -259,59 +201,42 @@
         const res = await fetch(`${RAILWAY_URL}/api/history`);
         const data = await res.json();
         container.innerHTML = '';
-        if (data.length === 0) {
-          container.innerHTML = `<p class="text-gray-400 text-center mt-4">No reading history.</p>`;
-          return;
-        }
+        if (data.length === 0) { container.innerHTML = `<p class="text-gray-400 text-center mt-4">No reading history.</p>`; return; }
         data.forEach(item => {
           const div = document.createElement('div');
           div.className = "flex items-center bg-[#1e293b] p-3 rounded-xl border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform";
           div.onclick = () => openDetails(item.mangaId);
-          div.innerHTML = `
-            <img src="${item.thumbnailUrl}" class="w-12 h-16 object-cover rounded-md mr-4" />
-            <div class="flex-1">
-              <p class="font-semibold text-sm text-gray-200 truncate">${item.title}</p>
-              <p class="text-xs text-gray-400">Read recently</p>
-            </div>
-          `;
+          div.innerHTML = `<img src="${item.thumbnailUrl}" class="w-12 h-16 object-cover rounded-md mr-4" /><div class="flex-1"><p class="font-semibold text-sm text-gray-200 truncate">${item.title}</p><p class="text-xs text-gray-400">Read recently</p></div>`;
           container.appendChild(div);
         });
       } catch (e) { container.innerHTML = `<p class="text-red-400 text-center mt-4">Failed to load history.</p>`; }
     }
 
-    // 7. Render Grid
     function renderGrid(containerId, mangaList) {
       const grid = document.getElementById(containerId);
       grid.innerHTML = '';
-      if (!mangaList || mangaList.length === 0) {
-        grid.innerHTML = `<p class="col-span-2 text-center text-gray-400 mt-4">No items found.</p>`;
-        return;
-      }
+      if (!mangaList || mangaList.length === 0) { grid.innerHTML = `<p class="col-span-2 text-center text-gray-400 mt-4">No items found.</p>`; return; }
       mangaList.forEach(manga => {
         const card = document.createElement('div');
         card.className = "flex flex-col bg-[#1e293b] rounded-xl overflow-hidden cursor-pointer active:scale-95 transition-transform shadow-sm border border-[#2d3a4a]";
         card.onclick = () => openDetails(manga.id);
-        card.innerHTML = `
-          <div class="relative w-full aspect-[3/4] overflow-hidden bg-[#0f172a]">
-            <img src="${manga.thumbnailUrl}" alt="${manga.title}" class="absolute inset-0 w-full h-full object-cover" loading="lazy" onerror="this.src='https://via.placeholder.com/300x400/1e293b/94a3b8?text=No+Cover';" />
-          </div>
-          <div class="p-3">
-            <p class="text-sm font-semibold text-gray-200 truncate leading-tight">${manga.title}</p>
-          </div>
-        `;
+        card.innerHTML = `<div class="relative w-full aspect-[3/4] overflow-hidden bg-[#0f172a]"><img src="${manga.thumbnailUrl}" alt="${manga.title}" class="absolute inset-0 w-full h-full object-cover" loading="lazy" onerror="this.src='https://via.placeholder.com/300x400/1e293b/94a3b8?text=No+Cover';" /></div><div class="p-3"><p class="text-sm font-semibold text-gray-200 truncate leading-tight">${manga.title}</p></div>`;
         grid.appendChild(card);
       });
     }
 
-    // 8. Open Details
     async function openDetails(mangaId) {
       currentMangaId = mangaId;
       document.getElementById('detailsView').classList.remove('hidden');
-      
       document.getElementById('detailTitle').innerText = "Loading...";
       document.getElementById('detailDescription').innerText = "";
       document.getElementById('detailCover').src = "";
+      document.getElementById('detailAuthor').innerText = "";
+      document.getElementById('detailArtist').innerText = "";
+      document.getElementById('detailStatus').innerText = "";
+      document.getElementById('detailGenres').innerHTML = "";
       document.getElementById('chapterList').innerHTML = `<p class="text-gray-400 text-sm">Loading chapters...</p>`;
+      document.getElementById('chapterCount').innerText = "Chapters";
       
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -322,20 +247,31 @@
         document.getElementById('detailTitle').innerText = data.title;
         document.getElementById('detailDescription').innerText = data.description;
         document.getElementById('detailCover').src = data.thumbnailUrl;
+        document.getElementById('detailAuthor').innerText = data.author;
+        document.getElementById('detailArtist').innerText = data.artist;
+        document.getElementById('detailStatus').innerText = data.status;
+
+        const genresContainer = document.getElementById('detailGenres');
+        genresContainer.innerHTML = '';
+        if (data.genre && data.genre.length > 0) {
+          data.genre.forEach(g => {
+            const span = document.createElement('span');
+            span.className = "px-3 py-1 bg-[#1e293b] text-gray-300 text-xs rounded-full border border-[#2d3a4a]";
+            span.innerText = g;
+            genresContainer.appendChild(span);
+          });
+        }
 
         const chapterContainer = document.getElementById('chapterList');
         chapterContainer.innerHTML = '';
         
         if (data.chapters && data.chapters.length > 0) {
+          document.getElementById('chapterCount').innerText = `${data.chapters.length} Chapters`;
           data.chapters.forEach(ch => {
             const btn = document.createElement('div');
-            btn.className = "flex justify-between items-center bg-[#1e293b] p-3 rounded-lg border border-[#2d3a4a] cursor-pointer active:scale-95 transition-transform";
-            // 🛑 CHANGED: Now opens the in-app reader
+            btn.className = "chapter-item cursor-pointer active:scale-95 transition-transform";
             btn.onclick = () => openReader(ch.id, ch.name, data.title); 
-            btn.innerHTML = `
-              <span class="text-sm text-gray-200">${ch.name || `Chapter ${ch.number}`}</span>
-              <span class="text-xs text-blue-400">Read In App</span>
-            `;
+            btn.innerHTML = `<span class="text-sm text-gray-200">${ch.name || `Chapter ${ch.number}`}</span><span class="text-xs text-blue-400">Read In App</span>`;
             chapterContainer.appendChild(btn);
           });
         } else {
@@ -347,24 +283,17 @@
       }
     }
 
-    // 9. Close Details
     function closeDetails() {
       document.getElementById('detailsView').classList.add('hidden');
       currentMangaId = null;
     }
 
-    // 10. 🟢 OPEN IN-APP READER
     async function openReader(chapterId, chapterName, mangaTitle) {
       document.getElementById('readerView').classList.remove('hidden');
       document.getElementById('readerTitle').innerText = chapterName || mangaTitle;
       const container = document.getElementById('readerImages');
       
-      container.innerHTML = `
-        <div class="flex justify-center mt-20">
-          <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-white"></div>
-        </div>
-      `;
-
+      container.innerHTML = `<div class="flex justify-center mt-20"><div class="animate-spin rounded-full h-10 w-10 border-b-2 border-white"></div></div>`;
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
       try {
@@ -373,7 +302,7 @@
         
         container.innerHTML = '';
         if (data.pages && data.pages.length > 0) {
-          data.pages.forEach((imgUrl, index) => {
+          data.pages.forEach((imgUrl) => {
             const img = document.createElement('img');
             img.src = imgUrl;
             img.loading = "lazy";
@@ -389,35 +318,22 @@
       }
     }
 
-    // 11. Close Reader
     function closeReader() {
       document.getElementById('readerView').classList.add('hidden');
-      document.getElementById('readerImages').innerHTML = ''; // Clear memory
+      document.getElementById('readerImages').innerHTML = '';
     }
 
-    // 12. Send Bot Command (For Bot Dashboard)
     function sendBotCommand(cmd) {
       tg.sendData(JSON.stringify({ action: "command", command: cmd }));
       tg.close();
     }
 
-    // 13. Debounced Live Search
     let searchTimeout = null;
     function handleSearch() {
       clearTimeout(searchTimeout);
       const query = document.getElementById('searchInput').value.trim();
-      
-      if (query === "") {
-        renderGrid('browseGrid', allManga);
-        return;
-      }
-
-      document.getElementById('browseGrid').innerHTML = `
-        <div class="col-span-2 flex justify-center mt-10">
-          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
-        </div>
-      `;
-
+      if (query === "") { renderGrid('browseGrid', allManga); return; }
+      document.getElementById('browseGrid').innerHTML = `<div class="col-span-2 flex justify-center mt-10"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div></div>`;
       searchTimeout = setTimeout(async () => {
         try {
           const res = await fetch(`${RAILWAY_URL}/api/search?q=${encodeURIComponent(query)}`);
