@@ -16,7 +16,7 @@
     .nav-tab svg { width: 24px; height: 24px; margin: 0 auto 4px auto; display: block; }
     
     /* Tachiyomi Reader Styles */
-    #readerView { background-color: #000; position: fixed; inset: 0; z-index: 60; display: flex; flex-direction: column; }
+    #readerView { background-color: #000; position: fixed; inset: 0; z-index: 60; }
     #readerContent { flex: 1; overflow-y: auto; width: 100%; height: 100%; scroll-behavior: smooth; }
     #readerContent img { width: 100%; height: auto; display: block; object-fit: contain; margin: 0 auto; }
     
@@ -105,7 +105,8 @@
   </div>
 
   <!-- 🟢 TACHIYOMI STYLE READER VIEW -->
-  <div id="readerView" class="hidden fixed inset-0 bg-black z-[60] flex flex-col">
+  <!-- 🛑 FIX: Removed 'flex' from initial class list to prevent it from showing on load -->
+  <div id="readerView" class="hidden fixed inset-0 bg-black z-[60]">
     <!-- Top Bar -->
     <div id="readerTopBar" class="reader-top-bar">
       <button onclick="closeReader()" class="flex items-center text-blue-400 font-semibold text-sm"><svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>Close</button>
@@ -244,6 +245,7 @@
     async function openDetails(mangaId) {
       currentMangaId = mangaId;
       document.getElementById('detailsView').classList.remove('hidden');
+      document.getElementById('detailsView').classList.add('flex'); // Add flex here
       document.getElementById('detailTitle').innerText = "Loading...";
       document.getElementById('detailDescription').innerText = "";
       document.getElementById('detailCover').src = "";
@@ -302,6 +304,7 @@
 
     function closeDetails() {
       document.getElementById('detailsView').classList.add('hidden');
+      document.getElementById('detailsView').classList.remove('flex'); // Remove flex here
       currentMangaId = null;
       currentChapters = [];
     }
@@ -310,7 +313,14 @@
       currentChapterIndex = index;
       const chapter = currentChapters[index];
       
+      // 🛑 FIX: Add 'flex' to show the reader
       document.getElementById('readerView').classList.remove('hidden');
+      document.getElementById('readerView').classList.add('flex'); 
+      
+      // Reset UI visibility
+      document.getElementById('readerTopBar').classList.remove('hidden');
+      document.getElementById('readerBottomBar').classList.remove('hidden');
+      
       document.getElementById('readerTitle').innerText = chapter.name || `Chapter ${chapter.number}`;
       document.getElementById('chapterIndicator').innerText = chapter.name || `Chapter ${chapter.number}`;
       
@@ -336,7 +346,6 @@
             img.onerror = function() { this.style.display = 'none'; };
             container.appendChild(img);
           });
-          // Reset slider
           document.getElementById('readerSlider').value = 0;
           document.getElementById('pageCounter').innerText = `1/${totalImages}`;
         } else {
@@ -347,20 +356,17 @@
       }
     }
 
-    // 🛑 TACHIYOMI UI TOGGLE
     function toggleReaderUI() {
       document.getElementById('readerTopBar').classList.toggle('hidden');
       document.getElementById('readerBottomBar').classList.toggle('hidden');
     }
 
-    // 🛑 SLIDER LOGIC
     function handleSliderChange(value) {
       const container = document.getElementById('readerContent');
       const maxScroll = container.scrollHeight - container.clientHeight;
       container.scrollTop = (value / 100) * maxScroll;
     }
 
-    // Update slider on scroll
     document.getElementById('readerContent').addEventListener('scroll', () => {
       const container = document.getElementById('readerContent');
       const maxScroll = container.scrollHeight - container.clientHeight;
@@ -368,7 +374,6 @@
         const percent = (container.scrollTop / maxScroll) * 100;
         document.getElementById('readerSlider').value = percent;
         
-        // Update page counter (rough estimate based on scroll)
         const currentPage = Math.min(totalImages, Math.floor((container.scrollTop / maxScroll) * totalImages) + 1);
         document.getElementById('pageCounter').innerText = `${currentPage}/${totalImages}`;
       }
@@ -384,6 +389,7 @@
 
     function closeReader() {
       document.getElementById('readerView').classList.add('hidden');
+      document.getElementById('readerView').classList.remove('flex'); // Remove flex here
       document.getElementById('readerContent').innerHTML = '';
     }
 
