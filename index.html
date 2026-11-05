@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Manhwa Reader</title>
+  <!-- Telegram WebApp Script -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <!-- Tailwind CSS for beautiful styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background-color: #17212b; color: white; margin: 0; padding: 0; }
+    /* Custom scrollbar for smooth scrolling */
+    ::-webkit-scrollbar { width: 0px; background: transparent; }
+  </style>
+</head>
+<body class="h-screen flex flex-col">
+  
+  <!-- Search Bar -->
+  <div class="p-4 sticky top-0 bg-[#17212b] z-10 shadow-md">
+    <input type="text" id="searchInput" placeholder="Search Manhwa..." 
+           class="w-full bg-[#242f3d] text-white p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+           oninput="filterManga()">
+  </div>
+
+  <!-- Loading Spinner -->
+  <div id="loading" class="flex justify-center mt-10">
+    <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-white"></div>
+  </div>
+
+  <!-- Manga Grid -->
+  <div id="mangaGrid" class="grid grid-cols-2 gap-4 p-4 overflow-y-auto" style="flex: 1;">
+    <!-- Cards will be injected here -->
+  </div>
+
+  <script>
+    // 1. Initialize Telegram WebApp
+    const tg = window.Telegram.WebApp;
+    tg.expand(); // Make it full screen
+    tg.setHeaderColor('#17212b');
+
+    // 2. Authenticate User with your Railway Backend
+    const initData = tg.initData;
+    fetch('YOUR-RAILWAY-URL/api/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ initData })
+    }).then(res => res.json()).then(data => {
+      if(data.ok) console.log("Authenticated user:", data.user.username);
+    });
+
+    // 3. Fetch Manga Data
+    let allManga = [];
+    fetch('YOUR-RAILWAY-URL/api/popular')
+      .then(res => res.json())
+      .then(data => {
+        allManga = data;
+        renderManga(allManga);
+        document.getElementById('loading').style.display = 'none';
+      });
+
+    // 4. Render the Grid
+    function renderManga(mangaList) {
+      const grid = document.getElementById('mangaGrid');
+      grid.innerHTML = '';
+      mangaList.forEach(manga => {
+        const card = document.createElement('div');
+        card.className = "bg-[#242f3d] rounded-lg overflow-hidden cursor-pointer active:scale-95 transition-transform";
+        card.onclick = () => {
+          // Send data back to bot when clicked
+          tg.sendData(JSON.stringify({ mangaId: manga.id }));
+          tg.close();
+        };
+        
+        card.innerHTML = `
+          <img src="${manga.thumbnailUrl}" class="w-full h-48 object-cover" />
+          <p class="text-sm p-2 font-semibold truncate">${manga.title}</p>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // 5. Search Filter
+    function filterManga() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = allManga.filter(m => m.title.toLowerCase().includes(query));
+      renderManga(filtered);
+    }
+  </script>
+</body>
+</html>
