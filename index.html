@@ -154,6 +154,7 @@
     if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
 
     const RAILWAY_URL = 'https://manhwa-opehh-production.up.railway.app';
+    const USER_ID = tg.initDataUnsafe?.user?.id;
     let allManga = [];
     let currentMangaId = null;
     let currentChapters = [];
@@ -229,8 +230,10 @@
     async function loadHistory() {
       const container = document.getElementById('historyList');
       container.innerHTML = `<p class="text-gray-400 text-center mt-4">Loading...</p>`;
+      if (!USER_ID) { container.innerHTML = `<p class="text-red-400 text-center mt-4">User not found.</p>`; return; }
+      
       try {
-        const res = await fetch(`${RAILWAY_URL}/api/history`);
+        const res = await fetch(`${RAILWAY_URL}/api/history?userId=${USER_ID}`);
         const data = await res.json();
         container.innerHTML = '';
         if (data.length === 0) { container.innerHTML = `<p class="text-gray-400 text-center mt-4">No reading history.</p>`; return; }
@@ -260,7 +263,7 @@
       container.style.opacity = '0.5';
       
       try {
-        await fetch(`${RAILWAY_URL}/api/history/${mangaId}`, { method: 'DELETE' });
+        await fetch(`${RAILWAY_URL}/api/history/${mangaId}?userId=${USER_ID}`, { method: 'DELETE' });
         container.remove();
       } catch (e) {
         container.style.opacity = '1';
@@ -404,8 +407,11 @@
           document.getElementById('readerSlider').value = 0;
           document.getElementById('pageCounter').innerText = `1/${totalImages}`;
           
-          // 🛑 MARK CHAPTER AS READ (Saves to History)
-          fetch(`${RAILWAY_URL}/api/chapter/${chapter.id}/read`, { method: 'POST' }).catch(e => console.log(e));
+          fetch(`${RAILWAY_URL}/api/chapter/${chapter.id}/read`, { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: USER_ID })
+          }).catch(e => console.log(e));
           
         } else {
           container.innerHTML = `<p class="text-white text-center mt-10">No images found for this chapter.</p>`;
