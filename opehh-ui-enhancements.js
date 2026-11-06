@@ -1,34 +1,71 @@
-/* Manhwa Opehh visual/reader enhancements. Load after the existing inline app script. */
+/* Manhwa Opehh enhancements. Load after the app's existing inline script. */
 (() => {
+  'use strict';
+
   const OWNER_ID = 1405846034;
+  const $ = (id) => document.getElementById(id);
+  let webtoonEnabled = false;
+
   const css = `
-    /* Slightly larger app navigation only; reader controls stay untouched. */
-    #bottomNav .nav-tab { min-height: 60px; padding-top: 10px; padding-bottom: calc(9px + env(safe-area-inset-bottom)); }
+    /* Slightly larger bottom tabs only; chapter toolbar layout is unchanged. */
+    #bottomNav .nav-tab {
+      min-height: 60px;
+      padding-top: 10px;
+      padding-bottom: calc(9px + env(safe-area-inset-bottom));
+    }
     #bottomNav .nav-tab svg { width: 22px; height: 22px; }
-    /* Branded, dramatic Opehh splash. */
-    #splash .opehh-mark { position:relative; isolation:isolate; overflow:hidden; }
-    #splash .opehh-mark::before { content:""; position:absolute; inset:-50%; z-index:-1; background:linear-gradient(105deg,transparent 42%,rgba(126,249,255,.55) 49%,rgba(169,149,255,.62) 51%,transparent 58%); animation:opehh-sweep 1.15s steps(10,end) infinite; }
-    #splash .opehh-mark::after { content:""; position:absolute; inset:0; z-index:-1; background:repeating-linear-gradient(0deg,transparent 0 6px,rgba(255,255,255,.08) 7px,transparent 8px); animation:opehh-scan 1.6s steps(2,end) infinite; }
-    #splash .opehh-title { color:#e7edff; text-shadow:2px 0 #7ef9ff,-2px 0 #a995ff,0 0 20px rgba(126,249,255,.3); animation:opehh-flicker 2.4s steps(1,end) infinite; }
-    #splash .opehh-subtitle { color:#9aa8c2; letter-spacing:.28em; text-transform:uppercase; font-size:9px; }
-    @keyframes opehh-sweep { 0%{transform:translateX(-70%) skewX(-15deg)}65%{transform:translateX(65%) skewX(-15deg)}72%{transform:translateX(59%) skewX(-12deg)}100%{transform:translateX(150%) skewX(-15deg)} }
-    @keyframes opehh-scan { 50%{transform:translateY(3px);opacity:.12} }
-    @keyframes opehh-flicker { 0%,88%,100%{transform:none;clip-path:none}89%{transform:translateX(2px);clip-path:inset(15% 0 68%)}91%{transform:translateX(-2px);clip-path:inset(65% 0 12%)}93%{transform:none;clip-path:inset(40% 0 40%)} }
-    /* Webtoon mode: uninterrupted vertical artwork, no artificial gaps. */
-    #readerView.opehh-webtoon #readerContent { scroll-behavior:auto; }
-    #readerView.opehh-webtoon #readerContent img { width:100%; max-width:none; margin:0 auto; border-radius:0!important; }
-    @media(prefers-reduced-motion:reduce){#splash .opehh-mark::before,#splash .opehh-mark::after,#splash .opehh-title{animation:none!important}}
+
+    /* Opehh splash treatment reuses the app's existing logo and layout. */
+    #splash .opehh-mark { position: relative; isolation: isolate; overflow: hidden; }
+    #splash .opehh-mark::before {
+      content: ""; position: absolute; inset: -50%; z-index: -1;
+      background: linear-gradient(105deg, transparent 42%, rgba(126,249,255,.55) 49%, rgba(169,149,255,.62) 51%, transparent 58%);
+      animation: opehh-sweep 1.15s steps(10,end) infinite;
+    }
+    #splash .opehh-mark::after {
+      content: ""; position: absolute; inset: 0; z-index: -1;
+      background: repeating-linear-gradient(0deg, transparent 0 6px, rgba(255,255,255,.08) 7px, transparent 8px);
+      animation: opehh-scan 1.6s steps(2,end) infinite;
+    }
+    #splash .opehh-title {
+      color: #e7edff;
+      text-shadow: 2px 0 #7ef9ff, -2px 0 #a995ff, 0 0 20px rgba(126,249,255,.3);
+      animation: opehh-flicker 2.4s steps(1,end) infinite;
+    }
+    #splash .opehh-subtitle { color: #9aa8c2; letter-spacing: .28em; text-transform: uppercase; font-size: 9px; }
+    @keyframes opehh-sweep {
+      0% { transform: translateX(-70%) skewX(-15deg); }
+      65% { transform: translateX(65%) skewX(-15deg); }
+      72% { transform: translateX(59%) skewX(-12deg); }
+      100% { transform: translateX(150%) skewX(-15deg); }
+    }
+    @keyframes opehh-scan { 50% { transform: translateY(3px); opacity: .12; } }
+    @keyframes opehh-flicker {
+      0%,88%,100% { transform: none; clip-path: none; }
+      89% { transform: translateX(2px); clip-path: inset(15% 0 68%); }
+      91% { transform: translateX(-2px); clip-path: inset(65% 0 12%); }
+      93% { transform: none; clip-path: inset(40% 0 40%); }
+    }
+
+    /* Webtoon mode: continuous full-width vertical panels without gaps. */
+    #readerView.opehh-webtoon #readerContent { scroll-behavior: auto; }
+    #readerView.opehh-webtoon #readerContent img {
+      display: block; width: 100%; max-width: none; height: auto;
+      margin: 0; border-radius: 0 !important;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #splash .opehh-mark::before, #splash .opehh-mark::after, #splash .opehh-title { animation: none !important; }
+    }
   `;
   const style = document.createElement('style');
   style.textContent = css;
   document.head.appendChild(style);
 
-  const $ = (id) => document.getElementById(id);
-  const userId = Number(window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 0);
-  const isOwner = userId === OWNER_ID;
-  const hasPremium = () => isOwner || $('accountPlan')?.dataset?.premium === 'true';
+  const getUserId = () => Number(window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 0);
+  const hasPremiumAccess = () =>
+    getUserId() === OWNER_ID || $('accountPlan')?.dataset?.premium === 'true';
 
-  // Rebrand the existing splash in place; leave the app's established layout alone.
+  // Keep the splash's existing structure and icon; only update its label/effects.
   const splash = $('splash');
   if (splash) {
     const mark = splash.querySelector('.logo-mark') || splash.querySelector('div');
@@ -50,7 +87,8 @@
     }
   }
 
-  // Fix the previous-cover flash without replacing the existing detail renderer.
+  // Reset old title data synchronously. Existing request-ID guards still decide
+  // which response may render when users tap titles quickly in succession.
   if (typeof window.openDetails === 'function') {
     const originalOpenDetails = window.openDetails;
     window.openDetails = function (id) {
@@ -69,7 +107,8 @@
     };
   }
 
-  // Clear the previous chapter synchronously and prioritize the first viewport.
+  // Keep chapter rendering untouched. Prioritize only the first viewport after
+  // the existing reader has inserted its images; don't pre-download duplicates.
   if (typeof window.openReader === 'function') {
     const originalOpenReader = window.openReader;
     window.openReader = async function (index) {
@@ -79,33 +118,28 @@
         content.replaceChildren();
         content.scrollTop = 0;
       }
-      if (view) view.classList.remove('opehh-webtoon');
+      if (view) view.classList.toggle('opehh-webtoon', webtoonEnabled);
+
       const result = await originalOpenReader.apply(this, arguments);
       requestAnimationFrame(() => {
-        const images = [...(content?.querySelectorAll('img') || [])];
+        if (!content) return;
+        const images = [...content.querySelectorAll('img')];
         images.forEach((img, i) => {
+          img.decoding = 'async';
           if (i < 4) img.loading = 'eager';
           if (i === 0) img.fetchPriority = 'high';
-          else if (i < 4) img.fetchPriority = 'auto';
         });
-        // Pre-warm only the next couple of pages; avoid downloading a whole chapter up front.
-        for (const img of images.slice(4, 6)) {
-          if (img.dataset.opehhPreload) continue;
-          img.dataset.opehhPreload = '1';
-          const preload = new Image();
-          preload.decoding = 'async';
-          preload.src = img.src;
-        }
+        if (view) view.classList.toggle('opehh-webtoon', webtoonEnabled);
       });
       return result;
     };
   }
 
-  // Add a scroll-only webtoon presentation toggle for owner and Premium readers.
   function installWebtoonToggle() {
     const view = $('readerView');
     const header = $('readerTopBar');
     if (!view || !header || header.querySelector('#opehhWebtoonToggle')) return;
+
     const button = document.createElement('button');
     button.id = 'opehhWebtoonToggle';
     button.type = 'button';
@@ -113,25 +147,38 @@
     button.textContent = 'Webtoon';
     button.title = 'Continuous vertical webtoon reading';
     button.hidden = true;
+
     button.addEventListener('click', () => {
-      if (!hasPremium()) return;
-      const enabled = view.classList.toggle('opehh-webtoon');
-      button.textContent = enabled ? 'Webtoon ✓' : 'Webtoon';
-      if ($('readerContent')) $('readerContent').scrollTop = 0;
+      if (!hasPremiumAccess()) {
+        window.showToast?.('Webtoon mode is available to the owner and Premium readers.');
+        return;
+      }
+      webtoonEnabled = !webtoonEnabled;
+      view.classList.toggle('opehh-webtoon', webtoonEnabled);
+      button.textContent = webtoonEnabled ? 'Webtoon ✓' : 'Webtoon';
+      const content = $('readerContent');
+      if (content) content.scrollTop = 0;
     });
+
     const buttons = header.querySelectorAll('button');
     if (buttons.length > 1) header.insertBefore(button, buttons[buttons.length - 1]);
     else header.appendChild(button);
 
-    const observer = new MutationObserver(() => {
+    const updateButton = () => {
       const opened = view.classList.contains('flex') && !view.classList.contains('hidden');
+      const access = hasPremiumAccess();
       button.hidden = !opened;
-      button.disabled = !hasPremium();
-      button.classList.toggle('opacity-50', !hasPremium());
-      if (!hasPremium()) button.title = 'Webtoon mode is available to the owner and Premium readers';
-    });
-    observer.observe(view, { attributes: true, attributeFilter: ['class'] });
-    observer.observe($('accountPlan') || document.body, { attributes: true, subtree: true, attributeFilter: ['data-premium'] });
+      button.disabled = !access;
+      button.classList.toggle('opacity-50', !access);
+      button.title = access
+        ? 'Toggle continuous vertical webtoon reading'
+        : 'Webtoon mode is available to the owner and Premium readers';
+    };
+
+    new MutationObserver(updateButton).observe(view, { attributes: true, attributeFilter: ['class'] });
+    const accountPlan = $('accountPlan');
+    if (accountPlan) new MutationObserver(updateButton).observe(accountPlan, { attributes: true, attributeFilter: ['data-premium'] });
+    updateButton();
   }
 
   installWebtoonToggle();
