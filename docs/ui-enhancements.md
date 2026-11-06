@@ -1,13 +1,16 @@
-# Applying the Manhwa Opehh UI enhancement helper
+# Applying the Manhwa Opehh enhancements without replacing your UI
 
-This helper deliberately does not replace `index.html` or redesign the app. It adjusts only bottom-tab size, splash branding/glitch styling, detail cover reset, initial chapter image priority, and adds a Premium/owner webtoon toggle.
+This standalone helper preserves the existing `index.html` and reader markup. It makes the bottom tabs slightly taller, adds Manhwa Opehh splash branding/glitch styling, clears stale detail state before loading a new title, raises priority for only the first four chapter images, and adds a continuous vertical Webtoon mode toggle.
 
-Add this script tag after the app's existing inline `<script>` block and before `</body>` in `index.html`:
+## Install
+
+1. Keep the existing `index.html` and its reader UI unchanged.
+2. Add this one script tag after the existing inline app script and before `</body>`:
 
 ```html
 <script src="/opehh-ui-enhancements.js"></script>
 ```
 
-The toggle is presentation-only; the current reader already scrolls vertically. Premium/owner visibility is a client-side UI gate, not a security boundary. The owner ID is set to the Telegram ID supplied by the user (1405846034). The helper requires the account UI to set `#accountPlan[data-premium="true"]` for active Premium readers.
+3. Commit both files to the mini-app repo and redeploy it.
 
-The helper does not change library/history/update UI. The file is not active until the script tag is added to the HTML and the mini app is redeployed.
+The Webtoon switch is available to the configured Telegram owner ID and active Premium accounts (`#accountPlan` must have `data-premium="true"`). This is only a UI toggle: the existing reader already presents pages vertically. The helper changes them to a seamless, full-width scroll presentation. Client-side checks are not a security boundary; enforce entitlements on the backend for protected features.
