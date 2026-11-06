@@ -6,6 +6,7 @@
   const $ = (id) => document.getElementById(id);
   let webtoonEnabled = false;
   let imageObserver = null;
+  let isLoadingNext = false;
 
   const css = `
     #bottomNav .nav-tab { min-height:60px; padding-top:10px; padding-bottom:calc(9px + env(safe-area-inset-bottom)); }
@@ -22,6 +23,10 @@
     /* Webtoon mode: gapless continuous pages, controls stay visible */
     #readerView.opehh-webtoon #readerContent { padding-top:3.5rem!important; padding-bottom:9rem!important; scroll-behavior:auto; }
     #readerView.opehh-webtoon #readerContent img { display:block; width:100%; max-width:none; height:auto; margin:0; border-radius:0!important; }
+    
+    /* Loading indicator for infinite scroll */
+    #opehhInfiniteLoader { text-align: center; padding: 20px; color: #aeb8ca; font-size: 12px; display: none; }
+    #opehhInfiniteLoader.show { display: block; }
     
     @media(prefers-reduced-motion:reduce){#splash .opehh-mark::before,#splash .opehh-mark::after,#splash .opehh-title{animation:none!important}}
   `;
@@ -87,6 +92,75 @@
   }
   observeReaderImages();
 
+  // --- INFINITE SCROLL LOGIC ---
+  async function loadNextChapterInfinite() {
+    if (!webtoonEnabled || isLoadingNext) return;
+    
+    // Check if there is a next chapter
+    const nextIdx = window.currentChapterIndex + 1;
+    if (nextIdx >= window.currentChapters.length) {
+      return; // No more chapters
+    }
+    
+    isLoadingNext = true;
+    const loader = $('opehhInfiniteLoader');
+    if (loader) loader.classList.add('show');
+    
+    try {
+      const nextChapter = window.currentChapters[nextIdx];
+      const content = $('readerContent');
+      
+      // Add a visual separator
+      const divider = document.createElement('div');
+      divider.style.cssText = 'text-align:center; padding:20px; color:#bcf36b; font-size:12px; font-weight:bold;';
+      divider.textContent = `--- ${nextChapter.name || `Chapter ${nextChapter.number}`} ---`;
+      content.appendChild(divider);
+
+      const res = await window.apiFetch(`/api/chapter/${encodeURIComponent(nextChapter.id)}`);
+      const data = await res.json();
+      const pages = data.pages || [];
+      
+      pages.forEach((url, n) => {
+        const im = document.createElement('img');
+        im.alt = `Page ${n+1}`;
+        im.loading = 'lazy';
+        im.decoding = 'async';
+        const src = window.resolveImage(url);
+        im.src = src;
+        let tries = 0;
+        im.onerror = () => {
+          if (tries++ < 2) im.src = `${src}${src.includes('?')?'&':'?'}retry=${Date.now()}-${tries}`;
+          else { im.onerror = null; im.alt = `Page ${n+1} failed`; im.classList.add('cover-fallback'); }
+        };
+        content.appendChild(im);
+      });
+      
+      // Update global state so the reader knows where we are
+      window.currentChapterIndex = nextIdx;
+      $('prevBtn').disabled = false;
+      $('nextBtn').disabled = nextIdx === window.currentChapters.length - 1;
+      
+      // Save history for next chapter
+      window.apiFetch(`/api/chapter/${encodeURIComponent(nextChapter.id)}/read`, { method: 'POST' }).catch(console.warn);
+      
+    } catch (e) {
+      console.warn("Infinite scroll load failed", e);
+    } finally {
+      isLoadingNext = false;
+      if (loader) loader.classList.remove('show');
+    }
+  }
+
+  // Listen for scroll on reader
+  $('readerContent')?.addEventListener('scroll', (e) => {
+    if (!webtoonEnabled) return;
+    const el = e.target;
+    // If scrolled within 300px of the bottom
+    if (el.scrollHeight - el.scrollTop - el.clientHeight < 300) {
+      loadNextChapterInfinite();
+    }
+  });
+
   if (typeof window.openDetails === 'function') {
     const originalOpenDetails = window.openDetails;
     window.openDetails = function (id) {
@@ -119,6 +193,12 @@
         if (view) view.classList.toggle('opehh-webtoon', webtoonEnabled);
         content.scrollTop = 0;
         observeReaderImages();
+        
+        // Append the loader indicator at the bottom
+        const loader = document.createElement('div');
+        loader.id = 'opehhInfiniteLoader';
+        loader.innerHTML = '<div class="spinner mx-auto mb-2"></div> Loading next chapter...';
+        content.appendChild(loader);
       });
       return result;
     };
