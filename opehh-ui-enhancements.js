@@ -6,11 +6,6 @@
   const $ = (id) => document.getElementById(id);
   let webtoonEnabled = false;
   let imageObserver = null;
-  let browseMode = 'popular';
-  let browsePage = 1;
-  let browseFilters = { lang: '', source: '' };
-  let browseItems = [];
-  let browseRequest = 0;
 
   const css = `
     #bottomNav .nav-tab { min-height:60px; padding-top:10px; padding-bottom:calc(9px + env(safe-area-inset-bottom)); }
@@ -23,17 +18,11 @@
     @keyframes opehh-sweep { 0%{transform:translateX(-70%) skewX(-15deg)}65%{transform:translateX(65%) skewX(-15deg)}72%{transform:translateX(59%) skewX(-12deg)}100%{transform:translateX(150%) skewX(-15deg)} }
     @keyframes opehh-scan { 50%{transform:translateY(3px);opacity:.12} }
     @keyframes opehh-flicker { 0%,88%,100%{transform:none;clip-path:none}89%{transform:translateX(2px);clip-path:inset(15% 0 68%)}91%{transform:translateX(-2px);clip-path:inset(65% 0 12%)}93%{transform:none;clip-path:inset(40% 0 40%)} }
-
-    /* Webtoon means gapless continuous pages, not hiding the reader controls. */
+    
+    /* Webtoon mode: gapless continuous pages, controls stay visible */
     #readerView.opehh-webtoon #readerContent { padding-top:3.5rem!important; padding-bottom:9rem!important; scroll-behavior:auto; }
     #readerView.opehh-webtoon #readerContent img { display:block; width:100%; max-width:none; height:auto; margin:0; border-radius:0!important; }
-
-    .opehh-browse-controls { display:grid; gap:9px; margin:12px 0 4px; }
-    .opehh-browse-tabs { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-    .opehh-browse-tab,.opehh-browse-filter { min-height:42px; border:1px solid rgba(255,255,255,.1); border-radius:14px; background:#121621; color:#aeb8ca; font:600 12px inherit; }
-    .opehh-browse-tab.active { color:#090b12; border-color:#bcf36b; background:#bcf36b; }
-    .opehh-browse-filters { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-    .opehh-browse-filter { width:100%; padding:0 10px; text-align:left; }
+    
     @media(prefers-reduced-motion:reduce){#splash .opehh-mark::before,#splash .opehh-mark::after,#splash .opehh-title{animation:none!important}}
   `;
   const style = document.createElement('style');
@@ -42,17 +31,19 @@
 
   const telegramId = () => Number(window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 0);
   const hasPremiumAccess = () => telegramId() === OWNER_ID || $('accountPlan')?.dataset?.premium === 'true';
-  const toast = (message) => {
-    if (typeof window.showToast === 'function') window.showToast(message);
-    else console.info(message);
-  };
 
   const splash = $('splash');
   if (splash) {
     const mark = splash.querySelector('.logo-mark') || splash.querySelector('div');
-    if (mark) { mark.classList.add('opehh-mark'); mark.setAttribute('aria-label', 'Manhwa Opehh'); }
+    if (mark) {
+      mark.classList.add('opehh-mark');
+      mark.setAttribute('aria-label', 'Manhwa Opehh');
+    }
     const heading = splash.querySelector('h1');
-    if (heading) { heading.textContent = 'MANHWA OPEHH'; heading.classList.add('opehh-title'); }
+    if (heading) {
+      heading.textContent = 'MANHWA OPEHH';
+      heading.classList.add('opehh-title');
+    }
     const message = $('splashMessage');
     if (message && !splash.querySelector('.opehh-subtitle')) {
       const subtitle = document.createElement('p');
@@ -110,8 +101,6 @@
     };
   }
 
-  // Keep the existing reader functions and controls intact. The buttons remain
-  // visible and their chapter-navigation handlers are never intercepted.
   if (typeof window.openReader === 'function') {
     const originalOpenReader = window.openReader;
     window.openReader = async function (index) {
@@ -147,7 +136,10 @@
     button.title = 'Continuous vertical pages; chapter controls stay available';
     button.hidden = true;
     button.addEventListener('click', () => {
-      if (!hasPremiumAccess()) { toast('Webtoon mode is available to the owner and Premium readers.'); return; }
+      if (!hasPremiumAccess()) { 
+        if (typeof window.showToast === 'function') window.showToast('Webtoon mode is available to the owner and Premium readers.');
+        return; 
+      }
       webtoonEnabled = !webtoonEnabled;
       view.classList.toggle('opehh-webtoon', webtoonEnabled);
       button.textContent = webtoonEnabled ? 'Webtoon ✓' : 'Webtoon';
@@ -170,106 +162,6 @@
     refresh();
   }
 
-  function populateSelect(select, options, label, selected) {
-    const values = [...new Set(options.filter(Boolean))].sort((a,b) => a.localeCompare(b));
-    select.replaceChildren(new Option(label, ''));
-    values.forEach((value) => select.add(new Option(value, value)));
-    select.value = selected || '';
-  }
-
-  function installBrowseControls() {
-    const search = $('searchInput');
-    const grid = $('browseGrid');
-    const header = search?.closest('header');
-    if (!search || !grid || !header || $('opehhBrowseControls')) return;
-
-    const controls = document.createElement('div');
-    controls.id = 'opehhBrowseControls';
-    controls.className = 'opehh-browse-controls';
-    controls.innerHTML = `
-      <div class="opehh-browse-tabs" role="tablist" aria-label="Browse lists">
-        <button type="button" class="opehh-browse-tab active" data-mode="popular" role="tab" aria-selected="true">Popular</button>
-        <button type="button" class="opehh-browse-tab" data-mode="latest" role="tab" aria-selected="false">Latest</button>
-      </div>
-      <div class="opehh-browse-filters">
-        <select id="opehhLanguageFilter" class="opehh-browse-filter" aria-label="Filter by language"><option value="">All languages</option></select>
-        <select id="opehhSourceFilter" class="opehh-browse-filter" aria-label="Filter by source"><option value="">All sources</option></select>
-      </div>`;
-    search.insertAdjacentElement('afterend', controls);
-
-    const language = $('opehhLanguageFilter');
-    const source = $('opehhSourceFilter');
-    const setModeUI = () => {
-      controls.querySelectorAll('[data-mode]').forEach((button) => {
-        const active = button.dataset.mode === browseMode;
-        button.classList.toggle('active', active);
-        button.setAttribute('aria-selected', String(active));
-      });
-      language.disabled = browseMode !== 'latest';
-      source.disabled = false;
-      language.classList.toggle('opacity-50', browseMode !== 'latest');
-    };
-    controls.querySelectorAll('[data-mode]').forEach((button) => button.addEventListener('click', () => {
-      browseMode = button.dataset.mode;
-      browsePage = 1;
-      setModeUI();
-      loadBrowseMode(1);
-    }));
-    language.addEventListener('change', () => { browseFilters.lang = language.value; browsePage = 1; loadBrowseMode(1); });
-    source.addEventListener('change', () => { browseFilters.source = source.value; browsePage = 1; loadBrowseMode(1); });
-    setModeUI();
-  }
-
-  async function loadBrowseMode(page = 1) {
-    const grid = $('browseGrid');
-    const more = $('loadMoreBtn');
-    if (!grid) return;
-    const requestId = ++browseRequest;
-    browsePage = page;
-    if (page === 1 && typeof window.skeletonGrid === 'function') window.skeletonGrid(grid, 6);
-    if (more) { more.disabled = true; more.textContent = 'Loading…'; }
-    try {
-      const params = new URLSearchParams({ mode:browseMode, page:String(page) });
-      if (browseFilters.lang) params.set('lang', browseFilters.lang);
-      if (browseFilters.source) params.set('source', browseFilters.source);
-      const response = await window.apiFetch(`/api/browse?${params.toString()}`);
-      const data = await response.json();
-      if (requestId !== browseRequest) return;
-
-      const items = Array.isArray(data) ? data : (data.items || []);
-      const filters = data.filters || {};
-      if (page === 1) browseItems = items;
-      else browseItems = browseItems.concat(items);
-      populateSelect($('opehhLanguageFilter'), filters.languages || [], 'All languages', browseFilters.lang);
-      populateSelect($('opehhSourceFilter'), (filters.sources || []).map((s) => s.name), 'All sources',
-        (filters.sources || []).find((s) => String(s.id) === browseFilters.source)?.name || '');
-      // Keep selected source ID associated with its display label after filter refresh.
-      const sourceSelect = $('opehhSourceFilter');
-      if (browseFilters.source && filters.sources?.some((s) => String(s.id) === browseFilters.source)) {
-        sourceSelect.value = filters.sources.find((s) => String(s.id) === browseFilters.source).name;
-      }
-      if (typeof window.renderGrid === 'function') window.renderGrid('browseGrid', browseItems);
-      if (more) more.textContent = items.length ? 'Load more' : 'No more titles';
-    } catch (error) {
-      if (requestId === browseRequest && typeof window.setMessage === 'function') {
-        window.setMessage(grid, error.message || 'Browse failed. Try again.', true);
-      }
-      if (more) more.textContent = 'Retry';
-    } finally {
-      if (more) more.disabled = false;
-    }
-  }
-
-  function activateBrowse() {
-    installBrowseControls();
-    if (typeof window.loadBrowse === 'function') {
-      window.loadBrowse = (page = 1) => loadBrowseMode(page);
-    }
-    const more = $('loadMoreBtn');
-    if (more) more.onclick = () => loadBrowseMode(browsePage + 1);
-  }
-
   installWebtoonToggle();
-  activateBrowse();
-  document.addEventListener('DOMContentLoaded', () => { installWebtoonToggle(); activateBrowse(); }, { once:true });
+  document.addEventListener('DOMContentLoaded', () => { installWebtoonToggle(); }, { once:true });
 })();
