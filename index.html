@@ -1,39 +1,1002 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#090b12"><title>Panel — Manhwa Reader</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script><script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b1020" />
+  <title>Manhwa Opehh</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    :root{color-scheme:dark;--bg:#090b12;--panel:#121621;--accent:#bcf36b;--muted:#929bad}*{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);color:#f5f6f8;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overscroll-behavior:none}body{overflow:hidden}::-webkit-scrollbar{display:none}.nav-tab{flex:1;min-width:0;padding:9px 2px calc(7px + env(safe-area-inset-bottom));text-align:center;color:#81899a;font-size:10px;font-weight:650}.nav-tab.active{color:var(--accent)}.nav-tab svg{display:block;width:21px;height:21px;margin:0 auto 3px}.safe-bottom{padding-bottom:env(safe-area-inset-bottom)}button:disabled{opacity:.5}.cover{background:#151a25}.skeleton{position:relative;overflow:hidden;background:#151a25}.skeleton:after{content:"";position:absolute;inset:-40%;background:linear-gradient(105deg,transparent 35%,rgba(190,243,107,.14) 46%,rgba(171,151,255,.2) 49%,transparent 59%);transform:translateX(-70%) skewX(-15deg);animation:glitchSweep 1.15s steps(12,end) infinite}.skeleton:before{content:"";position:absolute;inset:0;opacity:.28;background:repeating-linear-gradient(0deg,transparent 0 7px,rgba(255,255,255,.07) 8px,transparent 9px);animation:scan 1.8s steps(2,end) infinite}@keyframes glitchSweep{0%{transform:translateX(-70%) skewX(-15deg)}65%{transform:translateX(65%) skewX(-15deg)}70%{transform:translateX(59%) skewX(-12deg)}75%{transform:translateX(72%) skewX(-18deg)}100%{transform:translateX(150%) skewX(-15deg)}}@keyframes scan{50%{transform:translateY(3px);opacity:.12}}.glitch-logo{position:relative;color:#f5f6f8;text-shadow:2px 0 #bcf36b,-2px 0 #a995ff;animation:logoGlitch 2.4s steps(1,end) infinite}@keyframes logoGlitch{0%,88%,100%{transform:none;clip-path:none}89%{transform:translateX(2px);clip-path:inset(15% 0 68%)}91%{transform:translateX(-2px);clip-path:inset(65% 0 12%)}93%{transform:none;clip-path:inset(40% 0 40%)}}.spinner{width:30px;height:30px;border:2px solid #343b4b;border-top-color:var(--accent);border-right-color:#a995ff;border-radius:50%;animation:spin .72s linear infinite;box-shadow:0 0 18px #bcf36b20}@keyframes spin{to{transform:rotate(360deg)}}#readerView{background:#050608}#readerContent{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;transition:filter .2s,background .2s}#readerContent img{display:block;width:100%;height:auto;max-width:1000px;min-height:180px;margin:0 auto;background:#0b0d12;object-fit:contain}.reader-bar{background:linear-gradient(180deg,rgba(5,6,8,.95),rgba(5,6,8,.72));backdrop-filter:blur(14px);transition:opacity .2s,transform .2s}.reader-hidden{opacity:0;pointer-events:none}.cover-fallback{display:grid;place-items:center;background:linear-gradient(145deg,#20283b,#11151f);color:#737e96}.premium-control{accent-color:#bcf36b}.pro-card{background:linear-gradient(130deg,#bcf36b12,#a995ff15 60%,#121621);border:1px solid #bcf36b35}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+    :root {
+      color-scheme: dark;
+      --bg: #071019;
+      --bg-2: #0d1729;
+      --panel: #121d2d;
+      --panel-2: #162539;
+      --line: rgba(148, 163, 184, 0.18);
+      --muted: #8fa3be;
+      --text: #edf3ff;
+      --accent: #8aa5ff;
+      --accent-2: #7c3aed;
+      --success: #4ade80;
+      --warning: #fbbf24;
+      --danger: #fb7185;
+      --glitch: #7ef9ff;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: radial-gradient(circle at top, #111d31 0%, var(--bg) 38%, #050a12 100%);
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overscroll-behavior: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body { overflow: hidden; }
+
+    ::-webkit-scrollbar { display: none; }
+
+    .nav-tab {
+      flex: 1;
+      min-width: 0;
+      padding: 8px 2px calc(8px + env(safe-area-inset-bottom));
+      text-align: center;
+      color: #7f90b3;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      border: none;
+      background: transparent;
+      height: 68px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: all .2s ease;
+    }
+
+    .nav-tab.active {
+      color: var(--accent);
+      background: linear-gradient(180deg, rgba(138,165,255,.12), rgba(138,165,255,0));
+    }
+
+    .nav-tab svg {
+      display: block;
+      width: 22px;
+      height: 22px;
+      margin: 0 auto 4px;
+    }
+
+    .skeleton {
+      background: linear-gradient(100deg, #182238 20%, #24395d 38%, #182238 56%);
+      background-size: 200% 100%;
+      animation: shine 1.4s linear infinite;
+    }
+
+    @keyframes shine {
+      to { background-position-x: -200%; }
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid rgba(255,255,255,.12);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .reader-bar {
+      background: linear-gradient(180deg, rgba(0,0,0,.96), rgba(0,0,0,.72));
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .reader-hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .safe-bottom {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    button:disabled {
+      opacity: .5;
+      cursor: default;
+    }
+
+    .cover { background: #101a2a; }
+    img { image-rendering: auto; }
+
+    .glitch-shell {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .glitch-shell::before,
+    .glitch-shell::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(126,249,255,.12) 30%, transparent 60%);
+      transform: translateX(-120%);
+      animation: glitchSweep 1.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .glitch-shell::after {
+      animation-delay: .8s;
+      background: linear-gradient(90deg, transparent 0%, rgba(138,165,255,.12) 20%, transparent 70%);
+    }
+
+    @keyframes glitchSweep {
+      0% { transform: translateX(-120%); filter: blur(0); opacity: 0; }
+      25% { opacity: 1; }
+      50% { transform: translateX(120%); filter: blur(1px); opacity: .8; }
+      100% { transform: translateX(120%); opacity: 0; }
+    }
+
+    .glitch-title {
+      position: relative;
+      text-shadow:
+        0 0 18px rgba(126,249,255,.22),
+        2px 0 rgba(126,249,255,.6),
+        -2px 0 rgba(138,165,255,.5);
+      animation: flicker 2.2s steps(2, end) infinite;
+    }
+
+    @keyframes flicker {
+      0%, 18%, 22%, 24%, 45%, 48%, 100% { opacity: 1; filter: blur(0); }
+      20%, 23%, 46%, 47% { opacity: .72; filter: blur(1px); }
+      25% { opacity: .94; }
+    }
+
+    .logo-mark {
+      width: 72px;
+      height: 72px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(138,165,255,.18), rgba(124,58,237,.24));
+      border: 1px solid rgba(138,165,255,.28);
+      box-shadow:
+        inset 0 0 28px rgba(126,249,255,.08),
+        0 0 28px rgba(138,165,255,.1);
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+
+    .logo-mark::before,
+    .logo-mark::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: 18px;
+      border: 1px solid rgba(126,249,255,.2);
+      transform: rotate(12deg);
+    }
+
+    .logo-mark::after {
+      transform: rotate(-12deg);
+      border-color: rgba(138,165,255,.22);
+    }
+
+    .logo-mark span {
+      font-size: 32px;
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 0 10px rgba(126,249,255,.18));
+    }
   </style>
 </head>
 <body>
-  <div id="splash" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#090b12]"><div class="mb-5 grid h-20 w-20 place-items-center rounded-[28px] border border-lime-300/20 bg-lime-300/10 text-4xl">漫</div><h1 class="glitch-logo text-xl font-black tracking-[.24em]">PANEL<span class="text-lime-300">.</span></h1><p id="splashMessage" class="mt-3 text-sm text-slate-400">Connecting securely…</p><div class="spinner mt-6"></div><p class="mt-4 text-[9px] uppercase tracking-[.28em] text-slate-600">Loading your world</p></div>
+  <div id="splash" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#0b1020] transition-opacity duration-300">
+    <div class="glitch-shell logo-mark"><span>📚</span></div>
+    <h1 class="glitch-title mt-5 text-xl font-black tracking-[0.18em] text-indigo-200">MANHWA OPEHH</h1>
+    <p id="splashMessage" class="mt-3 text-sm text-slate-400">Connecting securely…</p>
+    <div class="spinner mt-6"></div>
+  </div>
+
   <main id="viewsContainer" class="h-[100dvh] overflow-y-auto pb-20 safe-bottom">
-    <section id="libraryView" class="hidden min-h-full"><header class="sticky top-0 z-20 border-b border-white/5 bg-[#090b12]/95 px-4 py-4 backdrop-blur"><p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Your collection</p><h1 class="mt-1 text-2xl font-bold">Library</h1></header><div id="libraryGrid" class="grid grid-cols-2 gap-3 p-4"></div></section>
-    <section id="updatesView" class="hidden min-h-full"><header class="sticky top-0 z-20 border-b border-white/5 bg-[#090b12]/95 px-4 py-4 backdrop-blur"><p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Fresh pages</p><h1 class="mt-1 text-2xl font-bold">Updates</h1></header><div id="updatesList" class="space-y-3 p-4"></div></section>
-    <section id="historyView" class="hidden min-h-full"><header class="sticky top-0 z-20 flex items-center justify-between border-b border-white/5 bg-[#090b12]/95 px-4 py-4 backdrop-blur"><div><p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Your trail</p><h1 class="mt-1 text-2xl font-bold">History</h1></div><button onclick="loadHistory()" class="rounded-xl border border-white/10 px-3 py-2 text-xs">↻ Refresh</button></header><div id="historyList" class="space-y-3 p-4"></div></section>
-    <section id="browseView" class="min-h-full"><header class="sticky top-0 z-20 border-b border-white/5 bg-[#090b12]/95 p-4 backdrop-blur"><div class="mb-4 flex items-end justify-between"><div><p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Explore</p><h1 class="mt-1 text-2xl font-bold">Discover</h1></div><span class="rounded-full border border-white/10 px-3 py-1 text-[10px] text-slate-400">MANHWA · MANGA</span></div><input id="searchInput" class="w-full rounded-2xl border border-white/10 bg-[#121621] py-3 px-4 text-sm outline-none focus:border-lime-300/50" placeholder="Search titles…" autocomplete="off"></header><div id="browseGrid" class="grid grid-cols-2 gap-3 p-4"></div><div class="flex justify-center px-4 pb-8"><button id="loadMoreBtn" class="rounded-xl border border-white/10 bg-[#121621] px-6 py-3 text-sm font-semibold text-lime-200">Load more</button></div></section>
-    <section id="moreView" class="hidden min-h-full"><header class="border-b border-white/5 px-4 py-4"><p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Personal</p><h1 class="mt-1 text-2xl font-bold">Account</h1></header><div class="space-y-3 p-4"><div class="rounded-3xl border border-white/10 bg-[#121621] p-5"><p class="text-xs uppercase tracking-wider text-slate-500">Signed in with Telegram</p><p id="accountName" class="mt-2 text-lg font-bold">—</p><p id="accountId" class="mt-1 text-xs text-slate-400"></p><div class="mt-4 flex items-center justify-between border-t border-white/5 pt-4"><span class="text-sm text-slate-400">Membership</span><span id="accountPlan" class="rounded-full bg-lime-300/10 px-3 py-1 text-xs font-semibold text-lime-200">Loading…</span></div><p id="memberSince" class="mt-3 text-xs text-slate-500"></p></div><div class="pro-card rounded-2xl p-4"><div class="flex items-center justify-between"><div><p class="text-xs font-bold uppercase tracking-wider text-lime-200">Premium reader</p><p class="mt-1 text-xs text-slate-400">Auto-scroll · themes · brightness</p></div><span class="text-2xl">✦</span></div><p id="premiumAccountMessage" class="mt-3 text-[11px] text-slate-400">Open the bot’s ⭐ Premium menu to see plans.</p></div><button class="w-full rounded-2xl border border-white/10 bg-[#121621] p-4 text-left" onclick="switchTab('library')"><b>▤ &nbsp;My library</b></button><button class="w-full rounded-2xl border border-white/10 bg-[#121621] p-4 text-left" onclick="switchTab('history')"><b>◷ &nbsp;Reading history</b></button><button class="w-full rounded-2xl border border-white/10 bg-[#121621] p-4 text-left" onclick="refreshCurrent()"><b>↻ &nbsp;Refresh data</b></button><p class="px-1 text-[11px] leading-relaxed text-slate-500">Your library and reading history are private to your Telegram account.</p></div></section>
+    <section id="libraryView" class="hidden min-h-full">
+      <header class="sticky top-0 z-20 border-b border-slate-800 bg-[#0b1020]/95 px-4 py-4 backdrop-blur">
+        <h1 class="text-xl font-bold">My Library</h1>
+        <p class="mt-1 text-xs text-slate-400">Your saved manhwa</p>
+      </header>
+      <div id="libraryGrid" class="grid grid-cols-2 gap-3 p-4"></div>
+    </section>
+
+    <section id="updatesView" class="hidden min-h-full">
+      <header class="sticky top-0 z-20 border-b border-slate-800 bg-[#0b1020]/95 px-4 py-4 backdrop-blur">
+        <h1 class="text-xl font-bold">Updates</h1>
+        <p class="mt-1 text-xs text-slate-400">Unread latest chapters</p>
+      </header>
+      <div id="updatesList" class="space-y-3 p-4"></div>
+    </section>
+
+    <section id="historyView" class="hidden min-h-full">
+      <header class="sticky top-0 z-20 border-b border-slate-800 bg-[#0b1020]/95 px-4 py-4 backdrop-blur">
+        <h1 class="text-xl font-bold">Reading History</h1>
+        <p class="mt-1 text-xs text-slate-400">Your recent reads</p>
+      </header>
+      <div id="historyList" class="space-y-3 p-4"></div>
+    </section>
+
+    <section id="browseView" class="min-h-full">
+      <header class="sticky top-0 z-20 border-b border-slate-800 bg-[#0b1020]/95 p-4 backdrop-blur">
+        <div class="mb-4 flex items-center justify-between">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[.2em] text-indigo-300">Discover</p>
+            <h1 class="text-2xl font-bold">Browse manhwa</h1>
+          </div>
+          <div class="rounded-full border border-slate-700 bg-slate-900/50 px-2 py-1 text-[10px] uppercase tracking-[0.25em] text-slate-400">OPEHH</div>
+        </div>
+        <label class="relative block">
+          <svg class="absolute left-3 top-3.5 h-5 w-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7" stroke-width="1.8"></circle>
+            <path d="M5.5 5.5l13 13" stroke-linecap="round" stroke-width="1.8"></path>
+          </svg>
+          <input id="searchInput" class="w-full rounded-2xl border border-slate-700 bg-[#111b2d] px-10 py-3 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none" placeholder="Search manhwa..." />
+        </label>
+      </header>
+
+      <div id="browseGrid" class="grid grid-cols-2 gap-3 p-4"></div>
+      <div class="flex justify-center px-4 pb-8">
+        <button id="loadMoreBtn" class="rounded-xl border border-slate-700 bg-[#121a2d] px-6 py-3 text-sm font-semibold text-indigo-300">
+          Load more
+        </button>
+      </div>
+    </section>
+
+    <section id="moreView" class="hidden min-h-full">
+      <header class="border-b border-slate-800 px-4 py-4">
+        <h1 class="text-xl font-bold">Account</h1>
+        <p class="mt-1 text-xs text-slate-400">Connected with your Telegram account</p>
+      </header>
+
+      <div class="space-y-3 p-4">
+        <div class="rounded-2xl border border-slate-800 bg-[#121a2d] p-4">
+          <p class="text-xs uppercase tracking-wider text-slate-500">Signed in as</p>
+          <p id="accountName" class="mt-1 font-semibold">Loading...</p>
+          <p id="accountId" class="mt-1 text-xs text-slate-400">Telegram ID</p>
+          <p id="userLevel" class="mt-2 text-xs text-indigo-300">Level 1</p>
+        </div>
+
+        <button class="w-full rounded-2xl border border-slate-800 bg-[#121a2d] p-4 text-left" onclick="switchTab('library',document.querySelector('[data-tab=library]'))">
+          <b>📚 My library</b>
+          <p class="mt-1 text-xs text-slate-400">Your saved titles</p>
+        </button>
+
+        <button class="w-full rounded-2xl border border-slate-800 bg-[#121a2d] p-4 text-left" onclick="switchTab('history',document.querySelector('[data-tab=history]'))">
+          <b>🕘 Reading history</b>
+          <p class="mt-1 text-xs text-slate-400">Continue where you left off</p>
+        </button>
+
+        <button class="w-full rounded-2xl border border-slate-800 bg-[#121a2d] p-4 text-left" onclick="refreshCurrent()">
+          <b>↻ Refresh data</b>
+          <p class="mt-1 text-xs text-slate-400">Reload current screen</p>
+        </button>
+
+        <p class="px-1 text-[11px] leading-relaxed text-slate-500">
+          Your library and reading history are associated with your Telegram account.
+          Never share your Telegram login or bot token.
+        </p>
+      </div>
+    </section>
   </main>
-  <nav id="bottomNav" class="fixed bottom-0 left-0 right-0 z-40 flex border-t border-white/5 bg-[#090b12]/95 backdrop-blur safe-bottom"><button data-tab="library" class="nav-tab" onclick="switchTab('library')">▤<br>Library</button><button data-tab="updates" class="nav-tab" onclick="switchTab('updates')">⟳<br>Updates</button><button data-tab="history" class="nav-tab" onclick="switchTab('history')">◷<br>History</button><button data-tab="browse" class="nav-tab active" onclick="switchTab('browse')">⌕<br>Browse</button><button data-tab="more" class="nav-tab" onclick="switchTab('more')">•••<br>More</button></nav>
-  <section id="detailsView" class="fixed inset-0 z-50 hidden flex-col overflow-y-auto bg-[#090b12] pb-10"><header class="sticky top-0 z-20 flex items-center border-b border-white/5 bg-[#090b12]/95 p-4 backdrop-blur"><button onclick="closeDetails()" class="mr-3 text-xl text-lime-200">‹</button><span id="detailsHeaderTitle" class="truncate font-semibold"></span></header><div class="p-4"><div class="flex gap-4"><img id="detailCover" class="cover h-40 w-32 shrink-0 rounded-2xl object-cover" alt="Cover"><div class="min-w-0 pt-1"><h1 id="detailTitle" class="text-xl font-bold">Loading…</h1><p id="detailAuthor" class="mt-2 text-xs text-slate-400"></p><p id="detailArtist" class="mt-1 text-xs text-slate-400"></p><p id="detailStatus" class="mt-2 text-xs text-lime-200"></p></div></div><button id="addToLibraryBtn" class="mt-5 w-full rounded-xl border border-lime-300/30 bg-lime-300/10 py-3 font-semibold text-lime-100" onclick="toggleLibrary()">＋ Add to library</button><div id="detailGenres" class="mt-4 flex flex-wrap gap-2"></div><div class="mt-4 rounded-2xl border border-white/5 bg-[#121621] p-4"><h2 class="mb-2 text-sm font-bold">Synopsis</h2><p id="detailDescription" class="whitespace-pre-line text-xs leading-relaxed text-slate-300"></p></div><div class="mt-6"><div class="mb-3 flex items-center justify-between"><h2 id="chapterCount" class="text-lg font-bold">Chapters</h2><span class="text-xs text-slate-500">Tap to read</span></div><div id="chapterList" class="space-y-2"></div></div></div></section>
-  <section id="readerView" class="fixed inset-0 z-[60] hidden flex-col"><header id="readerTopBar" class="reader-bar absolute left-0 right-0 top-0 z-20 flex items-center justify-between border-b border-white/10 px-4 py-3"><button onclick="closeReader()" class="text-xl text-lime-200">‹</button><div class="min-w-0 px-3 text-center"><p id="readerTitle" class="truncate text-sm font-semibold"></p><p id="readerPageLabel" class="text-[10px] text-slate-400">Tap a page to hide controls</p></div><button onclick="togglePremiumPanel()" class="rounded-lg border border-lime-300/20 px-2 py-1 text-xs text-lime-200">✦ Pro</button></header><div id="readerContent" class="flex-1 overflow-y-auto pb-28 pt-14"></div><footer id="readerBottomBar" class="reader-bar absolute bottom-0 left-0 right-0 z-20 border-t border-white/10 px-3 pt-3 safe-bottom"><div class="mb-3 flex items-center justify-between gap-2"><button id="prevBtn" onclick="loadAdjacentChapter(-1)" class="rounded-lg bg-white/5 px-3 py-2 text-xs">← Previous</button><span id="pageCounter" class="text-xs text-slate-300">Loading…</span><button id="nextBtn" onclick="loadAdjacentChapter(1)" class="rounded-lg bg-white/5 px-3 py-2 text-xs">Next →</button></div><input id="readerSlider" type="range" min="0" max="100" value="0" class="premium-control mb-2 h-1 w-full"><div id="premiumPanel" class="hidden border-t border-white/10 pt-2 pb-2"><div class="mb-2 flex items-center justify-between"><span class="text-[10px] font-semibold uppercase tracking-wider text-lime-200">Premium reader tools</span><span id="premiumLockLabel" class="text-[10px] text-slate-500"></span></div><div class="grid grid-cols-2 gap-2"><button id="autoScrollBtn" onclick="toggleAutoScroll()" class="rounded-lg border border-white/10 bg-white/5 px-2 py-2 text-[11px]">▶ Auto-scroll</button><button id="readerThemeBtn" onclick="cycleReaderTheme()" class="rounded-lg border border-white/10 bg-white/5 px-2 py-2 text-[11px]">◐ Theme: Dark</button></div><label class="mt-2 flex items-center justify-between gap-3 text-[10px] text-slate-400">Scroll speed <input id="scrollSpeed" type="range" min="1" max="10" value="4" class="premium-control w-2/3"></label><label class="mt-2 flex items-center justify-between gap-3 text-[10px] text-slate-400">Brightness <input id="readerBrightness" type="range" min="50" max="130" value="100" class="premium-control w-2/3"></label><p class="mt-2 text-[9px] text-slate-500">Hands-free scroll, warm/OLED themes and reader brightness are Premium features.</p></div></footer></section>
-  <div id="toast" class="pointer-events-none fixed left-1/2 top-5 z-[90] hidden -translate-x-1/2 rounded-xl border border-white/10 bg-slate-900 px-4 py-3 text-sm shadow-xl"></div>
-<script>
-  const tg=window.Telegram?.WebApp,API='https://manhwa-opehh-production.up.railway.app',initData=tg?.initData||'',telegramUser=tg?.initDataUnsafe?.user||null;let currentTab='browse',currentPage=1,allManga=[],searchQuery='',currentMangaId=null,currentChapters=[],currentChapterIndex=0,totalImages=0,searchTimer,searchController,toastTimer,readerGestureStart=null,isPremium=false,autoScrollTimer=null,readerTheme=0;const libraryIds=new Set(),$=id=>document.getElementById(id);if(tg){tg.ready();tg.expand();tg.setHeaderColor('#090b12');tg.setBackgroundColor('#090b12');if(tg.disableVerticalSwipes)tg.disableVerticalSwipes()}
-  function apiUrl(p){return p.startsWith('http')?p:`${API}${p}`}function resolveImage(p){return p?(p.startsWith('http')?p:`${API}${p.startsWith('/')?'':'/'}${p}`):''}async function apiFetch(path,options={}){if(!initData)throw Error('Open the app using its Telegram button so your account can be verified.');const headers=new Headers(options.headers||{});headers.set('X-Telegram-Init-Data',initData);if(options.body&&!headers.has('Content-Type'))headers.set('Content-Type','application/json');const r=await fetch(apiUrl(path),{...options,headers});if(!r.ok){const j=await r.json().catch(()=>({}));throw Error(j.error||`Request failed (${r.status})`)}return r}
-  function showToast(s){const t=$('toast');t.textContent=s;t.classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.add('hidden'),2600)}function setMessage(c,s,error=false){c.innerHTML='';const p=document.createElement('p');p.className=`col-span-2 py-10 text-center text-sm ${error?'text-rose-300':'text-slate-400'}`;p.textContent=s;c.appendChild(p)}function skeletonGrid(c,n=6){c.innerHTML='';for(let i=0;i<n;i++){const d=document.createElement('div');d.className='overflow-hidden rounded-2xl border border-white/5 bg-[#121621]';d.innerHTML='<div class="skeleton aspect-[3/4]"></div><div class="space-y-2 p-3"><div class="skeleton h-3 rounded"></div><div class="skeleton h-2 w-2/3 rounded"></div></div>';c.appendChild(d)}}function retryImage(img,url){let n=0;img.onerror=()=>{if(n++<2)img.src=`${url}${url.includes('?')?'&':'?'}retry=${Date.now()}-${n}`;else{img.onerror=null;img.removeAttribute('src');img.classList.add('cover-fallback');img.alt='Image unavailable'}}}
-  function switchTab(name){currentTab=name;document.querySelectorAll('#viewsContainer>section').forEach(s=>s.classList.toggle('hidden',s.id!==`${name}View`));document.querySelectorAll('.nav-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));$('viewsContainer').scrollTop=0;if(name==='library')loadLibrary();if(name==='updates')loadUpdates();if(name==='history')loadHistory();if(name==='browse'&&!allManga.length)loadBrowse(1)}function renderGrid(id,items){const c=$(id);c.innerHTML='';if(!items?.length)return setMessage(c,id==='browseGrid'?'No titles found. Try another search.':'Nothing here yet. Browse titles and add them to your library.');items.forEach(m=>{const b=document.createElement('button');b.className='overflow-hidden rounded-2xl border border-white/5 bg-[#121621] text-left active:scale-[.98]';const im=document.createElement('img');im.className='cover aspect-[3/4] w-full object-cover';im.loading='lazy';im.alt=m.title||'Cover';const src=resolveImage(m.thumbnailUrl);if(src){im.src=src;retryImage(im,src)}const body=document.createElement('div');body.className='p-3';const title=document.createElement('p');title.className='truncate text-sm font-semibold';title.textContent=m.title||'Untitled';body.appendChild(title);if(m.chapterName){const ch=document.createElement('p');ch.className='mt-1 truncate text-xs text-lime-200';ch.textContent=m.chapterName;body.appendChild(ch)}b.append(im,body);b.onclick=()=>openDetails(m.mangaId??m.id);c.appendChild(b)})}
-  async function loadBrowse(page=1){const c=$('browseGrid');if(page===1)skeletonGrid(c);$('loadMoreBtn').disabled=true;try{const d=await(await apiFetch(`/api/popular?page=${page}`)).json();allManga=page===1?d:allManga.concat(d);currentPage=page;if(!searchQuery)renderGrid('browseGrid',allManga)}catch(e){if(page===1)setMessage(c,`${e.message} · Tap Load more to retry.`,true)}finally{$('loadMoreBtn').disabled=false}}async function searchTitles(q){if(!q)return renderGrid('browseGrid',allManga);skeletonGrid($('browseGrid'),4);try{const d=await(await apiFetch(`/api/search?q=${encodeURIComponent(q)}&page=1`,{signal:searchController?.signal})).json();if(searchQuery===q)renderGrid('browseGrid',d)}catch(e){if(e.name!=='AbortError'&&searchQuery===q)setMessage($('browseGrid'),e.message,true)}}async function loadLibrary(){skeletonGrid($('libraryGrid'),4);try{const a=await(await apiFetch('/api/library')).json();libraryIds.clear();a.forEach(x=>libraryIds.add(String(x.id)));renderGrid('libraryGrid',a)}catch(e){setMessage($('libraryGrid'),`${e.message} · Tap Library again to retry.`,true)}}
-  function renderRows(id,items,type){const c=$(id);c.innerHTML='';if(!items?.length){const p=document.createElement('p');p.className='py-10 text-center text-sm text-slate-400';p.textContent=type==='updates'?'No unread updates in your library.':'No reading history yet. Your chapters appear here when you read.';return c.appendChild(p)}items.forEach(x=>{const row=document.createElement('div');row.className='flex items-center gap-3 rounded-2xl border border-white/5 bg-[#121621] p-3';const im=document.createElement('img');im.className='cover h-16 w-12 rounded-lg object-cover';const src=resolveImage(x.thumbnailUrl);if(src){im.src=src;retryImage(im,src)}const b=document.createElement('button');b.className='min-w-0 flex-1 text-left';b.onclick=()=>openDetails(x.mangaId??x.id);const t=document.createElement('span');t.className='block truncate text-sm font-semibold';t.textContent=x.title||'Untitled';const sub=document.createElement('span');sub.className='mt-1 block truncate text-xs text-lime-200';sub.textContent=type==='updates'?(x.chapterName||`Chapter ${x.chapterNumber??''}`):'Recently read · tap to continue';b.append(t,sub);row.append(im,b);if(type==='history'){const del=document.createElement('button');del.textContent='✕';del.className='px-2 text-slate-500';del.onclick=()=>deleteHistory(x.mangaId,row,del);row.appendChild(del)}c.appendChild(row)})}async function loadUpdates(){const c=$('updatesList');c.textContent='Checking your library…';try{renderRows('updatesList',await(await apiFetch('/api/updates')).json(),'updates')}catch(e){setMessage(c,`${e.message} · Tap Updates again to retry.`,true)}}async function loadHistory(){const c=$('historyList');c.innerHTML='<div class="flex flex-col items-center py-10 text-slate-400"><div class="spinner"></div><p class="mt-4 text-sm">Loading your reading history…</p></div>';try{renderRows('historyList',await(await apiFetch('/api/history')).json(),'history')}catch(e){setMessage(c,`${e.message} · Check connection, then refresh.`,true)}}async function deleteHistory(id,row,b){b.disabled=true;try{await apiFetch(`/api/history/${encodeURIComponent(id)}`,{method:'DELETE'});row.remove();showToast('History removed')}catch(e){b.disabled=false;showToast(e.message)}}
-  async function openDetails(id){currentMangaId=String(id);$('detailsView').classList.remove('hidden');$('detailsView').classList.add('flex');$('detailTitle').textContent='Loading…';$('chapterList').textContent='Loading chapters…';try{const d=await(await apiFetch(`/api/manga/${encodeURIComponent(id)}`)).json();if(currentMangaId!==String(id))return;$('detailTitle').textContent=d.title||'Untitled';$('detailsHeaderTitle').textContent=d.title||'';const src=resolveImage(d.thumbnailUrl);if(src){$('detailCover').src=src;retryImage($('detailCover'),src)}$('detailAuthor').textContent=`Author · ${d.author||'Unknown'}`;$('detailArtist').textContent=`Artist · ${d.artist||'Unknown'}`;$('detailStatus').textContent=d.status||'Unknown';$('detailDescription').textContent=d.description||'No description available.';$('detailGenres').innerHTML='';(d.genre||[]).forEach(g=>{const x=document.createElement('span');x.className='rounded-full border border-white/10 px-3 py-1 text-xs';x.textContent=g;$('detailGenres').appendChild(x)});currentChapters=d.chapters||[];$('addToLibraryBtn').textContent=libraryIds.has(String(id))?'✓ In library · Remove':'＋ Add to library';$('chapterCount').textContent=`Chapters · ${currentChapters.length}`;const c=$('chapterList');c.innerHTML='';currentChapters.forEach((ch,i)=>{const b=document.createElement('button');b.className='flex w-full justify-between rounded-xl border border-white/5 bg-[#121621] p-3 text-left text-sm';const name=document.createElement('span');name.textContent=ch.name||`Chapter ${ch.number??i+1}`;const read=document.createElement('span');read.className='text-lime-200';read.textContent='Read ›';b.append(name,read);b.onclick=()=>openReader(i);c.appendChild(b)});if(!currentChapters.length)c.textContent='No chapters available.'}catch(e){$('detailTitle').textContent='Could not load title';$('chapterList').textContent=e.message}}async function toggleLibrary(){const id=currentMangaId,b=$('addToLibraryBtn'),was=libraryIds.has(id);b.disabled=true;try{await apiFetch(`/api/library/${encodeURIComponent(id)}`,{method:was?'DELETE':'POST'});was?libraryIds.delete(id):libraryIds.add(id);b.textContent=was?'＋ Add to library':'✓ In library · Remove';showToast(was?'Removed from library':'Added to library')}catch(e){showToast(e.message)}finally{b.disabled=false}}function closeDetails(){$('detailsView').classList.add('hidden');$('detailsView').classList.remove('flex');currentMangaId=null;currentChapters=[]}
-  async function openReader(i){const ch=currentChapters[i];if(!ch)return;stopAutoScroll();currentChapterIndex=i;readerTheme=0;$('readerContent').style.background='#050608';$('readerContent').style.filter='none';$('readerThemeBtn').textContent='◐ Theme: Dark';const view=$('readerView'),c=$('readerContent');view.classList.remove('hidden');view.classList.add('flex');$('readerTopBar').classList.remove('reader-hidden');$('readerBottomBar').classList.remove('reader-hidden');$('premiumPanel').classList.add('hidden');c.innerHTML='<div class="flex flex-col items-center py-24 text-slate-400"><div class="spinner"></div><p class="mt-4 text-sm">Preparing chapter…</p></div>';c.scrollTop=0;$('readerTitle').textContent=ch.name||`Chapter ${ch.number??i+1}`;$('pageCounter').textContent='Loading pages…';$('prevBtn').disabled=i===0;$('nextBtn').disabled=i===currentChapters.length-1;try{const result=await(await apiFetch(`/api/chapter/${encodeURIComponent(ch.id)}`)).json();if(!view.classList.contains('flex')||currentChapterIndex!==i)return;const pages=result.pages||[];totalImages=pages.length;if(!pages.length)throw Error('No pages were returned for this chapter.');c.innerHTML='';pages.forEach((url,n)=>{const im=document.createElement('img');im.alt=`Page ${n+1}`;im.dataset.page=String(n+1);im.loading=n<3?'eager':'lazy';im.decoding='async';const src=resolveImage(url);im.src=src;let tries=0;im.onerror=()=>{if(tries++<2)im.src=`${src}${src.includes('?')?'&':'?'}retry=${Date.now()}-${tries}`;else{im.onerror=null;im.alt=`Page ${n+1} failed to load; tap to retry`;im.classList.add('cover-fallback');im.onclick=()=>{tries=0;im.classList.remove('cover-fallback');im.src=`${src}${src.includes('?')?'&':'?'}retry=${Date.now()}`}}};c.appendChild(im)});$('readerSlider').value=0;$('pageCounter').textContent=`1 / ${totalImages}`;apiFetch(`/api/chapter/${encodeURIComponent(ch.id)}/read`,{method:'POST'}).catch(e=>{console.warn('History save failed',e);showToast('Could not save reading history. Reopen chapter to retry.')})}catch(e){c.innerHTML='';const p=document.createElement('p');p.className='px-5 py-20 text-center text-rose-300';p.textContent=e.message||'Failed to load chapter images.';c.appendChild(p)}}function closeReader(){stopAutoScroll();$('readerView').classList.add('hidden');$('readerView').classList.remove('flex');$('readerContent').innerHTML='';if(currentTab==='history')loadHistory()}function loadAdjacentChapter(d){const n=currentChapterIndex+d;if(n>=0&&n<currentChapters.length)openReader(n)}function toggleReaderUI(){$('readerTopBar').classList.toggle('reader-hidden');$('readerBottomBar').classList.toggle('reader-hidden')}
-  function updateReaderPosition(){const c=$('readerContent'),max=c.scrollHeight-c.clientHeight;if(max>0)$('readerSlider').value=String(c.scrollTop/max*100);const image=[...c.querySelectorAll('img')].find(x=>x.getBoundingClientRect().bottom>90);if(image)$('pageCounter').textContent=`${image.dataset.page} / ${totalImages}`}$('readerContent').addEventListener('scroll',()=>requestAnimationFrame(updateReaderPosition),{passive:true});$('readerContent').addEventListener('click',e=>{if(e.target.tagName==='IMG')toggleReaderUI()});$('readerSlider').addEventListener('input',e=>{const c=$('readerContent');c.scrollTop=(Number(e.target.value)/100)*(c.scrollHeight-c.clientHeight)});
-  function premiumGate(){if(isPremium)return true;showToast('Premium reader tools · Upgrade with ⭐ Premium in the bot.');return false}function togglePremiumPanel(){const p=$('premiumPanel');if(p.classList.contains('hidden')){$('readerTopBar').classList.remove('reader-hidden');$('readerBottomBar').classList.remove('reader-hidden');p.classList.remove('hidden');$('premiumLockLabel').textContent=isPremium?'UNLOCKED':'🔒 PREMIUM';if(!isPremium)showToast('Preview: auto-scroll, themes and brightness require Premium.')}else p.classList.add('hidden')}function stopAutoScroll(){if(autoScrollTimer){clearInterval(autoScrollTimer);autoScrollTimer=null}const b=$('autoScrollBtn');if(b)b.textContent='▶ Auto-scroll'}function toggleAutoScroll(){if(!premiumGate())return;if(autoScrollTimer){stopAutoScroll();return}const speed=Number($('scrollSpeed').value);$('autoScrollBtn').textContent='Ⅱ Pause scroll';autoScrollTimer=setInterval(()=>{const c=$('readerContent');c.scrollTop+=speed;if(c.scrollTop+c.clientHeight>=c.scrollHeight-2)stopAutoScroll()},50)}function cycleReaderTheme(){if(!premiumGate())return;readerTheme=(readerTheme+1)%3;const c=$('readerContent'),b=$('readerThemeBtn'),brightness=Number($('readerBrightness').value);if(readerTheme===0){c.style.background='#050608';c.style.filter=`brightness(${brightness}%)`;b.textContent='◐ Theme: Dark'}else if(readerTheme===1){c.style.background='#f0e5c9';c.style.filter=`brightness(${brightness}%) sepia(.18)`;b.textContent='◐ Theme: Warm'}else{c.style.background='#000';c.style.filter=`brightness(${brightness*.78}%) grayscale(.15)`;b.textContent='◐ Theme: OLED'}}$('readerBrightness').addEventListener('input',e=>{if(!premiumGate()){e.target.value=100;return}const factor=readerTheme===2?.78:1,sepia=readerTheme===1?'.18':readerTheme===2?'.15':'0';$('readerContent').style.filter=`brightness(${Number(e.target.value)*factor}%) sepia(${sepia})`});
-  let gestureStart=null;$('readerContent').addEventListener('touchstart',e=>{gestureStart={x:e.touches[0].clientX,y:e.touches[0].clientY}},{passive:true});$('readerContent').addEventListener('touchend',e=>{if(!gestureStart)return;const dx=e.changedTouches[0].clientX-gestureStart.x,dy=e.changedTouches[0].clientY-gestureStart.y;if(Math.abs(dx)>95&&Math.abs(dx)>Math.abs(dy)*1.3&&$('readerContent').scrollTop<35)loadAdjacentChapter(dx>0?-1:1);gestureStart=null},{passive:true});async function loadAccount(){try{const a=await(await apiFetch('/api/account')).json();isPremium=!!a.premium;$('accountPlan').textContent=isPremium?'Premium':'Free';$('accountPlan').dataset.premium=String(isPremium);$('memberSince').textContent=a.memberSince?`Member since ${new Date(a.memberSince).toLocaleDateString()}`:'';$('premiumAccountMessage').textContent=isPremium?'Premium active — advanced reader controls are unlocked.':'Get Premium in the Telegram bot for advanced reader controls.'}catch{$('accountPlan').textContent='Unavailable'}}function refreshCurrent(){if(currentTab==='library')loadLibrary();else if(currentTab==='updates')loadUpdates();else if(currentTab==='history')loadHistory();else loadBrowse(1)}
-  $('loadMoreBtn').onclick=()=>loadBrowse(currentPage+1);$('searchInput').addEventListener('input',()=>{clearTimeout(searchTimer);searchQuery=$('searchInput').value.trim();searchController?.abort();searchController=new AbortController();if(!searchQuery)return renderGrid('browseGrid',allManga);searchTimer=setTimeout(()=>searchTitles(searchQuery),350)});function navigateBack(){if($('readerView').classList.contains('flex')){closeReader();return true}if(!$('detailsView').classList.contains('hidden')){closeDetails();return true}if(currentTab!=='browse'){switchTab('browse');return true}return false}document.addEventListener('keydown',e=>{if(e.key==='Escape')navigateBack();if(e.key==='ArrowLeft')loadAdjacentChapter(-1);if(e.key==='ArrowRight')loadAdjacentChapter(1)});if(tg?.BackButton){tg.BackButton.onClick(()=>{if(!navigateBack())tg.close()});tg.BackButton.show()}let edgeX=0;document.addEventListener('touchstart',e=>{edgeX=e.touches[0].clientX},{passive:true});document.addEventListener('touchend',e=>{if(!$('readerView').classList.contains('flex')&&edgeX<28&&e.changedTouches[0].clientX-edgeX>100)navigateBack();edgeX=0},{passive:true});
-  async function start(){if(!telegramUser||!initData){$('splashMessage').textContent='Open this app from the Telegram bot to sign in.';$('splash').querySelector('.spinner').remove();return}$('accountName').textContent=[telegramUser.first_name,telegramUser.last_name].filter(Boolean).join(' ')||'Telegram reader';$('accountId').textContent=`Telegram account · ${telegramUser.username?'@'+telegramUser.username:'verified'}`;try{await apiFetch('/api/auth',{method:'POST',body:JSON.stringify({initData})});await Promise.all([loadBrowse(1),loadAccount()]);$('splash').classList.add('opacity-0','transition-opacity');setTimeout(()=>$('splash').remove(),350)}catch(e){$('splashMessage').textContent=e.message;$('splash').querySelector('.spinner').remove();const b=document.createElement('button');b.className='mt-5 rounded-xl bg-lime-300 px-5 py-3 text-sm font-bold text-black';b.textContent='Try again';b.onclick=()=>location.reload();$('splash').appendChild(b)}}start();
-</script>
+
+  <nav class="fixed bottom-0 left-0 right-0 z-40 flex border-t border-slate-800 bg-[#0b1020]/95 backdrop-blur safe-bottom">
+    <button data-tab="library" class="nav-tab" onclick="switchTab('library',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="1.8" d="M4 5.5A2.5 2.5 0 0 1 6.5 3v13A2.5 2.5 0 0 1 4 18.5V5.5Zm2 0H16.5A2.5 2.5 0 0 1 19 8v9a2.5 2.5 0 0 1-1.5 2.5H6.5A2.5 2.5 0 0 1 4 17V8.5A2.5 2.5 0 0 1 6.5 3Z" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      Library
+    </button>
+
+    <button data-tab="updates" class="nav-tab" onclick="switchTab('updates',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="1.8" d="M20 7v5h-5M4 17v-5h5m10-1a8 8 0 1 1-7 13" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      Updates
+    </button>
+
+    <button data-tab="history" class="nav-tab" onclick="switchTab('history',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="1.8"/><path d="M12 2.5v9l5 2.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      History
+    </button>
+
+    <button data-tab="browse" class="nav-tab active" onclick="switchTab('browse',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8" stroke-width="1.8"/><path d="M10.8 10.8l5.7 5.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      Browse
+    </button>
+
+    <button data-tab="more" class="nav-tab" onclick="switchTab('more',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
+      More
+    </button>
+  </nav>
+
+  <section id="detailsView" class="fixed inset-0 z-50 hidden flex-col overflow-y-auto bg-[#0b1020] pb-10">
+    <header class="sticky top-0 z-20 flex items-center border-b border-slate-800 bg-[#0b1020]/95 p-4 backdrop-blur">
+      <button onclick="closeDetails()" class="font-semibold text-indigo-300">‹ Back</button>
+      <div class="ml-3 min-w-0 flex-1">
+        <h1 id="detailsHeaderTitle" class="truncate text-base font-bold">Title</h1>
+      </div>
+    </header>
+
+    <div class="p-4">
+      <div class="flex gap-4">
+        <img id="detailCover" class="cover h-40 w-32 shrink-0 rounded-xl object-cover" alt="Cover" />
+        <div class="min-w-0 pt-1">
+          <h2 id="detailTitle" class="line-clamp-3 text-xl font-bold leading-tight">Loading...</h2>
+          <p id="detailAuthor" class="mt-1 text-xs text-slate-400">Author</p>
+          <p id="detailArtist" class="mt-1 text-xs text-slate-400">Artist</p>
+          <p id="detailStatus" class="mt-1 text-xs text-slate-400">Status</p>
+        </div>
+      </div>
+
+      <button id="addToLibraryBtn" class="mt-5 w-full rounded-xl border border-indigo-400/30 bg-indigo-500/10 py-3 font-semibold text-indigo-200" onclick="toggleLibrary()">
+        + Add to library
+      </button>
+
+      <div id="detailGenres" class="mt-4 flex flex-wrap gap-2"></div>
+
+      <div class="mt-4 rounded-xl border border-slate-800 bg-[#121a2d] p-4">
+        <h2 class="mb-2 text-sm font-bold">Synopsis</h2>
+        <p id="detailDescription" class="whitespace-pre-line text-xs leading-relaxed text-slate-300">Loading synopsis...</p>
+      </div>
+
+      <div class="mt-6">
+        <div class="mb-3 flex items-center justify-between">
+          <h2 id="chapterCount" class="text-lg font-bold">Chapters</h2>
+          <span class="text-xs text-slate-500">Tap to read</span>
+        </div>
+        <div id="chapterList" class="space-y-2"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="readerView" class="fixed inset-0 z-[60] hidden flex-col">
+    <header id="readerTopBar" class="reader-bar absolute left-0 right-0 top-0 z-20 flex items-center justify-between border-b border-white/10 px-4 py-3">
+      <button onclick="closeReader()" class="text-sm font-semibold text-indigo-300">‹ Back</button>
+      <div class="min-w-0 flex-1 px-2 text-center">
+        <p id="readerTitle" class="truncate text-sm font-semibold">Chapter</p>
+      </div>
+      <button id="toggleReaderUI" class="text-xs font-semibold text-slate-300" onclick="toggleReaderUI()">Hide</button>
+    </header>
+
+    <div id="readerContent" class="flex-1 overflow-y-auto pb-28 pt-14"></div>
+
+    <footer id="readerBottomBar" class="reader-bar absolute bottom-0 left-0 right-0 z-20 border-t border-white/10 px-3 pt-3 safe-bottom">
+      <div class="mb-3 flex items-center justify-between gap-2">
+        <div class="min-w-0 flex-1">
+          <p class="text-[10px] uppercase tracking-[.2em] text-slate-500">Page</p>
+          <p id="pageCounter" class="text-sm font-semibold">0 / 0</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="prevBtn" class="rounded-lg border border-slate-700 bg-[#121a2d] px-3 py-2 text-sm" onclick="loadAdjacentChapter(-1)">Prev</button>
+          <button id="nextBtn" class="rounded-lg border border-slate-700 bg-[#121a2d] px-3 py-2 text-sm" onclick="loadAdjacentChapter(1)">Next</button>
+        </div>
+      </div>
+
+      <input id="readerSlider" type="range" min="0" max="100" value="0" class="w-full accent-indigo-400" />
+    </footer>
+  </section>
+
+  <div id="toast" class="pointer-events-none fixed left-1/2 top-5 z-[90] hidden -translate-x-1/2 rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm shadow-xl"></div>
+
+  <script>
+    const tg = window.Telegram?.WebApp;
+    const API = 'https://manhwa-opehh-production.up.railway.app';
+    const initData = tg?.initData || '';
+    const telegramUser = tg?.initDataUnsafe?.user || null;
+
+    let currentTab = 'browse';
+    let currentPage = 1;
+    let allManga = [];
+    let searchQuery = '';
+    let currentMangaId = null;
+    let currentChapters = [];
+    let currentChapterIndex = 0;
+    let totalImages = 0;
+    let toastTimer = null;
+    let searchTimer = null;
+    let searchController = null;
+    let readerOpen = false;
+
+    const libraryIds = new Set();
+
+    const $ = (id) => document.getElementById(id);
+
+    function apiUrl(path) {
+      return path.startsWith('http') ? path : `${API}${path.startsWith('/') ? '' : '/'}${path}`;
+    }
+
+    function resolveImage(path) {
+      if (!path) return '';
+      return path.startsWith('http') ? path : `${API}${path.startsWith('/') ? '' : '/'}${path}`;
+    }
+
+    async function apiFetch(path, options = {}) {
+      if (!initData) {
+        throw new Error('Open the app using its Telegram button so your account can be verified.');
+      }
+
+      const headers = new Headers(options.headers || {});
+      headers.set('X-Telegram-Init-Data', initData);
+
+      if (options.body && !headers.has('Content-Type')) {
+        headers.set('Content-Type', 'application/json');
+      }
+
+      const response = await fetch(apiUrl(path), { ...options, headers });
+
+      if (!response.ok) {
+        let detail = {};
+        try {
+          detail = await response.json();
+        } catch (e) {
+          detail = {};
+        }
+        throw new Error(detail.error || `Request failed (${response.status})`);
+      }
+
+      return response;
+    }
+
+    function showToast(message) {
+      const t = $('toast');
+      t.textContent = message;
+      t.classList.remove('hidden');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        t.classList.add('hidden');
+      }, 2600);
+    }
+
+    function hideSplash() {
+      const s = $('splash');
+      s.classList.add('opacity-0');
+      setTimeout(() => s.remove(), 350);
+    }
+
+    function setMessage(container, text, error = false) {
+      container.innerHTML = '';
+      const p = document.createElement('p');
+      p.className = `col-span-2 py-10 text-center text-sm ${error ? 'text-rose-300' : 'text-slate-400'}`;
+      p.textContent = text;
+      container.appendChild(p);
+    }
+
+    function skeletonGrid(container, count = 6) {
+      container.innerHTML = '';
+      for (let i = 0; i < count; i++) {
+        const card = document.createElement('div');
+        card.className = 'overflow-hidden rounded-2xl border border-slate-800 bg-[#121a2d]';
+        card.innerHTML = `
+          <div class="skeleton h-56 rounded-t-2xl"></div>
+          <div class="p-3">
+            <div class="skeleton h-4 w-3/4 rounded-full"></div>
+            <div class="skeleton mt-2 h-3 w-1/2 rounded-full"></div>
+          </div>
+        `;
+        container.appendChild(card);
+      }
+    }
+
+    function switchTab(name, button) {
+      currentTab = name;
+      document.querySelectorAll('#viewsContainer > section').forEach((section) => {
+        section.classList.toggle('hidden', section.id !== `${name}View`);
+      });
+
+      document.querySelectorAll('.nav-tab').forEach((el) => {
+        el.classList.toggle('active', el.dataset.tab === name);
+      });
+
+      $('viewsContainer').scrollTop = 0;
+
+      if (name === 'library') loadLibrary();
+      if (name === 'updates') loadUpdates();
+      if (name === 'history') loadHistory();
+      if (name === 'browse' && !searchQuery) loadBrowse(1);
+    }
+
+    function renderGrid(containerId, items) {
+      const grid = $(containerId);
+      grid.innerHTML = '';
+
+      if (!items || !items.length) {
+        setMessage(grid, 'Nothing here yet. Browse titles and add them to your library.');
+        return;
+      }
+
+      items.forEach((item) => {
+        const card = document.createElement('button');
+        card.className = 'overflow-hidden rounded-2xl border border-slate-800 bg-[#121a2d] text-left transition active:scale-[.98]';
+        card.type = 'button';
+
+        const image = document.createElement('img');
+        image.className = 'cover aspect-[3/4] w-full object-cover';
+        image.loading = 'lazy';
+        image.alt = item.title || 'Manga cover';
+        image.src = resolveImage(item.thumbnailUrl || item.cover || item.image || item.poster || '');
+
+        const body = document.createElement('div');
+        body.className = 'p-3';
+
+        const title = document.createElement('p');
+        title.className = 'truncate text-sm font-semibold';
+        title.textContent = item.title || 'Untitled';
+
+        const chapter = document.createElement('p');
+        if (item.chapterName || item.chapterTitle || item.chapterNumber) {
+          chapter.className = 'mt-1 truncate text-xs text-indigo-300';
+          chapter.textContent = item.chapterName || item.chapterTitle || `Chapter ${item.chapterNumber ?? ''}`;
+          body.appendChild(chapter);
+        }
+
+        body.appendChild(title);
+        card.appendChild(image);
+        card.appendChild(body);
+        card.onclick = () => openDetails(item.mangaId || item.id);
+
+        grid.appendChild(card);
+      });
+    }
+
+    async function loadBrowse(page = 1) {
+      const grid = $('browseGrid');
+      if (page === 1) skeletonGrid(grid);
+
+      const button = $('loadMoreBtn');
+      button.disabled = true;
+      button.textContent = 'Loading…';
+
+      try {
+        const response = await apiFetch(`/api/popular?page=${page}`);
+        const data = await response.json();
+        if (page === 1) allManga = data;
+        else allManga = allManga.concat(data);
+
+        currentPage = page;
+        renderGrid('browseGrid', data);
+      } catch (error) {
+        if (page === 1) setMessage(grid, error.message || 'Could not load browse list.', true);
+        else showToast(error.message || 'Could not load more titles.');
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Load more';
+      }
+    }
+
+    async function loadLibrary() {
+      const grid = $('libraryGrid');
+      skeletonGrid(grid, 4);
+
+      try {
+        const response = await apiFetch('/api/library');
+        const data = await response.json();
+        libraryIds.clear();
+        data.forEach((m) => libraryIds.add(String(m.id || m.mangaId)));
+
+        renderGrid('libraryGrid', data);
+      } catch (error) {
+        setMessage(grid, error.message || 'Could not load library. Check connection then refresh.', true);
+      }
+    }
+
+    function renderRows(containerId, items, type) {
+      const container = $(containerId);
+      container.innerHTML = '';
+
+      if (!items || !items.length) {
+        const emptyText = type === 'updates' ? 'No unread updates in your library.' : 'No reading history yet.';
+        const p = document.createElement('p');
+        p.className = 'py-10 text-center text-sm text-slate-400';
+        p.textContent = emptyText;
+        container.appendChild(p);
+        return;
+      }
+
+      items.forEach((item) => {
+        const row = document.createElement('div');
+        row.className = 'relative flex items-center gap-3 rounded-2xl border border-slate-800 bg-[#121a2d] p-3';
+
+        const img = document.createElement('img');
+        img.className = 'cover h-16 w-12 shrink-0 rounded-lg object-cover';
+        img.loading = 'lazy';
+        img.alt = '';
+        img.src = resolveImage(item.thumbnailUrl || item.cover || item.image || item.poster || '');
+
+        const text = document.createElement('button');
+        text.className = 'min-w-0 flex-1 text-left';
+        text.type = 'button';
+        text.onclick = () => openDetails(item.mangaId || item.id);
+
+        const title = document.createElement('span');
+        title.className = 'block truncate text-sm font-semibold';
+        title.textContent = item.title || 'Untitled';
+
+        const sub = document.createElement('span');
+        sub.className = 'mt-1 block truncate text-xs text-indigo-300';
+        sub.textContent = type === 'updates'
+          ? (item.chapterName || item.chapterTitle || `Chapter ${item.chapterNumber ?? ''}`)
+          : (item.chapterName || item.chapterTitle || `Chapter ${item.chapterNumber ?? ''}`);
+
+        row.appendChild(img);
+        row.appendChild(text);
+        text.appendChild(title);
+        text.appendChild(sub);
+
+        if (type === 'history') {
+          const del = document.createElement('button');
+          del.className = 'px-2 py-2 text-slate-500';
+          del.type = 'button';
+          del.textContent = '✕';
+          del.onclick = async () => {
+            try {
+              await apiFetch(`/api/history/${encodeURIComponent(item.mangaId || item.id)}`, { method: 'DELETE' });
+              row.remove();
+              showToast('History removed.');
+            } catch (error) {
+              showToast(error.message || 'Could not remove history.');
+            }
+          };
+          row.appendChild(del);
+        }
+
+        container.appendChild(row);
+      });
+    }
+
+    async function loadUpdates() {
+      const container = $('updatesList');
+      container.innerHTML = '<p class="py-8 text-center text-sm text-slate-400">Checking your library…</p>';
+
+      try {
+        const response = await apiFetch('/api/updates');
+        const data = await response.json();
+        renderRows('updatesList', data, 'updates');
+      } catch (error) {
+        container.innerHTML = '';
+        const p = document.createElement('p');
+        p.className = 'py-8 text-center text-sm text-rose-300';
+        p.textContent = error.message || 'Could not load updates. Check connection then refresh.';
+        container.appendChild(p);
+      }
+    }
+
+    async function loadHistory() {
+      const container = $('historyList');
+      container.innerHTML = '<p class="py-8 text-center text-sm text-slate-400">Loading history…</p>';
+
+      try {
+        const response = await apiFetch('/api/history');
+        const data = await response.json();
+        renderRows('historyList', data, 'history');
+      } catch (error) {
+        container.innerHTML = '';
+        const p = document.createElement('p');
+        p.className = 'py-8 text-center text-sm text-rose-300';
+        p.textContent = error.message || 'Could not load history. Check connection then refresh.';
+        container.appendChild(p);
+      }
+    }
+
+    async function openDetails(id) {
+      const detailId = String(id);
+
+      currentMangaId = detailId;
+      $('detailsView').classList.remove('hidden');
+      $('detailsView').classList.add('flex');
+      $('detailsView').scrollTop = 0;
+
+      $('detailTitle').textContent = 'Loading...';
+      $('detailsHeaderTitle').textContent = 'Loading...';
+      $('detailDescription').textContent = 'Loading synopsis...';
+      $('chapterList').innerHTML = '<p class="py-6 text-center text-slate-400">Loading chapters…</p>';
+      $('detailGenres').innerHTML = '';
+
+      $('detailCover').src = '';
+      $('detailCover').alt = 'Loading cover';
+
+      try {
+        const res = await apiFetch(`/api/manga/${encodeURIComponent(id)}`);
+        const data = await res.json();
+
+        if (currentMangaId !== detailId) return;
+
+        $('detailTitle').textContent = data.title || 'Untitled';
+        $('detailsHeaderTitle').textContent = data.title || '';
+        $('detailCover').src = resolveImage(data.thumbnailUrl || data.cover || data.image || data.poster || '');
+        $('detailCover').onerror = () => {
+          $('detailCover').src = 'https://images.unsplash.com/photo-1516979187454-8e94d7a4c4ff?auto=format&fit=crop&w=800&q=80';
+        };
+
+        $('detailAuthor').textContent = data.author || 'Unknown author';
+        $('detailArtist').textContent = data.artist || 'Unknown artist';
+        $('detailStatus').textContent = data.status || 'Unknown status';
+        $('detailDescription').textContent = data.description || 'No synopsis available.';
+        $('detailGenres').innerHTML = '';
+
+        (data.genre || []).forEach((genre) => {
+          const tag = document.createElement('span');
+          tag.className = 'rounded-full border border-slate-700 px-3 py-1 text-xs text-slate-300';
+          tag.textContent = genre;
+          $('detailGenres').appendChild(tag);
+        });
+
+        currentChapters = Array.isArray(data.chapters) ? data.chapters : [];
+        const inLibrary = libraryIds.has(String(id));
+        $('addToLibraryBtn').textContent = inLibrary ? '✓ In your library · Remove' : '+ Add to library';
+        $('addToLibraryBtn').disabled = false;
+
+        $('chapterCount').textContent = `Chapters · ${currentChapters.length}`;
+        const list = $('chapterList');
+        list.innerHTML = '';
+
+        if (!currentChapters.length) {
+          list.innerHTML = '<p class="py-4 text-sm text-slate-400">No chapters available.</p>';
+          return;
+        }
+
+        currentChapters.forEach((ch, index) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'flex w-full items-center justify-between gap-3 rounded-xl border border-slate-800 bg-[#121a2d] p-3 text-left';
+          btn.innerHTML = `
+            <div class="min-w-0">
+              <span class="block truncate text-sm font-semibold">${ch.name || ch.title || `Chapter ${ch.number ?? index + 1}`}</span>
+              <span class="text-xs text-slate-400">${ch.date || 'Recently updated'}</span>
+            </div>
+            <span class="text-xs text-slate-500">${ch.number ?? index + 1}</span>
+          `;
+          btn.onclick = () => openReader(index);
+          list.appendChild(btn);
+        });
+      } catch (error) {
+        $('detailTitle').textContent = 'Could not load title';
+        $('detailsHeaderTitle').textContent = 'Could not load title';
+        $('detailDescription').textContent = error.message || 'Failed to load manga details.';
+      }
+    }
+
+    async function toggleLibrary() {
+      if (!currentMangaId) return;
+
+      const btn = $('addToLibraryBtn');
+      const wasSaved = libraryIds.has(currentMangaId);
+
+      btn.disabled = true;
+      btn.textContent = wasSaved ? 'Removing…' : 'Adding…';
+
+      try {
+        const method = wasSaved ? 'DELETE' : 'POST';
+        const endpoint = wasSaved
+          ? `/api/library/${encodeURIComponent(currentMangaId)}`
+          : `/api/library/${encodeURIComponent(currentMangaId)}`;
+
+        await apiFetch(endpoint, { method, body: JSON.stringify({}) });
+        if (wasSaved) libraryIds.delete(currentMangaId);
+        else libraryIds.add(currentMangaId);
+
+        btn.textContent = wasSaved ? '✓ Removed from library' : '✓ Added to library';
+        showToast(wasSaved ? 'Removed from library.' : 'Added to library.');
+      } catch (error) {
+        showToast(error.message || 'Unable to update library.');
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    function closeDetails() {
+      $('detailsView').classList.add('hidden');
+      $('detailsView').classList.remove('flex');
+      currentMangaId = null;
+      currentChapters = [];
+    }
+
+    async function openReader(index) {
+      const chapter = currentChapters[index];
+      if (!chapter) return;
+
+      currentChapterIndex = index;
+      const view = $('readerView');
+      const content = $('readerContent');
+
+      view.classList.remove('hidden');
+      view.classList.add('flex');
+      readerOpen = true;
+
+      const label = chapter.name || chapter.title || `Chapter ${chapter.number ?? index + 1}`;
+      $('readerTitle').textContent = label;
+      $('pageCounter').textContent = '0 / 0';
+      $('readerSlider').value = '0';
+
+      content.innerHTML = '';
+      content.scrollTop = 0;
+
+      try {
+        const data = await apiFetch(`/api/chapter/${encodeURIComponent(chapter.id)}`);
+        const result = await data.json();
+
+        if (!view.classList.contains('flex') || currentChapterIndex !== index) return;
+
+        const pages = result.pages || [];
+        totalImages = pages.length;
+
+        if (!pages.length) {
+          throw new Error('No pages were returned for this chapter.');
+        }
+
+        content.innerHTML = '';
+        pages.forEach((url, i) => {
+          const img = document.createElement('img');
+          img.alt = `Page ${i + 1}`;
+          img.decoding = 'async';
+          img.loading = i < 3 ? 'eager' : 'lazy';
+          img.src = resolveImage(url);
+          img.style.display = 'block';
+          img.style.width = '100%';
+          img.style.maxWidth = '1000px';
+          img.style.margin = '0 auto';
+          img.style.background = '#090b0f';
+          img.style.borderRadius = '12px';
+          img.style.marginTop = '8px';
+          img.style.marginBottom = '8px';
+
+          content.appendChild(img);
+        });
+
+        $('pageCounter').textContent = `1 / ${totalImages}`;
+        $('readerSlider').value = '0';
+
+        apiFetch(`/api/chapter/${encodeURIComponent(chapter.id)}/read`, { method: 'POST' }).catch((err) => {
+          console.warn('History save failed', err);
+        });
+
+      } catch (error) {
+        content.innerHTML = '';
+        const p = document.createElement('p');
+        p.className = 'px-5 py-20 text-center text-rose-300';
+        p.textContent = error.message || 'Failed to load chapter images.';
+        content.appendChild(p);
+      }
+    }
+
+    function closeReader() {
+      $('readerView').classList.add('hidden');
+      $('readerView').classList.remove('flex');
+      $('readerContent').innerHTML = '';
+      readerOpen = false;
+    }
+
+    function toggleReaderUI() {
+      $('readerTopBar').classList.toggle('reader-hidden');
+      $('readerBottomBar').classList.toggle('reader-hidden');
+    }
+
+    function updateReaderPosition() {
+      const c = $('readerContent');
+      const max = c.scrollHeight - c.clientHeight;
+      if (max <= 0) return;
+
+      const ratio = c.scrollTop / max;
+      $('readerSlider').value = String(ratio * 100);
+      const imgs = [...c.querySelectorAll('img')];
+      if (!imgs.length) return;
+
+      let currentPage = 0;
+      imgs.forEach((img, idx) => {
+        if (img.getBoundingClientRect().top < c.clientHeight / 2) {
+          currentPage = idx + 1;
+        }
+      });
+
+      $('pageCounter').textContent = `${currentPage} / ${totalImages}`;
+    }
+
+    $('readerContent').addEventListener('scroll', () => {
+      requestAnimationFrame(updateReaderPosition);
+    }, { passive: true });
+
+    $('readerSlider').addEventListener('input', (event) => {
+      const c = $('readerContent');
+      c.scrollTop = (Number(event.target.value) / 100) * (c.scrollHeight - c.clientHeight);
+    });
+
+    function loadAdjacentChapter(direction) {
+      const next = currentChapterIndex + direction;
+      if (next >= 0 && next < currentChapters.length) {
+        openReader(next);
+      }
+    }
+
+    function refreshCurrent() {
+      if (currentTab === 'library') loadLibrary();
+      else if (currentTab === 'updates') loadUpdates();
+      else if (currentTab === 'history') loadHistory();
+      else loadBrowse(1);
+    }
+
+    $('loadMoreBtn').addEventListener('click', () => loadBrowse(currentPage + 1));
+    $('searchInput').addEventListener('input', () => {
+      clearTimeout(searchTimer);
+      const q = $('searchInput').value.trim();
+      searchQuery = q;
+
+      if (searchController) searchController.abort();
+
+      if (!q) {
+        renderGrid('browseGrid', allManga);
+        return;
+      }
+
+      const query = encodeURIComponent(q);
+      const controller = new AbortController();
+      searchController = controller;
+
+      (async () => {
+        try {
+          const resp = await apiFetch(`/api/search?q=${query}`, { signal: controller.signal });
+          const data = await resp.json();
+          renderGrid('browseGrid', data);
+        } catch (error) {
+          if (!controller.signal.aborted) {
+            showToast(error.message || 'Search failed.');
+          }
+        }
+      })();
+    });
+
+    async function start() {
+      $('splashMessage').textContent = 'Checking Telegram account…';
+
+      if (!telegramUser || !initData) {
+        $('splashMessage').textContent = 'Open this app from the Telegram bot to continue.';
+        $('splash').querySelector('.spinner').remove();
+        const p = document.createElement('p');
+        p.className = 'mt-5 rounded-xl bg-rose-500/10 border border-rose-500/30 px-4 py-2 text-sm text-rose-200';
+        p.textContent = 'Please open from the Telegram bot.';
+        $('splash').appendChild(p);
+        return;
+      }
+
+      $('accountName').textContent = [telegramUser.first_name, telegramUser.last_name].filter(Boolean).join(' ') || 'Telegram user';
+      $('accountId').textContent = `Telegram ID · ${telegramUser.id}`;
+      $('userLevel').textContent = 'Level 1';
+
+      try {
+        await apiFetch('/api/auth', { method: 'POST', body: JSON.stringify({ initData }) });
+        $('splashMessage').textContent = 'Loading your reader…';
+        await loadBrowse(1);
+        hideSplash();
+      } catch (error) {
+        $('splashMessage').textContent = error.message || 'Unable to verify account.';
+        $('splash').querySelector('.spinner').remove();
+        const retry = document.createElement('button');
+        retry.className = 'mt-5 rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold text-white';
+        retry.textContent = 'Retry';
+        retry.onclick = () => hideSplash();
+        $('splash').appendChild(retry);
+      }
+    }
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        if ($('readerView').classList.contains('flex')) closeReader();
+        else if (!$('detailsView').classList.contains('hidden')) closeDetails();
+      }
+    });
+
+    start();
+  </script>
 </body>
 </html>
