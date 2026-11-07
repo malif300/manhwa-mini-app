@@ -8,9 +8,9 @@
   let isLoadingNext = false;
 
   const css = `
-    #bottomNav .nav-tab svg { width:24px; height:24px; }
+    #bottomNav .nav-tab svg { width:26px; height:26px; }
     
-    /* DISABLE LONG PRESS ON IMAGES EVERYWHERE */
+    /* DISABLE LONG PRESS ON IMAGES GLOBALLY */
     img { -webkit-touch-callout: none; user-select: none; pointer-events: none; }
     
     #splash .opehh-mark { position:relative; isolation:isolate; overflow:hidden; }
@@ -34,7 +34,7 @@
   style.textContent = css;
   document.head.appendChild(style);
 
-  // Only check the dataset, no owner ID bypass
+  // REMOVED OWNER ID BYPASS SO FREEPREVIEW WORKS
   const hasPremiumAccess = () => $('accountPlan')?.dataset?.premium === 'true';
 
   const splash = $('splash');
