@@ -178,4 +178,60 @@
         images.forEach((img, i) => {
           attachImageRetry(img);
           img.decoding = 'async';
-          if (i < 4)
+          if (i < 4) img.loading = 'eager';
+          if (i === 0) img.fetchPriority = 'high';
+        });
+        if (view) view.classList.toggle('opehh-webtoon', webtoonEnabled);
+        content.scrollTop = 0;
+        observeReaderImages();
+        
+        const loader = document.createElement('div');
+        loader.id = 'opehhInfiniteLoader';
+        loader.innerHTML = '<div class="spinner mx-auto mb-2"></div> Loading next chapter...';
+        content.appendChild(loader);
+      });
+      return result;
+    };
+  }
+
+  function installWebtoonToggle() {
+    const view = $('readerView');
+    const header = $('readerTopBar');
+    if (!view || !header || header.querySelector('#opehhWebtoonToggle')) return;
+    const button = document.createElement('button');
+    button.id = 'opehhWebtoonToggle';
+    button.type = 'button';
+    button.className = 'rounded-lg border border-white/10 px-2 py-1 text-[10px] font-semibold text-slate-300';
+    button.textContent = 'Webtoon';
+    button.title = 'Continuous vertical pages';
+    button.hidden = true;
+    button.addEventListener('click', () => {
+      if (!hasPremiumAccess()) { 
+        if (typeof window.showToast === 'function') window.showToast('Webtoon mode is available to Premium readers.');
+        return; 
+      }
+      webtoonEnabled = !webtoonEnabled;
+      view.classList.toggle('opehh-webtoon', webtoonEnabled);
+      button.textContent = webtoonEnabled ? 'Webtoon ✓' : 'Webtoon';
+      const content = $('readerContent');
+      if (content) content.scrollTop = 0;
+    });
+    const buttons = header.querySelectorAll('button');
+    if (buttons.length > 1) header.insertBefore(button, buttons[buttons.length - 1]);
+    else header.appendChild(button);
+    const refresh = () => {
+      const opened = view.classList.contains('flex') && !view.classList.contains('hidden');
+      const allowed = hasPremiumAccess();
+      button.hidden = !opened;
+      button.disabled = !allowed;
+      button.classList.toggle('opacity-50', !allowed);
+    };
+    new MutationObserver(refresh).observe(view, { attributes:true, attributeFilter:['class'] });
+    const plan = $('accountPlan');
+    if (plan) new MutationObserver(refresh).observe(plan, { attributes:true, data:true });
+    refresh();
+  }
+
+  installWebtoonToggle();
+  document.addEventListener('DOMContentLoaded', () => { installWebtoonToggle(); }, { once:true });
+})();
