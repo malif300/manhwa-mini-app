@@ -6,7 +6,7 @@
   <style>
     :root{color-scheme:dark;--bg:#090b12;--panel:#121621;--accent:#bcf36b;--muted:#929bad}*{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);color:#f5f6f8;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overscroll-behavior:none}body{overflow:hidden}::-webkit-scrollbar{display:none}.nav-tab{flex:1;min-width:0;padding:9px 2px calc(7px + env(safe-area-inset-bottom));text-align:center;color:#81899a;font-size:10px;font-weight:650}.nav-tab.active{color:var(--accent)}.nav-tab svg{display:block;width:24px;height:24px;margin:0 auto 3px}.safe-bottom{padding-bottom:env(safe-area-inset-bottom)}button:disabled{opacity:.5}.cover{background:#151a25}.skeleton{position:relative;overflow:hidden;background:#151a25}.skeleton:after{content:"";position:absolute;inset:-40%;background:linear-gradient(105deg,transparent 35%,rgba(190,243,107,.14) 46%,rgba(171,151,255,.2) 49%,transparent 59%);transform:translateX(-70%) skewX(-15deg);animation:glitchSweep 1.15s steps(12,end) infinite}.skeleton:before{content:"";position:absolute;inset:0;opacity:.28;background:repeating-linear-gradient(0deg,transparent 0 7px,rgba(255,255,255,.07) 8px,transparent 9px);animation:scan 1.8s steps(2,end) infinite}@keyframes glitchSweep{0%{transform:translateX(-70%) skewX(-15deg)}65%{transform:translateX(65%) skewX(-15deg)}70%{transform:translateX(59%) skewX(-12deg)}75%{transform:translateX(72%) skewX(-18deg)}100%{transform:translateX(150%) skewX(-15deg)}}@keyframes scan{50%{transform:translateY(3px);opacity:.12}}.glitch-logo{position:relative;color:#f5f6f8;text-shadow:2px 0 #bcf36b,-2px 0 #a995ff;animation:logoGlitch 2.4s steps(1,end) infinite}@keyframes logoGlitch{0%,88%,100%{transform:none;clip-path:none}89%{transform:translateX(2px);clip-path:inset(15% 0 68%)}91%{transform:translateX(-2px);clip-path:inset(65% 0 12%)}93%{transform:none;clip-path:inset(40% 0 40%)}}.spinner{width:30px;height:30px;border:2px solid #343b4b;border-top-color:var(--accent);border-right-color:#a995ff;border-radius:50%;animation:spin .72s linear infinite;box-shadow:0 0 18px #bcf36b20}@keyframes spin{to{transform:rotate(360deg)}}#readerView{background:#050608}#readerContent{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;transition:filter .2s,background .2s}#readerContent img{display:block;width:100%;height:auto;max-width:1000px;min-height:180px;margin:0 auto;background:#0b0d12;object-fit:contain}.reader-bar{background:linear-gradient(180deg,rgba(5,6,8,.95),rgba(5,6,8,.72));backdrop-filter:blur(14px);transition:opacity .2s,transform .2s}.reader-hidden{opacity:0;pointer-events:none}.cover-fallback{display:grid;place-items:center;background:linear-gradient(145deg,#20283b,#11151f);color:#737e96}.premium-control{accent-color:#bcf36b}.pro-card{background:linear-gradient(130deg,#bcf36b12,#a995ff15 60%,#121621);border:1px solid #bcf36b35}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
     
-    /* Disable text/image selection globally */
+    /* Disable long press on images globally */
     * { -webkit-touch-callout: none; user-select: none; }
   </style>
 </head>
@@ -26,6 +26,7 @@
             <h1 class="mt-1 text-2xl font-bold glitch-logo">MANHWA OPEHH</h1>
           </div>
           <div class="flex items-center gap-2">
+            <!-- Collapsible Arrow -->
             <button id="toggleFiltersBtn" onclick="toggleFilters()" class="hidden text-slate-400 hover:text-lime-200 text-lg">▼</button>
           </div>
         </div>
@@ -36,11 +37,13 @@
             <button id="btnLatest" onclick="setBrowseType('latest')" class="flex-1 rounded-xl border border-white/10 bg-[#121621] py-2 text-xs font-bold text-slate-400 transition">Latest</button>
           </div>
           
+          <!-- Owner Only Filter -->
           <div id="ownerFilters" class="mb-3 hidden flex gap-2">
             <select id="filterSource" onchange="applyFilters()" class="w-1/2 rounded-xl border border-white/10 bg-[#121621] p-2 text-xs text-slate-200 outline-none">
               <option value="">All Sources</option>
             </select>
           </div>
+          <!-- Language Filter (Everyone) -->
           <div class="mb-3 flex gap-2">
             <select id="filterLang" onchange="applyFilters()" class="w-full rounded-xl border border-white/10 bg-[#121621] p-2 text-xs text-slate-200 outline-none">
               <option value="">All Languages</option>
@@ -86,6 +89,7 @@
           <p id="memberSince" class="mt-3 text-xs text-slate-500"></p>
         </div>
 
+        <!-- MISSIONS -->
         <div class="pro-card rounded-2xl p-4">
           <div class="flex items-center justify-between">
             <div>
@@ -112,15 +116,9 @@
       </div>
     </section>
   </main>
-
-  <nav id="bottomNav" class="fixed bottom-0 left-0 right-0 z-40 flex border-t border-white/5 bg-[#090b12]/95 backdrop-blur safe-bottom">
-    <button data-tab="library" class="nav-tab" onclick="switchTab('library')">▤<br>Library</button>
-    <button data-tab="updates" class="nav-tab" onclick="switchTab('updates')">⟳<br>Updates</button>
-    <button data-tab="history" class="nav-tab" onclick="switchTab('history')">◷<br>History</button>
-    <button data-tab="browse" class="nav-tab active" onclick="switchTab('browse')">⌕<br>Browse</button>
-    <button data-tab="more" class="nav-tab" onclick="switchTab('more')">•••<br>More</button>
-  </nav>
-
+  
+  <nav id="bottomNav" class="fixed bottom-0 left-0 right-0 z-40 flex border-t border-white/5 bg-[#090b12]/95 backdrop-blur safe-bottom"><button data-tab="library" class="nav-tab" onclick="switchTab('library')">▤<br>Library</button><button data-tab="updates" class="nav-tab" onclick="switchTab('updates')">⟳<br>Updates</button><button data-tab="history" class="nav-tab" onclick="switchTab('history')">◷<br>History</button><button data-tab="browse" class="nav-tab active" onclick="switchTab('browse')">⌕<br>Browse</button><button data-tab="more" class="nav-tab" onclick="switchTab('more')">•••<br>More</button></nav>
+  
   <section id="detailsView" class="fixed inset-0 z-50 hidden flex-col overflow-y-auto bg-[#090b12] pb-10">
     <header class="sticky top-0 z-20 flex items-center border-b border-white/5 bg-[#090b12]/95 p-4 backdrop-blur">
       <button onclick="closeDetails()" class="mr-3 text-xl text-lime-200">‹</button><span id="detailsHeaderTitle" class="truncate font-semibold"></span>
@@ -153,9 +151,9 @@
       </div>
     </div>
   </section>
-
+  
   <section id="readerView" class="fixed inset-0 z-[60] hidden flex-col">
-    <!-- FIXED TOP BAR: Pro Button is Back! -->
+    <!-- PRO BUTTON RESTORED -->
     <header id="readerTopBar" class="reader-bar absolute left-0 right-0 top-0 z-20 flex items-center justify-between border-b border-white/10 px-4 py-3">
       <button onclick="closeReader()" class="text-xl text-lime-200">‹</button>
       <div class="min-w-0 px-3 text-center">
@@ -166,13 +164,13 @@
 
     <div id="readerContent" class="flex-1 overflow-y-auto pb-28 pt-14"></div>
 
-    <!-- FIXED BOTTOM BAR: Pro Panel Restored -->
+    <!-- BOTTOM BAR: Arrows slightly larger, Pro panel intact -->
     <footer id="readerBottomBar" class="reader-bar absolute bottom-0 left-0 right-0 z-20 border-t border-white/10 px-3 pt-3 safe-bottom">
       <div class="mb-3 flex items-center justify-between gap-2">
-        <button id="prevBtn" onclick="loadAdjacentChapter(-1)" class="rounded-lg bg-white/5 px-3 py-2 text-lg">‹</button>
+        <button id="prevBtn" onclick="loadAdjacentChapter(-1)" class="rounded-lg bg-white/5 px-4 py-2 text-lg">‹</button>
         <input id="readerSlider" type="range" min="0" max="100" value="0" class="flex-1 premium-control mx-2 h-1">
         <span id="pageCounter" class="text-xs text-slate-300 min-w-[40px] text-center">0 / 0</span>
-        <button id="nextBtn" onclick="loadAdjacentChapter(1)" class="rounded-lg bg-white/5 px-3 py-2 text-lg">›</button>
+        <button id="nextBtn" onclick="loadAdjacentChapter(1)" class="rounded-lg bg-white/5 px-4 py-2 text-lg">›</button>
       </div>
       
       <div id="premiumPanel" class="hidden border-t border-white/10 pt-2 pb-2">
@@ -184,10 +182,13 @@
           <button id="autoScrollBtn" onclick="toggleAutoScroll()" class="rounded-lg border border-white/10 bg-white/5 px-2 py-2 text-[11px]">▶ Auto-scroll</button>
           <button id="readerThemeBtn" onclick="cycleReaderTheme()" class="rounded-lg border border-white/10 bg-white/5 px-2 py-2 text-[11px]">◐ Theme: Dark</button>
         </div>
+        <label class="mt-2 flex items-center justify-between gap-3 text-[10px] text-slate-400">Scroll speed <input id="scrollSpeed" type="range" min="1" max="10" value="4" class="premium-control w-2/3"></label>
+        <label class="mt-2 flex items-center justify-between gap-3 text-[10px] text-slate-400">Brightness <input id="readerBrightness" type="range" min="50" max="130" value="100" class="premium-control w-2/3"></label>
       </div>
     </footer>
   </section>
 
+  <!-- TIME'S UP OVERLAY -->
   <div id="timeUpOverlay" class="fixed inset-0 z-[100] hidden flex-col items-center justify-center bg-black/95 p-6 text-center">
     <div class="text-5xl mb-4">⏳</div>
     <h2 class="text-2xl font-bold text-white mb-2">Time's Up!</h2>
@@ -210,9 +211,7 @@
   const libraryIds=new Set(),$=id=>document.getElementById(id);
   if(tg){tg.ready();tg.expand();tg.setHeaderColor('#090b12');tg.setBackgroundColor('#090b12');if(tg.disableVerticalSwipes)tg.disableVerticalSwipes()}
   
-  function apiUrl(p){return p.startsWith('http')?p:`${API}${p}`}
-  function resolveImage(p){return p?(p.startsWith('http')?p:`${API}${p.startsWith('/')?'':'/'}${p}`):''}
-  async function apiFetch(path,options={}){if(!initData)throw Error('Open the app using its Telegram button so your account can be verified.');const headers=new Headers(options.headers||{});headers.set('X-Telegram-Init-Data',initData);if(options.body&&!headers.has('Content-Type'))headers.set('Content-Type','application/json');const r=await fetch(apiUrl(path),{...options,headers});if(!r.ok){const j=await r.json().catch(()=>({}));throw Error(j.error||`Request failed (${r.status})`)}return r}
+  function apiUrl(p){return p.startsWith('http')?p:`${API}${p}`}function resolveImage(p){return p?(p.startsWith('http')?p:`${API}${p.startsWith('/')?'':'/'}${p}`):''}async function apiFetch(path,options={}){if(!initData)throw Error('Open the app using its Telegram button so your account can be verified.');const headers=new Headers(options.headers||{});headers.set('X-Telegram-Init-Data',initData);if(options.body&&!headers.has('Content-Type'))headers.set('Content-Type','application/json');const r=await fetch(apiUrl(path),{...options,headers});if(!r.ok){const j=await r.json().catch(()=>({}));throw Error(j.error||`Request failed (${r.status})`)}return r}
   
   function showToast(s){const t=$('toast');t.textContent=s;t.classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.add('hidden'),2600)}
   function setMessage(c,s,error=false){c.innerHTML='';const p=document.createElement('p');p.className=`col-span-2 py-10 text-center text-sm ${error?'text-rose-300':'text-slate-400'}`;p.textContent=s;c.appendChild(p)}
@@ -319,7 +318,6 @@
       });
       if(!currentChapters.length)c.textContent='No chapters available.';
       
-      // Fetch Resume data
       try {
           const res = await (await apiFetch(`/api/resume/${id}`)).json();
           if (res.available) {
@@ -403,7 +401,7 @@
       });
       $('readerSlider').value=0;
       $('pageCounter').textContent=`1 / ${totalImages}`;
-      apiFetch(`/api/chapter/${encodeURIComponent(ch.id)}/read`,{method:'POST'}).catch(e=>{console.warn('History save failed',e)})
+      apiFetch(`/api/chapter/${encodeURIComponent(ch.id)}/read`,{method:'POST'}).catch(e=>{console.warn('History save failed',e);showToast('Could not save reading history. Reopen chapter to retry.')})
     }catch(e){
       c.innerHTML='';
       const p=document.createElement('p');
@@ -519,83 +517,4 @@
   
   function setBrowseType(type) {
     browseType = type;
-    $('btnPopular').className = type === 'popular' ? 'flex-1 rounded-xl bg-lime-300/20 py-2 text-xs font-bold text-lime-200 transition' : 'flex-1 rounded-xl border border-white/10 bg-[#121621] py-2 text-xs font-bold text-slate-400 transition';
-    $('btnLatest').className = type === 'latest' ? 'flex-1 rounded-xl bg-lime-300/20 py-2 text-xs font-bold text-lime-200 transition' : 'flex-1 rounded-xl border border-white/10 bg-[#121621] py-2 text-xs font-bold text-slate-400 transition';
-    loadBrowse(1);
-  }
-
-  function applyFilters() { loadBrowse(1); }
-
-  async function loadSourcesDropdown() {
-    try {
-      const sources = await (await apiFetch('/api/sources')).json();
-      const select = $('filterSource');
-      sources.forEach(s => {
-        const opt = document.createElement('option');
-        opt.value = s.id;
-        opt.textContent = `${s.name} (${s.lang || '?'})`;
-        select.appendChild(opt);
-      });
-    } catch (e) { console.warn("Could not load sources", e); }
-  }
-
-  function shareReferral() {
-      const text = `Read Manhwa for free on Opehh! https://t.me/ManhwaOpehh_bot?start=ref_${telegramUser.id}`;
-      const url = `https://t.me/share/url?url=${encodeURIComponent(text)}&text=Join+me+on+Manhwa+Opehh!`;
-      if (tg.openTelegramLink) tg.openTelegramLink(url);
-      else window.open(url, '_blank');
-  }
-
-  $('loadMoreBtn').onclick=()=>loadBrowse(currentPage+1);
-  $('searchInput').addEventListener('input',()=>{clearTimeout(searchTimer);searchQuery=$('searchInput').value.trim();searchController?.abort();searchController=new AbortController();if(!searchQuery)return renderGrid('browseGrid',allManga);searchTimer=setTimeout(()=>searchTitles(searchQuery),350)});
-  
-  function navigateBack(){
-    if($('readerView').classList.contains('flex')){closeReader();return true}
-    if(!$('detailsView').classList.contains('hidden')){closeDetails();return true}
-    if(currentTab!=='browse'){switchTab('browse');return true}
-    return false
-  }
-  
-  document.addEventListener('keydown',e=>{if(e.key==='Escape')navigateBack();if(e.key==='ArrowLeft')loadAdjacentChapter(-1);if(e.key==='ArrowRight')loadAdjacentChapter(1)});
-  
-  if(tg?.BackButton){tg.BackButton.onClick(()=>{if(!navigateBack())tg.close()});tg.BackButton.show()}
-  
-  let edgeX=0;
-  document.addEventListener('touchstart',e=>{edgeX=e.touches[0].clientX},{passive:true});
-  document.addEventListener('touchend',e=>{if(!$('readerView').classList.contains('flex')&&edgeX<28&&e.changedTouches[0].clientX-edgeX>100)navigateBack();edgeX=0},{passive:true});
-  
-  async function start(){
-    if(!telegramUser||!initData){
-      $('splashMessage').textContent='Open this app from the Telegram bot to sign in.';
-      $('splash').querySelector('.spinner').remove();
-      return;
-    }
-    
-    if (isOwner) {
-      $('toggleFiltersBtn').classList.remove('hidden');
-      $('ownerFilters').classList.remove('hidden');
-      loadSourcesDropdown();
-    }
-    
-    $('accountName').textContent=[telegramUser.first_name,telegramUser.last_name].filter(Boolean).join(' ')||'Telegram reader';
-    $('accountId').textContent=`Telegram account · ${telegramUser.username?'@'+telegramUser.username:'verified'}`;
-    try{
-      await apiFetch('/api/auth',{method:'POST',body:JSON.stringify({initData})});
-      await Promise.all([loadBrowse(1),loadAccount()]);
-      $('splash').classList.add('opacity-0','transition-opacity');
-      setTimeout(()=>$('splash').remove(),350)
-    }catch(e){
-      $('splashMessage').textContent=e.message;
-      $('splash').querySelector('.spinner').remove();
-      const b=document.createElement('button');
-      b.className='mt-5 rounded-xl bg-lime-300 px-5 py-3 text-sm font-bold text-black';
-      b.textContent='Try again';
-      b.onclick=()=>location.reload();
-      $('splash').appendChild(b)
-    }
-  }
-  start();
-</script>
-<script src="/opehh-ui-enhancements.js"></script>
-</body>
-</html>
+    $('btnPopular').className = type === 'popular' ? 'flex-1 rounded-xl bg-lime-300/
