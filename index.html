@@ -16,14 +16,13 @@
     <section id="historyView" class="hidden min-h-full"><header class="sticky top-0 z-20 flex items-center justify-between border-b border-white/5 bg-[#090b12]/95 px-4 py-4 backdrop-blur"><div><p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Your trail</p><h1 class="mt-1 text-2xl font-bold">History</h1></div><button onclick="loadHistory()" class="rounded-xl border border-white/10 px-3 py-2 text-xs">↻ Refresh</button></header><div id="historyList" class="space-y-3 p-4"></div></section>
     
     <section id="browseView" class="min-h-full">
-      <header class="sticky top-0 z-20 border-b border-white/5 bg-[#090b12]/95 p-4 backdrop-blur">
+      <header class="sticky top-0 z-30 border-b border-white/5 bg-[#090b12]/95 p-4 backdrop-blur">
         <div class="mb-4 flex items-end justify-between">
           <div id="browseTitleContainer">
             <p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Explore</p>
             <h1 class="mt-1 text-2xl font-bold">Discover</h1>
           </div>
           <div class="flex items-center gap-2">
-            <!-- Removed the MANHWA · MANGA span here -->
             <!-- Collapsible Arrow (Only for Owner) -->
             <button id="toggleFiltersBtn" onclick="toggleFilters()" class="hidden text-slate-400 hover:text-lime-200">▼</button>
           </div>
@@ -67,11 +66,15 @@
       </header>
       <div class="space-y-3 p-4">
         <div class="rounded-3xl border border-white/10 bg-[#121621] p-5">
-          <p class="text-xs uppercase tracking-wider text-slate-500">Signed in with Telegram</p>
-          <p id="accountName" class="mt-2 text-lg font-bold">—</p>
-          <p id="accountId" class="mt-1 text-xs text-slate-400"></p>
+          <div class="flex items-center gap-4 border-b border-white/5 pb-4">
+            <img id="accountAvatar" class="h-14 w-14 rounded-full object-cover border-2 border-lime-300/30 bg-[#20283b]" src="" alt="Avatar">
+            <div>
+              <p class="text-xs uppercase tracking-wider text-slate-500">Signed in with Telegram</p>
+              <p id="accountName" class="text-lg font-bold">—</p>
+            </div>
+          </div>
           
-          <div class="mt-4 flex items-center justify-between border-t border-white/5 pt-4">
+          <div class="mt-4 flex items-center justify-between">
             <span class="text-sm text-slate-400">Membership</span>
             <span id="accountPlan" class="rounded-full bg-lime-300/10 px-3 py-1 text-xs font-semibold text-lime-200">Loading…</span>
           </div>
@@ -155,7 +158,8 @@
   </section>
   
   <section id="readerView" class="fixed inset-0 z-[60] hidden flex-col">
-    <header id="readerTopBar" class="reader-bar absolute left-0 right-0 top-0 z-20 flex items-center justify-between border-b border-white/10 px-4 py-3">
+    <!-- Increased z-index to z-[70] so buttons are always clickable -->
+    <header id="readerTopBar" class="reader-bar absolute left-0 right-0 top-0 z-[70] flex items-center justify-between border-b border-white/10 px-4 py-3">
       <button onclick="closeReader()" class="text-xl text-lime-200">‹</button>
       <div class="min-w-0 px-3 text-center">
         <p id="readerTitle" class="truncate text-sm font-semibold"></p>
@@ -163,15 +167,17 @@
       </div>
       <button onclick="togglePremiumPanel()" class="rounded-lg border border-lime-300/20 px-2 py-1 text-xs text-lime-200">✦ Pro</button>
     </header>
+    
     <div id="readerContent" class="flex-1 overflow-y-auto pb-28 pt-14"></div>
     
-    <footer id="readerBottomBar" class="reader-bar absolute bottom-0 left-0 right-0 z-20 border-t border-white/10 px-3 pt-3 safe-bottom">
+    <!-- Increased z-index to z-[70] -->
+    <footer id="readerBottomBar" class="reader-bar absolute bottom-0 left-0 right-0 z-[70] border-t border-white/10 px-3 pt-3 safe-bottom">
       <!-- Order: Previous | Slider | Page | Next -->
       <div class="mb-3 flex items-center justify-between gap-2">
-        <button id="prevBtn" onclick="loadAdjacentChapter(-1)" class="rounded-lg bg-white/5 px-3 py-2 text-xs">← Previous</button>
-        <input id="readerSlider" type="range" min="0" max="100" value="0" class="premium-control h-1 flex-1 mx-2">
-        <span id="pageCounter" class="text-xs text-slate-300 whitespace-nowrap">1 / 1</span>
-        <button id="nextBtn" onclick="loadAdjacentChapter(1)" class="rounded-lg bg-white/5 px-3 py-2 text-xs">Next →</button>
+        <button id="prevBtn" onclick="loadAdjacentChapter(-1)" class="rounded-lg bg-white/5 px-2 py-1.5 text-xs whitespace-nowrap">← Previous</button>
+        <input id="readerSlider" type="range" min="0" max="100" value="0" class="premium-control h-1 flex-1 mx-1 min-w-[50px]">
+        <span id="pageCounter" class="text-xs text-slate-300 whitespace-nowrap min-w-[40px] text-center">1 / 1</span>
+        <button id="nextBtn" onclick="loadAdjacentChapter(1)" class="rounded-lg bg-white/5 px-2 py-1.5 text-xs whitespace-nowrap">Next →</button>
       </div>
       
       <div id="premiumPanel" class="hidden border-t border-white/10 pt-2 pb-2">
@@ -433,7 +439,16 @@
   function loadAdjacentChapter(d){const n=currentChapterIndex+d;if(n>=0&&n<currentChapters.length)openReader(n)}
   function toggleReaderUI(){$('readerTopBar').classList.toggle('reader-hidden');$('readerBottomBar').classList.toggle('reader-hidden')}
   
-  function updateReaderPosition(){const c=$('readerContent'),max=c.scrollHeight-c.clientHeight;if(max>0)$('readerSlider').value=String(c.scrollTop/max*100);const image=[...c.querySelectorAll('img')].find(x=>x.getBoundingClientRect().bottom>90);if(image)$('pageCounter').textContent=`${image.dataset.page} / ${totalImages}`}
+  function updateReaderPosition(){
+    const c=$('readerContent'),max=c.scrollHeight-c.clientHeight;
+    if(max>0)$('readerSlider').value=String(c.scrollTop/max*100);
+    const image=[...c.querySelectorAll('img')].find(x=>x.getBoundingClientRect().bottom>90);
+    // FIXED: Only update text if the image actually has a page number (prevents 'undefined')
+    if(image && image.dataset.page) {
+      $('pageCounter').textContent=`${image.dataset.page} / ${totalImages}`;
+    }
+  }
+  
   $('readerContent').addEventListener('scroll',()=>requestAnimationFrame(updateReaderPosition),{passive:true});
   $('readerContent').addEventListener('click',e=>{if(e.target.tagName==='IMG')toggleReaderUI()});
   $('readerSlider').addEventListener('input',e=>{const c=$('readerContent');c.scrollTop=(Number(e.target.value)/100)*(c.scrollHeight-c.clientHeight)});
@@ -585,6 +600,13 @@
       loadSourcesDropdown();
     }
     
+    // Set Profile Picture
+    if (telegramUser.photo_url) {
+      $('accountAvatar').src = telegramUser.photo_url;
+    } else {
+      $('accountAvatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(telegramUser.first_name || 'User')}&background=121621&color=bcf36b&size=128`;
+    }
+
     $('accountName').textContent=[telegramUser.first_name,telegramUser.last_name].filter(Boolean).join(' ')||'Telegram reader';
     $('accountId').textContent=`Telegram account · ${telegramUser.username?'@'+telegramUser.username:'verified'}`;
     
