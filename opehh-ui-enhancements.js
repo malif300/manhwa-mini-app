@@ -7,6 +7,7 @@
   let imageObserver = null;
   let isLoadingNext = false;
   let heartbeatInterval = null;
+  let isFullscreen = false;
 
   const css = `
     /* Bigger bottom nav symbols */
@@ -76,7 +77,7 @@
     // Header text replacement
     const browseHeader = $('browseView')?.querySelector('header');
     if (browseHeader && !$('opehhFullscreenBtn')) {
-      const titleContainer = browseHeader.querySelector('.mb-4 > div:first-child');
+      const titleContainer = $('browseTitleContainer');
       if (titleContainer) {
         titleContainer.innerHTML = `<p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Explore</p><h1 class="mt-1 text-2xl font-bold header-opehh-title">Manhwa Opehh</h1>`;
       }
@@ -84,22 +85,31 @@
       // Add Fullscreen button with TOGGLE logic
       const btn = document.createElement('button');
       btn.id = 'opehhFullscreenBtn';
-      btn.className = 'ml-2 text-slate-400 hover:text-lime-200 text-lg';
+      btn.className = 'ml-2 text-slate-400 hover:text-lime-200 text-lg z-50 relative';
       btn.innerHTML = '⛶';
       btn.title = 'Toggle Fullscreen';
+      
       btn.onclick = () => {
         const tg = window.Telegram?.WebApp;
-        const isFull = tg?.isFullscreen || document.fullscreenElement;
         
-        if (isFull) {
+        if (isFullscreen) {
+          // Exit Fullscreen
           if (tg?.exitFullscreen) tg.exitFullscreen();
           else if (document.exitFullscreen) document.exitFullscreen();
+          isFullscreen = false;
+          btn.innerHTML = '⛶';
         } else {
+          // Enter Fullscreen
           if (tg?.requestFullscreen) tg.requestFullscreen();
           else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+          isFullscreen = true;
+          btn.innerHTML = '✕';
         }
       };
-      browseHeader.querySelector('.mb-4 > div:last-child')?.appendChild(btn);
+
+      // Append to the controls div
+      const controlsDiv = browseHeader.querySelector('.mb-4 > div:last-child');
+      if (controlsDiv) controlsDiv.appendChild(btn);
     }
   }
   applyUIChanges();
@@ -119,10 +129,11 @@
     const button = document.createElement('button');
     button.id = 'opehhWebtoonToggle';
     button.type = 'button';
-    button.className = 'rounded-lg border border-white/10 px-2 py-1 text-[10px] font-semibold text-slate-300 ml-2';
+    button.className = 'rounded-lg border border-white/10 px-2 py-1 text-[10px] font-semibold text-slate-300 ml-2 z-50 relative';
     button.textContent = 'Webtoon';
     button.title = 'Continuous vertical pages';
     button.hidden = true;
+    
     button.addEventListener('click', () => {
       if (!hasPremiumAccess()) { 
         if (typeof window.showToast === 'function') window.showToast('Webtoon mode is available to Premium readers.');
@@ -158,7 +169,6 @@
   async function loadNextChapterInfinite() {
     if (!webtoonEnabled || isLoadingNext) return;
     
-    // Safety check for global variables
     if (typeof window.currentChapterIndex === 'undefined' || typeof window.currentChapters === 'undefined') return;
     
     const nextIdx = window.currentChapterIndex + 1;
@@ -241,7 +251,6 @@
   function startHeartbeat() {
     if (heartbeatInterval) clearInterval(heartbeatInterval);
     
-    // Initial check
     window.apiFetch('/api/heartbeat', { method: 'POST' })
       .then(r => r.json())
       .then(data => {
@@ -251,9 +260,8 @@
         }
       }).catch(console.warn);
 
-    // Ping every 60 seconds
     heartbeatInterval = setInterval(async () => {
-      if (!$('readerView')?.classList.contains('flex')) return; // Only if reading
+      if (!$('readerView')?.classList.contains('flex')) return;
       
       try {
         const res = await window.apiFetch('/api/heartbeat', { method: 'POST' });
@@ -283,7 +291,6 @@
       const view = $('readerView');
       const result = await originalOpenReader.apply(this, arguments);
       
-      // Start heartbeat
       startHeartbeat();
       
       requestAnimationFrame(() => {
@@ -299,7 +306,6 @@
         content.scrollTop = 0;
         observeReaderImages();
         
-        // Append the loader indicator at the bottom
         const loader = document.createElement('div');
         loader.id = 'opehhInfiniteLoader';
         loader.innerHTML = '<div class="spinner mx-auto mb-2"></div> Loading next chapter...';
@@ -350,6 +356,6 @@
     imageObserver.observe(content, { childList:true, subtree:true });
     content.querySelectorAll('img').forEach(attachImageRetry);
   }
-  observeImageRetry();
+  observeReaderImages();
 
 })();
