@@ -23,6 +23,7 @@
             <h1 class="mt-1 text-2xl font-bold">Discover</h1>
           </div>
           <div class="flex items-center gap-2">
+            <!-- "MANHWA · MANGA" removed from here -->
             <button id="toggleFiltersBtn" onclick="toggleFilters()" class="hidden text-slate-400 hover:text-lime-200">▼</button>
           </div>
         </div>
@@ -64,6 +65,7 @@
       <div class="space-y-3 p-4">
         <div class="rounded-3xl border border-white/10 bg-[#121621] p-5">
           <div class="flex items-center gap-4 border-b border-white/5 pb-4">
+            <!-- Telegram Profile Picture added here -->
             <img id="accountAvatar" class="h-14 w-14 rounded-full object-cover border-2 border-lime-300/30 bg-[#20283b]" src="" alt="Avatar">
             <div>
               <p class="text-xs uppercase tracking-wider text-slate-500">Signed in with Telegram</p>
@@ -161,11 +163,12 @@
     <div id="readerContent" class="flex-1 overflow-y-auto pb-28 pt-14"></div>
     
     <footer id="readerBottomBar" class="reader-bar absolute bottom-0 left-0 right-0 z-[70] border-t border-white/10 px-3 pt-3 safe-bottom">
+      <!-- Clean Reader Bar: Prev | Slider | Page | Next -->
       <div class="mb-3 flex items-center justify-between gap-2">
-        <button id="prevBtn" onclick="loadAdjacentChapter(-1)" class="rounded-lg bg-white/5 px-2 py-1.5 text-xs whitespace-nowrap">← Previous</button>
+        <button id="prevBtn" onclick="loadAdjacentChapter(-1)" class="rounded-lg bg-white/5 px-2 py-1.5 text-xs whitespace-nowrap text-slate-300 font-semibold">← Previous</button>
         <input id="readerSlider" type="range" min="0" max="100" value="0" class="premium-control h-1 flex-1 mx-1 min-w-[50px]">
-        <span id="pageCounter" class="text-xs text-slate-300 whitespace-nowrap min-w-[40px] text-center">1 / 1</span>
-        <button id="nextBtn" onclick="loadAdjacentChapter(1)" class="rounded-lg bg-white/5 px-2 py-1.5 text-xs whitespace-nowrap">Next →</button>
+        <span id="pageCounter" class="text-xs text-slate-300 whitespace-nowrap min-w-[40px] text-center font-bold">1 / 1</span>
+        <button id="nextBtn" onclick="loadAdjacentChapter(1)" class="rounded-lg bg-white/5 px-2 py-1.5 text-xs whitespace-nowrap text-slate-300 font-semibold">Next →</button>
       </div>
       
       <div id="premiumPanel" class="hidden border-t border-white/10 pt-2 pb-2">
@@ -204,20 +207,9 @@
     const headers=new Headers(options.headers||{});
     headers.set('X-Telegram-Init-Data',initData);
     if(options.body&&!headers.has('Content-Type'))headers.set('Content-Type','application/json');
-    
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000); 
-    
-    try {
-      const r = await fetch(apiUrl(path),{...options,headers, signal: controller.signal});
-      if(!r.ok){const j=await r.json().catch(()=>({}));throw Error(j.error||`Request failed (${r.status})`)}
-      return r;
-    } catch(e) {
-      if (e.name === 'AbortError') throw Error('Server took too long to respond. Please try again.');
-      throw e;
-    } finally {
-      clearTimeout(timeoutId);
-    }
+    const r=await fetch(apiUrl(path),{...options,headers});
+    if(!r.ok){const j=await r.json().catch(()=>({}));throw Error(j.error||`Request failed (${r.status})`)}
+    return r;
   }
   window.apiFetch = apiFetch;
   window.resolveImage = resolveImage;
@@ -441,6 +433,7 @@
     const c=$('readerContent'),max=c.scrollHeight-c.clientHeight;
     if(max>0)$('readerSlider').value=String(c.scrollTop/max*100);
     const image=[...c.querySelectorAll('img')].find(x=>x.getBoundingClientRect().bottom>90);
+    // FIXED: Check if dataset.page exists to prevent 'undefined'
     if(image && image.dataset.page) {
       $('pageCounter').textContent=`${image.dataset.page} / ${totalImages}`;
     }
@@ -610,7 +603,7 @@
       await apiFetch('/api/auth',{method:'POST',body:JSON.stringify({initData})});
       await loadAccount();
       
-      // Hide splash screen immediately so the user is not stuck waiting
+      // FIX: Remove splash screen immediately, don't wait for loadBrowse (which depends on Suwayomi)
       $('splash').classList.add('opacity-0','transition-opacity');
       setTimeout(()=>$('splash').remove(),350);
       
