@@ -201,6 +201,7 @@
   function apiUrl(p){return p.startsWith('http')?p:`${API}${p}`}
   function resolveImage(p){return p?(p.startsWith('http')?p:`${API}${p.startsWith('/')?'':'/'}${p}`):''}
   
+  // FIXED: Added 15-second timeout to prevent infinite spinning
   async function apiFetch(path,options={}){
     if(!initData)throw Error('Open the app using its Telegram button so your account can be verified.');
     const headers=new Headers(options.headers||{});
@@ -608,19 +609,26 @@
     $('accountName').textContent=[telegramUser.first_name,telegramUser.last_name].filter(Boolean).join(' ')||'Telegram reader';
     $('accountId').textContent=`Telegram account · ${telegramUser.username?'@'+telegramUser.username:'verified'}`;
     
-    // 1. HIDE SPLASH SCREEN IMMEDIATELY (No waiting for Railway!)
-    $('splash').classList.add('opacity-0','transition-opacity');
-    setTimeout(()=>$('splash').remove(),350);
-    
-    // 2. NOW talk to Railway in the background
-    apiFetch('/api/auth',{method:'POST',body:JSON.stringify({initData})})
-      .then(() => {
-          loadAccount().catch(console.warn);
-          loadBrowse(1).catch(console.warn);
-      })
-      .catch((e) => {
-          showToast("Backend Error: " + e.message);
-      });
+    try{
+      await apiFetch('/api/auth',{method:'POST',body:JSON.stringify({initData})});
+      
+      // FIXED: Removed 'await' so the splash screen hides instantly
+      loadAccount().catch(console.warn);
+      
+      $('splash').classList.add('opacity-0','transition-opacity');
+      setTimeout(()=>$('splash').remove(),350);
+      
+      loadBrowse(1).catch(e => console.warn("Could not load browse on startup:", e));
+      
+    }catch(e){
+      $('splashMessage').textContent=e.message;
+      $('splash').querySelector('.spinner').remove();
+      const b=document.createElement('button');
+      b.className='mt-5 rounded-xl bg-lime-300 px-5 py-3 text-sm font-bold text-black';
+      b.textContent='Try again';
+      b.onclick=()=>location.reload();
+      $('splash').appendChild(b)
+    }
   }
   start();
 </script>
