@@ -34,12 +34,6 @@
     #opehhInfiniteLoader { text-align: center; padding: 20px; color: #aeb8ca; font-size: 12px; display: none; }
     #opehhInfiniteLoader.show { display: block; }
     
-    /* Reader Bottom Bar Redesign */
-    #readerBottomBar .reader-controls-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-    #readerBottomBar #prevBtn, #readerBottomBar #nextBtn { padding: 6px 12px; font-size: 14px; }
-    #readerBottomBar #readerSlider { flex: 1; margin: 0; }
-    #readerBottomBar #pageCounter { font-size: 12px; white-space: nowrap; }
-    
     /* Header Glitch Effect */
     .header-opehh-title { position:relative; color:#f5f6f8; text-shadow:2px 0 #bcf36b,-2px 0 #a995ff; animation:logoGlitch 2.4s steps(1,end) infinite; }
     @keyframes logoGlitch { 0%,88%,100%{transform:none;clip-path:none}89%{transform:translateX(2px);clip-path:inset(15% 0 68%)}91%{transform:translateX(-2px);clip-path:inset(65% 0 12%)}93%{transform:none;clip-path:inset(40% 0 40%)} }
@@ -54,7 +48,6 @@
   style.textContent = css;
   document.head.appendChild(style);
 
-  // FIXED: Removed hardcoded OWNER_ID check to prevent free preview bypass
   const hasPremiumAccess = () => $('accountPlan')?.dataset?.premium === 'true';
 
   // --- HEADER & UI CHANGES ---
@@ -88,50 +81,25 @@
         titleContainer.innerHTML = `<p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Explore</p><h1 class="mt-1 text-2xl font-bold header-opehh-title">Manhwa Opehh</h1>`;
       }
       
-      // Add Fullscreen button
+      // Add Fullscreen button with TOGGLE logic
       const btn = document.createElement('button');
       btn.id = 'opehhFullscreenBtn';
-      btn.className = 'ml-2 text-slate-400 hover:text-lime-200';
+      btn.className = 'ml-2 text-slate-400 hover:text-lime-200 text-lg';
       btn.innerHTML = '⛶';
       btn.title = 'Toggle Fullscreen';
       btn.onclick = () => {
-        if (window.Telegram?.WebApp?.requestFullscreen) {
-          window.Telegram.WebApp.requestFullscreen();
-        } else if (document.documentElement.requestFullscreen) {
-          document.documentElement.requestFullscreen();
+        const tg = window.Telegram?.WebApp;
+        const isFull = tg?.isFullscreen || document.fullscreenElement;
+        
+        if (isFull) {
+          if (tg?.exitFullscreen) tg.exitFullscreen();
+          else if (document.exitFullscreen) document.exitFullscreen();
+        } else {
+          if (tg?.requestFullscreen) tg.requestFullscreen();
+          else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
         }
       };
       browseHeader.querySelector('.mb-4 > div:last-child')?.appendChild(btn);
-    }
-
-    // Reader Bottom Bar Reorder
-    const bottomBar = $('readerBottomBar');
-    if (bottomBar && !bottomBar.dataset.reordered) {
-      const slider = $('readerSlider');
-      const prevBtn = $('prevBtn');
-      const nextBtn = $('nextBtn');
-      const pageCounter = $('pageCounter');
-      
-      if (slider && prevBtn && nextBtn && pageCounter) {
-        // Create new container
-        const row = document.createElement('div');
-        row.className = 'reader-controls-row';
-        
-        prevBtn.textContent = '←';
-        nextBtn.textContent = '→';
-        
-        row.appendChild(prevBtn);
-        row.appendChild(slider);
-        row.appendChild(pageCounter);
-        row.appendChild(nextBtn);
-        
-        // Remove old container and insert new
-        const oldContainer = bottomBar.firstElementChild;
-        if (oldContainer) oldContainer.remove();
-        bottomBar.insertBefore(row, bottomBar.firstChild);
-        
-        bottomBar.dataset.reordered = 'true';
-      }
     }
   }
   applyUIChanges();
@@ -349,7 +317,7 @@
     };
   }
 
-  // --- IMAGE LOGIC (Kept as requested) ---
+  // --- IMAGE LOGIC ---
   function attachImageRetry(img) {
     if (img.dataset.opehhRetryAttached) return;
     img.dataset.opehhRetryAttached = 'true';
@@ -382,6 +350,6 @@
     imageObserver.observe(content, { childList:true, subtree:true });
     content.querySelectorAll('img').forEach(attachImageRetry);
   }
-  observeReaderImages();
+  observeImageRetry();
 
 })();
