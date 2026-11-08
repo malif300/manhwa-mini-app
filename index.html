@@ -201,14 +201,26 @@
   function apiUrl(p){return p.startsWith('http')?p:`${API}${p}`}
   function resolveImage(p){return p?(p.startsWith('http')?p:`${API}${p.startsWith('/')?'':'/'}${p}`):''}
   
+  // FIXED: Added 15-second timeout to prevent infinite spinning
   async function apiFetch(path,options={}){
     if(!initData)throw Error('Open the app using its Telegram button so your account can be verified.');
     const headers=new Headers(options.headers||{});
     headers.set('X-Telegram-Init-Data',initData);
     if(options.body&&!headers.has('Content-Type'))headers.set('Content-Type','application/json');
-    const r=await fetch(apiUrl(path),{...options,headers});
-    if(!r.ok){const j=await r.json().catch(()=>({}));throw Error(j.error||`Request failed (${r.status})`)}
-    return r;
+    
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); 
+
+    try {
+      const r = await fetch(apiUrl(path),{...options,headers, signal: controller.signal});
+      if(!r.ok){const j=await r.json().catch(()=>({}));throw Error(j.error||`Request failed (${r.status})`)}
+      return r;
+    } catch (e) {
+      if (e.name === 'AbortError') throw Error('Server took too long to respond.');
+      throw e;
+    } finally {
+      clearTimeout(timeoutId);
+    }
   }
   window.apiFetch = apiFetch;
   window.resolveImage = resolveImage;
@@ -599,9 +611,10 @@
     
     try{
       await apiFetch('/api/auth',{method:'POST',body:JSON.stringify({initData})});
-      await loadAccount();
       
-      // THE FIX: Hide splash instantly, load browse in the background.
+      // FIXED: Removed 'await' so the splash screen hides instantly
+      loadAccount().catch(console.warn);
+      
       $('splash').classList.add('opacity-0','transition-opacity');
       setTimeout(()=>$('splash').remove(),350);
       
