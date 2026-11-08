@@ -13,9 +13,8 @@
   <div id="splash" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#090b12]">
     <div class="mb-5 grid h-20 w-20 place-items-center rounded-[28px] border border-lime-300/20 bg-lime-300/10 text-4xl">漫</div>
     <h1 class="glitch-logo text-xl font-black tracking-[.24em]">PANEL<span class="text-lime-300">.</span></h1>
-    <p id="splashMessage" class="mt-3 text-sm text-slate-400">Connecting securely…</p>
+    <p id="splashMessage" class="mt-3 text-sm text-yellow-400 font-bold">Starting App...</p>
     <div class="spinner mt-6"></div>
-    <p class="mt-4 text-[9px] uppercase tracking-[.28em] text-slate-600">Loading your world</p>
   </div>
   
   <main id="viewsContainer" class="h-[100dvh] overflow-y-auto pb-20 safe-bottom hidden">
@@ -195,6 +194,18 @@
   <div id="toast" class="pointer-events-none fixed left-1/2 top-5 z-[90] hidden -translate-x-1/2 rounded-xl border border-white/10 bg-slate-900 px-4 py-3 text-sm shadow-xl"></div>
   
 <script>
+  // --- DEBUG ERROR CATCHER ---
+  window.onerror = function(message, source, lineno, colno, error) {
+    const msgBox = document.getElementById('splashMessage');
+    if (msgBox) {
+      msgBox.textContent = "FATAL CRASH: " + message;
+      msgBox.style.color = "red";
+      msgBox.style.fontSize = "14px";
+      msgBox.style.padding = "10px";
+    }
+    document.querySelector('.spinner')?.style.setProperty('display', 'none');
+  };
+
   const tg=window.Telegram?.WebApp,API='https://manhwa-opehh-production.up.railway.app',initData=tg?.initData||'',telegramUser=tg?.initDataUnsafe?.user||null;
   const isOwner = telegramUser?.id === 1405846034;
   let currentTab='browse',currentPage=1,allManga=[],searchQuery='',currentMangaId=null,currentChapters=[],currentChapterIndex=0,totalImages=0,searchTimer,searchController,toastTimer,readerGestureStart=null,isPremium=false,autoScrollTimer=null,readerTheme=0,browseType='popular';
@@ -221,7 +232,7 @@
     if(options.body&&!headers.has('Content-Type'))headers.set('Content-Type','application/json');
     
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // Reduced from 15s to 10s
+    const timeoutId = setTimeout(() => controller.abort(), 10000); 
 
     try {
       const r = await fetch(apiUrl(path),{...options,headers, signal: controller.signal});
@@ -660,43 +671,53 @@
   document.addEventListener('touchend',e=>{if(!$('readerView').classList.contains('flex')&&edgeX<28&&e.changedTouches[0].clientX-edgeX>100)navigateBack();edgeX=0},{passive:true});
   
   async function start(){
+    $('splashMessage').textContent = "1. Checking Telegram...";
+    
     if(!telegramUser||!initData){
-      $('splashMessage').textContent='Open this app from the Telegram bot to sign in.';
+      $('splashMessage').textContent='ERROR: Open this app from the Telegram bot to sign in.';
       $('splash').querySelector('.spinner').remove();
       return;
     }
     
-    if (isOwner) {
-      $('toggleFiltersBtn').classList.remove('hidden');
-      $('filterSource').disabled = false;
-      $('filterSource').classList.remove('opacity-50');
-      loadSourcesDropdown();
-    }
+    $('splashMessage').textContent = "2. Telegram OK. Initializing UI...";
     
-    if (telegramUser.photo_url) {
-      $('accountAvatar').src = telegramUser.photo_url;
-    } else {
-      $('accountAvatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(telegramUser.first_name || 'User')}&background=121621&color=bcf36b&size=128`;
-    }
+    try {
+      if (isOwner) {
+        $('toggleFiltersBtn').classList.remove('hidden');
+        $('filterSource').disabled = false;
+        $('filterSource').classList.remove('opacity-50');
+        loadSourcesDropdown();
+      }
+      
+      if (telegramUser.photo_url) {
+        $('accountAvatar').src = telegramUser.photo_url;
+      } else {
+        $('accountAvatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(telegramUser.first_name || 'User')}&background=121621&color=bcf36b&size=128`;
+      }
 
-    $('accountName').textContent=[telegramUser.first_name,telegramUser.last_name].filter(Boolean).join(' ')||'Telegram reader';
-    $('accountId').textContent=`Telegram account · ${telegramUser.username?'@'+telegramUser.username:'verified'}`;
-    
-    // HIDE SPLASH SCREEN IMMEDIATELY (No waiting for backend)
-    $('splash').classList.add('opacity-0','transition-opacity');
-    setTimeout(()=>$('splash').remove(),350);
-    $('viewsContainer').classList.remove('hidden');
-    
-    // NOW TALK TO BACKEND IN BACKGROUND
-    apiFetch('/api/auth',{method:'POST',body:JSON.stringify({initData})})
-      .then(() => {
-          loadAccount().catch(console.warn);
-          loadBrowse(1).catch(console.warn);
-          loadLibrary().catch(console.warn);
-      })
-      .catch((e) => {
-          showDebugError("Auth failed: " + e.message);
-      });
+      $('accountName').textContent=[telegramUser.first_name,telegramUser.last_name].filter(Boolean).join(' ')||'Telegram reader';
+      $('accountId').textContent=`Telegram account · ${telegramUser.username?'@'+telegramUser.username:'verified'}`;
+      
+      $('splashMessage').textContent = "3. UI Init OK. Hiding splash...";
+      
+      // HIDE SPLASH SCREEN IMMEDIATELY (No waiting for backend)
+      $('splash').classList.add('opacity-0','transition-opacity');
+      setTimeout(()=>$('splash').remove(),350);
+      $('viewsContainer').classList.remove('hidden');
+      
+      // NOW TALK TO BACKEND IN BACKGROUND
+      apiFetch('/api/auth',{method:'POST',body:JSON.stringify({initData})})
+        .then(() => {
+            loadAccount().catch(console.warn);
+            loadBrowse(1).catch(console.warn);
+            loadLibrary().catch(console.warn);
+        })
+        .catch((e) => {
+            showDebugError("Auth failed: " + e.message);
+        });
+    } catch(e) {
+      $('splashMessage').textContent = "CRASH AT START: " + e.message;
+    }
   }
   start();
 </script>
