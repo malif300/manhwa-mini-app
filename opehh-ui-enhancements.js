@@ -53,63 +53,64 @@
 
   // --- HEADER & UI CHANGES ---
   function applyUIChanges() {
-    const splash = $('splash');
-    if (splash) {
-      const mark = splash.querySelector('.logo-mark') || splash.querySelector('div');
-      if (mark) {
-        mark.classList.add('opehh-mark');
-        mark.setAttribute('aria-label', 'Manhwa Opehh');
-      }
-      const heading = splash.querySelector('h1');
-      if (heading) {
-        heading.textContent = 'MANHWA OPEHH';
-        heading.classList.add('opehh-title');
-      }
-      const message = $('splashMessage');
-      if (message && !splash.querySelector('.opehh-subtitle')) {
-        const subtitle = document.createElement('p');
-        subtitle.className = 'opehh-subtitle mt-4';
-        subtitle.textContent = 'Stories beyond the frame';
-        message.insertAdjacentElement('afterend', subtitle);
-      }
-    }
-
-    // Header text replacement
-    const browseHeader = $('browseView')?.querySelector('header');
-    if (browseHeader && !$('opehhFullscreenBtn')) {
-      const titleContainer = $('browseTitleContainer');
-      if (titleContainer) {
-        titleContainer.innerHTML = `<p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Explore</p><h1 class="mt-1 text-2xl font-bold header-opehh-title">Manhwa Opehh</h1>`;
-      }
-      
-      // Add Fullscreen button with TOGGLE logic
-      const btn = document.createElement('button');
-      btn.id = 'opehhFullscreenBtn';
-      btn.className = 'ml-2 text-slate-400 hover:text-lime-200 text-lg z-50 relative';
-      btn.innerHTML = '⛶';
-      btn.title = 'Toggle Fullscreen';
-      
-      btn.onclick = () => {
-        const tg = window.Telegram?.WebApp;
-        
-        if (isFullscreen) {
-          // Exit Fullscreen
-          if (tg?.exitFullscreen) tg.exitFullscreen();
-          else if (document.exitFullscreen) document.exitFullscreen();
-          isFullscreen = false;
-          btn.innerHTML = '⛶';
-        } else {
-          // Enter Fullscreen
-          if (tg?.requestFullscreen) tg.requestFullscreen();
-          else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
-          isFullscreen = true;
-          btn.innerHTML = '✕';
+    try {
+      const splash = $('splash');
+      if (splash) {
+        const mark = splash.querySelector('.logo-mark') || splash.querySelector('div');
+        if (mark) {
+          mark.classList.add('opehh-mark');
+          mark.setAttribute('aria-label', 'Manhwa Opehh');
         }
-      };
+        const heading = splash.querySelector('h1');
+        if (heading) {
+          heading.textContent = 'MANHWA OPEHH';
+          heading.classList.add('opehh-title');
+        }
+        const message = $('splashMessage');
+        if (message && !splash.querySelector('.opehh-subtitle')) {
+          const subtitle = document.createElement('p');
+          subtitle.className = 'opehh-subtitle mt-4';
+          subtitle.textContent = 'Stories beyond the frame';
+          message.insertAdjacentElement('afterend', subtitle);
+        }
+      }
 
-      // Append to the controls div
-      const controlsDiv = browseHeader.querySelector('.mb-4 > div:last-child');
-      if (controlsDiv) controlsDiv.appendChild(btn);
+      // Header text replacement
+      const browseHeader = $('browseView')?.querySelector('header');
+      if (browseHeader && !$('opehhFullscreenBtn')) {
+        const titleContainer = $('browseTitleContainer');
+        if (titleContainer) {
+          titleContainer.innerHTML = `<p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Explore</p><h1 class="mt-1 text-2xl font-bold header-opehh-title">Manhwa Opehh</h1>`;
+        }
+        
+        // Add Fullscreen button with TOGGLE logic
+        const btn = document.createElement('button');
+        btn.id = 'opehhFullscreenBtn';
+        btn.className = 'ml-2 text-slate-400 hover:text-lime-200 text-lg z-50 relative';
+        btn.innerHTML = '⛶';
+        btn.title = 'Toggle Fullscreen';
+        
+        btn.onclick = () => {
+          const tg = window.Telegram?.WebApp;
+          
+          if (isFullscreen) {
+            if (tg?.exitFullscreen) tg.exitFullscreen();
+            else if (document.exitFullscreen) document.exitFullscreen();
+            isFullscreen = false;
+            btn.innerHTML = '⛶';
+          } else {
+            if (tg?.requestFullscreen) tg.requestFullscreen();
+            else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+            isFullscreen = true;
+            btn.innerHTML = '✕';
+          }
+        };
+
+        const controlsDiv = browseHeader.querySelector('.mb-4 > div:last-child');
+        if (controlsDiv) controlsDiv.appendChild(btn);
+      }
+    } catch (e) {
+      console.warn("UI Changes Error:", e);
     }
   }
   applyUIChanges();
@@ -122,45 +123,49 @@
 
   // --- WEBTOON TOGGLE ---
   function installWebtoonToggle() {
-    const view = $('readerView');
-    const header = $('readerTopBar');
-    if (!view || !header || header.querySelector('#opehhWebtoonToggle')) return;
-    
-    const button = document.createElement('button');
-    button.id = 'opehhWebtoonToggle';
-    button.type = 'button';
-    button.className = 'rounded-lg border border-white/10 px-2 py-1 text-[10px] font-semibold text-slate-300 ml-2 z-50 relative';
-    button.textContent = 'Webtoon';
-    button.title = 'Continuous vertical pages';
-    button.hidden = true;
-    
-    button.addEventListener('click', () => {
-      if (!hasPremiumAccess()) { 
-        if (typeof window.showToast === 'function') window.showToast('Webtoon mode is available to Premium readers.');
-        return; 
-      }
-      webtoonEnabled = !webtoonEnabled;
-      view.classList.toggle('opehh-webtoon', webtoonEnabled);
-      button.textContent = webtoonEnabled ? 'Webtoon ✓' : 'Webtoon';
-      const content = $('readerContent');
-      if (content) content.scrollTop = 0;
-    });
-    
-    const buttons = header.querySelectorAll('button');
-    if (buttons.length > 1) header.insertBefore(button, buttons[buttons.length - 1]);
-    else header.appendChild(button);
-    
-    const refresh = () => {
-      const opened = view.classList.contains('flex') && !view.classList.contains('hidden');
-      const allowed = hasPremiumAccess();
-      button.hidden = !opened;
-      button.disabled = !allowed;
-      button.classList.toggle('opacity-50', !allowed);
-    };
-    new MutationObserver(refresh).observe(view, { attributes:true, attributeFilter:['class'] });
-    const plan = $('accountPlan');
-    if (plan) new MutationObserver(refresh).observe(plan, { attributes:true, attributeFilter:['data-premium'] });
-    refresh();
+    try {
+      const view = $('readerView');
+      const header = $('readerTopBar');
+      if (!view || !header || header.querySelector('#opehhWebtoonToggle')) return;
+      
+      const button = document.createElement('button');
+      button.id = 'opehhWebtoonToggle';
+      button.type = 'button';
+      button.className = 'rounded-lg border border-white/10 px-2 py-1 text-[10px] font-semibold text-slate-300 ml-2 z-50 relative';
+      button.textContent = 'Webtoon';
+      button.title = 'Continuous vertical pages';
+      button.hidden = true;
+      
+      button.addEventListener('click', () => {
+        if (!hasPremiumAccess()) { 
+          if (typeof window.showToast === 'function') window.showToast('Webtoon mode is available to Premium readers.');
+          return; 
+        }
+        webtoonEnabled = !webtoonEnabled;
+        view.classList.toggle('opehh-webtoon', webtoonEnabled);
+        button.textContent = webtoonEnabled ? 'Webtoon ✓' : 'Webtoon';
+        const content = $('readerContent');
+        if (content) content.scrollTop = 0;
+      });
+      
+      const buttons = header.querySelectorAll('button');
+      if (buttons.length > 1) header.insertBefore(button, buttons[buttons.length - 1]);
+      else header.appendChild(button);
+      
+      const refresh = () => {
+        const opened = view.classList.contains('flex') && !view.classList.contains('hidden');
+        const allowed = hasPremiumAccess();
+        button.hidden = !opened;
+        button.disabled = !allowed;
+        button.classList.toggle('opacity-50', !allowed);
+      };
+      new MutationObserver(refresh).observe(view, { attributes:true, attributeFilter:['class'] });
+      const plan = $('accountPlan');
+      if (plan) new MutationObserver(refresh).observe(plan, { attributes:true, attributeFilter:['data-premium'] });
+      refresh();
+    } catch (e) {
+      console.warn("Webtoon Toggle Error:", e);
+    }
   }
   installWebtoonToggle();
   document.addEventListener('DOMContentLoaded', () => { installWebtoonToggle(); }, { once:true });
@@ -356,6 +361,8 @@
     imageObserver.observe(content, { childList:true, subtree:true });
     content.querySelectorAll('img').forEach(attachImageRetry);
   }
+  
+  // FIXED: Changed from observeImageRetry to observeReaderImages
   observeReaderImages();
 
 })();
