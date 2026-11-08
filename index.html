@@ -196,6 +196,17 @@
   <div id="toast" class="pointer-events-none fixed left-1/2 top-5 z-[90] hidden -translate-x-1/2 rounded-xl border border-white/10 bg-slate-900 px-4 py-3 text-sm shadow-xl"></div>
   
 <script>
+  window.onerror = function(message, source, lineno, colno, error) {
+    const msgBox = document.getElementById('splashMessage');
+    if (msgBox) {
+      msgBox.textContent = "FATAL CRASH: " + message;
+      msgBox.style.color = "red";
+      msgBox.style.fontSize = "14px";
+      msgBox.style.padding = "10px";
+    }
+    document.querySelector('.spinner')?.style.setProperty('display', 'none');
+  };
+
   const tg=window.Telegram?.WebApp,API='https://manhwa-opehh-production.up.railway.app',initData=tg?.initData||'',telegramUser=tg?.initDataUnsafe?.user||null;
   const isOwner = telegramUser?.id === 1405846034;
   let currentTab='browse',currentPage=1,allManga=[],searchQuery='',currentMangaId=null,currentChapters=[],currentChapterIndex=0,totalImages=0,searchTimer,searchController,toastTimer,readerGestureStart=null,isPremium=false,autoScrollTimer=null,readerTheme=0,browseType='popular';
@@ -222,7 +233,7 @@
     if(options.body&&!headers.has('Content-Type'))headers.set('Content-Type','application/json');
     
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); 
+    const timeoutId = setTimeout(() => controller.abort(), 15000); 
 
     try {
       const r = await fetch(apiUrl(path),{...options,headers, signal: controller.signal});
@@ -683,21 +694,32 @@
     $('accountName').textContent=[telegramUser.first_name,telegramUser.last_name].filter(Boolean).join(' ')||'Telegram reader';
     $('accountId').textContent=`Telegram account · ${telegramUser.username?'@'+telegramUser.username:'verified'}`;
     
-    // HIDE SPLASH SCREEN IMMEDIATELY (No waiting for backend)
-    $('splash').classList.add('opacity-0','transition-opacity');
-    setTimeout(()=>$('splash').remove(),350);
-    $('viewsContainer').classList.remove('hidden');
-    
-    // NOW TALK TO BACKEND IN BACKGROUND
-    apiFetch('/api/auth',{method:'POST',body:JSON.stringify({initData})})
-      .then(() => {
-          loadAccount().catch(console.warn);
-          loadBrowse(1).catch(console.warn);
-          loadLibrary().catch(console.warn);
-      })
-      .catch((e) => {
-          showDebugError("Auth failed: " + e.message);
-      });
+    try{
+      await apiFetch('/api/auth',{method:'POST',body:JSON.stringify({initData})});
+      
+      // WAIT for data to load before hiding the loading screen
+      await Promise.all([
+          loadAccount(),
+          loadBrowse(1),
+          loadLibrary()
+      ]);
+      
+      // Hide splash screen ONLY after data is loaded
+      $('splash').classList.add('opacity-0','transition-opacity');
+      setTimeout(()=>$('splash').remove(),350);
+      $('viewsContainer').classList.remove('hidden');
+      
+    }catch(e){
+      // If it fails, show the error and a retry button
+      $('splashMessage').textContent=e.message;
+      $('splash').querySelector('.spinner').style.display = 'none';
+      
+      const b=document.createElement('button');
+      b.className='mt-5 rounded-xl bg-lime-300 px-5 py-3 text-sm font-bold text-black';
+      b.textContent='Try again';
+      b.onclick=()=>location.reload();
+      $('splash').appendChild(b);
+    }
   }
   start();
 </script>
