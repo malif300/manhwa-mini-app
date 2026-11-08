@@ -597,12 +597,14 @@
     
     try{
       await apiFetch('/api/auth',{method:'POST',body:JSON.stringify({initData})});
+      await loadAccount();
       
-      // REVERTED: Waits for browse to load before hiding splash
-      await Promise.all([loadBrowse(1), loadAccount()]);
-      
+      // REMOVE SPLASH IMMEDIATELY 
       $('splash').classList.add('opacity-0','transition-opacity');
       setTimeout(()=>$('splash').remove(),350);
+      
+      // LOAD MANGA IN BACKGROUND (non-blocking)
+      loadBrowse(1).catch(e => console.warn("Could not load browse on startup:", e));
       
     }catch(e){
       $('splashMessage').textContent=e.message;
