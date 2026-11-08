@@ -23,6 +23,7 @@
             <h1 class="mt-1 text-2xl font-bold">Discover</h1>
           </div>
           <div class="flex items-center gap-2">
+            <!-- "MANHWA · MANGA" removed from here -->
             <button id="toggleFiltersBtn" onclick="toggleFilters()" class="hidden text-slate-400 hover:text-lime-200">▼</button>
           </div>
         </div>
@@ -64,6 +65,7 @@
       <div class="space-y-3 p-4">
         <div class="rounded-3xl border border-white/10 bg-[#121621] p-5">
           <div class="flex items-center gap-4 border-b border-white/5 pb-4">
+            <!-- Telegram Profile Picture -->
             <img id="accountAvatar" class="h-14 w-14 rounded-full object-cover border-2 border-lime-300/30 bg-[#20283b]" src="" alt="Avatar">
             <div>
               <p class="text-xs uppercase tracking-wider text-slate-500">Signed in with Telegram</p>
@@ -599,11 +601,10 @@
       await apiFetch('/api/auth',{method:'POST',body:JSON.stringify({initData})});
       await loadAccount();
       
-      // REMOVE SPLASH IMMEDIATELY 
+      // THE FIX: Hide splash instantly, load browse in the background.
       $('splash').classList.add('opacity-0','transition-opacity');
       setTimeout(()=>$('splash').remove(),350);
       
-      // LOAD MANGA IN BACKGROUND (non-blocking)
       loadBrowse(1).catch(e => console.warn("Could not load browse on startup:", e));
       
     }catch(e){
