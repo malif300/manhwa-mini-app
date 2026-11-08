@@ -377,6 +377,7 @@
   async function loadHistory(){const c=$('historyList');c.innerHTML='<div class="flex flex-col items-center py-10 text-slate-400"><div class="spinner"></div><p class="mt-4 text-sm">Loading your reading history…</p></div>';try{renderRows('historyList',await(await apiFetch('/api/history')).json(),'history')}catch(e){setMessage(c,`${e.message} · Check connection, then refresh.`,true)}}
   async function deleteHistory(id,row,b){b.disabled=true;try{await apiFetch(`/api/history/${encodeURIComponent(id)}`,{method:'DELETE'});row.remove();showToast('History removed')}catch(e){b.disabled=false;showToast(e.message)}}
   
+  // FIX: Split fetching so cover/description load instantly
   async function openDetails(id){
     currentMangaId=String(id);
     $('detailsView').classList.remove('hidden');
@@ -391,6 +392,7 @@
     $('detailGenres').replaceChildren();
     
     try{
+      // 1. Fetch basic info (Fast)
       const d=await(await apiFetch(`/api/manga/${encodeURIComponent(id)}`)).json();
       if(currentMangaId!==String(id))return;
       
@@ -405,8 +407,16 @@
       $('detailGenres').innerHTML='';
       (d.genre||[]).forEach(g=>{const x=document.createElement('span');x.className='rounded-full border border-white/10 px-3 py-1 text-xs';x.textContent=g;$('detailGenres').appendChild(x)});
       $('addToLibraryBtn').textContent=libraryIds.has(String(id))?'✓ In library · Remove':'＋ Add to library';
+
+      // 2. Fetch chapters and history in parallel (Slow)
+      const chaptersReq = apiFetch(`/api/manga/${encodeURIComponent(id)}/chapters`).then(r=>r.json()).catch(()=>[]);
+      const historyReq = apiFetch('/api/history').then(r=>r.json()).catch(()=>[]);
       
-      currentChapters=d.chapters||[];
+      const [chapters, history] = await Promise.all([chaptersReq, historyReq]);
+      
+      if(currentMangaId!==String(id))return;
+
+      currentChapters = chapters || [];
       window.currentChapters = currentChapters;
       
       $('chapterCount').textContent=`Chapters · ${currentChapters.length}`;
@@ -426,28 +436,22 @@
       });
       if(!currentChapters.length)c.textContent='No chapters available.';
 
-      try {
-        const history = await (await apiFetch('/api/history')).json();
-        const lastRead = history.find(h => String(h.mangaId) === String(id));
-        
-        if (lastRead) {
-          const lastIndex = currentChapters.findIndex(ch => String(ch.id) === String(lastRead.lastChapterId));
-          if (lastIndex !== -1) {
-            const resumeBtn = document.createElement('button');
-            resumeBtn.className = 'w-full rounded-xl bg-lime-300 py-3 font-bold text-black flex items-center justify-center gap-2';
-            resumeBtn.innerHTML = `<span style="font-size:18px;">▶</span> Resume Chapter ${currentChapters[lastIndex].number || (lastIndex + 1)}`;
-            resumeBtn.onclick = () => openReader(lastIndex);
-            $('resumeContainer').appendChild(resumeBtn);
-          }
-        } else if (currentChapters.length > 0) {
-          const startBtn = document.createElement('button');
-          startBtn.className = 'w-full rounded-xl bg-lime-300 py-3 font-bold text-black flex items-center justify-center gap-2';
-          startBtn.innerHTML = `<span style="font-size:18px;">▶</span> Start Reading`;
-          startBtn.onclick = () => openReader(0);
-          $('resumeContainer').appendChild(startBtn);
+      const lastRead = history.find(h => String(h.mangaId) === String(id));
+      if (lastRead) {
+        const lastIndex = currentChapters.findIndex(ch => String(ch.id) === String(lastRead.lastChapterId));
+        if (lastIndex !== -1) {
+          const resumeBtn = document.createElement('button');
+          resumeBtn.className = 'w-full rounded-xl bg-lime-300 py-3 font-bold text-black flex items-center justify-center gap-2';
+          resumeBtn.innerHTML = `<span style="font-size:18px;">▶</span> Resume Chapter ${currentChapters[lastIndex].number || (lastIndex + 1)}`;
+          resumeBtn.onclick = () => openReader(lastIndex);
+          $('resumeContainer').appendChild(resumeBtn);
         }
-      } catch (e) {
-        console.warn("Could not check history for resume", e);
+      } else if (currentChapters.length > 0) {
+        const startBtn = document.createElement('button');
+        startBtn.className = 'w-full rounded-xl bg-lime-300 py-3 font-bold text-black flex items-center justify-center gap-2';
+        startBtn.innerHTML = `<span style="font-size:18px;">▶</span> Start Reading`;
+        startBtn.onclick = () => openReader(0);
+        $('resumeContainer').appendChild(startBtn);
       }
       
     }catch(e){
