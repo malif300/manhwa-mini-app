@@ -10,9 +10,11 @@
   let isFullscreen = false;
 
   const css = `
+    /* Bigger bottom nav symbols */
     #bottomNav .nav-tab { font-size: 14px; }
     #bottomNav .nav-tab br + * { display: block; margin-top: 2px; font-size: 10px; }
     
+    /* Splash effects */
     #splash .opehh-mark { position:relative; isolation:isolate; overflow:hidden; }
     #splash .opehh-mark::before { content:""; position:absolute; inset:-50%; z-index:-1; background:linear-gradient(105deg,transparent 42%,rgba(126,249,255,.55) 49%,rgba(169,149,255,.62) 51%,transparent 58%); animation:opehh-sweep 1.15s steps(10,end) infinite; }
     #splash .opehh-mark::after { content:""; position:absolute; inset:0; z-index:-1; background:repeating-linear-gradient(0deg,transparent 0 6px,rgba(255,255,255,.08) 7px,transparent 8px); animation:opehh-scan 1.6s steps(2,end) infinite; }
@@ -22,17 +24,22 @@
     @keyframes opehh-scan { 50%{transform:translateY(3px);opacity:.12} }
     @keyframes opehh-flicker { 0%,88%,100%{transform:none;clip-path:none}89%{transform:translateX(2px);clip-path:inset(15% 0 68%)}91%{transform:translateX(-2px);clip-path:inset(65% 0 12%)}93%{transform:none;clip-path:inset(40% 0 40%)} }
     
+    /* Webtoon mode */
     #readerView.opehh-webtoon #readerContent { padding-top:3.5rem!important; padding-bottom:9rem!important; scroll-behavior:auto; }
     #readerView.opehh-webtoon #readerContent img { display:block; width:100%; max-width:none; height:auto; margin:0; border-radius:0!important; }
     
+    /* Disable image long press */
     #readerContent img { -webkit-touch-callout: none; user-select: none; pointer-events: auto; }
     
+    /* Infinite Scroll Loader */
     #opehhInfiniteLoader { text-align: center; padding: 20px; color: #aeb8ca; font-size: 12px; display: none; }
     #opehhInfiniteLoader.show { display: block; }
     
+    /* Header Glitch Effect */
     .header-opehh-title { position:relative; color:#f5f6f8; text-shadow:2px 0 #bcf36b,-2px 0 #a995ff; animation:logoGlitch 2.4s steps(1,end) infinite; }
     @keyframes logoGlitch { 0%,88%,100%{transform:none;clip-path:none}89%{transform:translateX(2px);clip-path:inset(15% 0 68%)}91%{transform:translateX(-2px);clip-path:inset(65% 0 12%)}93%{transform:none;clip-path:inset(40% 0 40%)} }
 
+    /* Blackout Screen */
     #opehhBlackout { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.95); display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
     #opehhBlackout.show { display: flex; }
 
@@ -44,123 +51,124 @@
 
   const hasPremiumAccess = () => $('accountPlan')?.dataset?.premium === 'true';
 
+  // --- HEADER & UI CHANGES ---
   function applyUIChanges() {
-    try {
-      const splash = $('splash');
-      if (splash) {
-        const mark = splash.querySelector('.logo-mark') || splash.querySelector('div');
-        if (mark) {
-          mark.classList.add('opehh-mark');
-          mark.setAttribute('aria-label', 'Manhwa Opehh');
-        }
-        const heading = splash.querySelector('h1');
-        if (heading) {
-          heading.textContent = 'MANHWA OPEHH';
-          heading.classList.add('opehh-title');
-        }
-        const message = $('splashMessage');
-        if (message && !splash.querySelector('.opehh-subtitle')) {
-          const subtitle = document.createElement('p');
-          subtitle.className = 'opehh-subtitle mt-4';
-          subtitle.textContent = 'Stories beyond the frame';
-          message.insertAdjacentElement('afterend', subtitle);
-        }
+    const splash = $('splash');
+    if (splash) {
+      const mark = splash.querySelector('.logo-mark') || splash.querySelector('div');
+      if (mark) {
+        mark.classList.add('opehh-mark');
+        mark.setAttribute('aria-label', 'Manhwa Opehh');
       }
-
-      const browseHeader = $('browseView')?.querySelector('header');
-      if (browseHeader && !$('opehhFullscreenBtn')) {
-        const titleContainer = $('browseTitleContainer');
-        if (titleContainer) {
-          titleContainer.innerHTML = `<p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Explore</p><h1 class="mt-1 text-2xl font-bold header-opehh-title">Manhwa Opehh</h1>`;
-        }
-        
-        // Fixed Fullscreen Toggle
-        const btn = document.createElement('button');
-        btn.id = 'opehhFullscreenBtn';
-        btn.className = 'ml-2 text-slate-400 hover:text-lime-200 text-lg z-50 relative';
-        btn.innerHTML = '⛶';
-        btn.title = 'Toggle Fullscreen';
-        
-        btn.onclick = () => {
-          const tg = window.Telegram?.WebApp;
-          
-          if (isFullscreen) {
-            if (tg?.exitFullscreen) tg.exitFullscreen();
-            else if (document.exitFullscreen) document.exitFullscreen();
-            isFullscreen = false;
-            btn.innerHTML = '⛶';
-          } else {
-            if (tg?.requestFullscreen) tg.requestFullscreen();
-            else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
-            isFullscreen = true;
-            btn.innerHTML = '✕';
-          }
-        };
-
-        const controlsDiv = browseHeader.querySelector('.mb-4 > div:last-child');
-        if (controlsDiv) controlsDiv.appendChild(btn);
+      const heading = splash.querySelector('h1');
+      if (heading) {
+        heading.textContent = 'MANHWA OPEHH';
+        heading.classList.add('opehh-title');
       }
-    } catch (e) {
-      console.warn("UI Changes Error:", e);
+      const message = $('splashMessage');
+      if (message && !splash.querySelector('.opehh-subtitle')) {
+        const subtitle = document.createElement('p');
+        subtitle.className = 'opehh-subtitle mt-4';
+        subtitle.textContent = 'Stories beyond the frame';
+        message.insertAdjacentElement('afterend', subtitle);
+      }
+    }
+
+    // Header text replacement
+    const browseHeader = $('browseView')?.querySelector('header');
+    if (browseHeader && !$('opehhFullscreenBtn')) {
+      const titleContainer = $('browseTitleContainer');
+      if (titleContainer) {
+        titleContainer.innerHTML = `<p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Explore</p><h1 class="mt-1 text-2xl font-bold header-opehh-title">Manhwa Opehh</h1>`;
+      }
+      
+      // Add Fullscreen button with TOGGLE logic
+      const btn = document.createElement('button');
+      btn.id = 'opehhFullscreenBtn';
+      btn.className = 'ml-2 text-slate-400 hover:text-lime-200 text-lg z-50 relative';
+      btn.innerHTML = '⛶';
+      btn.title = 'Toggle Fullscreen';
+      
+      btn.onclick = () => {
+        const tg = window.Telegram?.WebApp;
+        
+        if (isFullscreen) {
+          // Exit Fullscreen
+          if (tg?.exitFullscreen) tg.exitFullscreen();
+          else if (document.exitFullscreen) document.exitFullscreen();
+          isFullscreen = false;
+          btn.innerHTML = '⛶';
+        } else {
+          // Enter Fullscreen
+          if (tg?.requestFullscreen) tg.requestFullscreen();
+          else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+          isFullscreen = true;
+          btn.innerHTML = '✕';
+        }
+      };
+
+      // Append to the controls div
+      const controlsDiv = browseHeader.querySelector('.mb-4 > div:last-child');
+      if (controlsDiv) controlsDiv.appendChild(btn);
     }
   }
   applyUIChanges();
   document.addEventListener('DOMContentLoaded', applyUIChanges);
 
+  // Disable Context Menu on Images
   $('readerContent')?.addEventListener('contextmenu', (e) => {
     if (e.target.tagName === 'IMG') e.preventDefault();
   });
 
+  // --- WEBTOON TOGGLE ---
   function installWebtoonToggle() {
-    try {
-      const view = $('readerView');
-      const header = $('readerTopBar');
-      if (!view || !header || header.querySelector('#opehhWebtoonToggle')) return;
-      
-      const button = document.createElement('button');
-      button.id = 'opehhWebtoonToggle';
-      button.type = 'button';
-      button.className = 'rounded-lg border border-white/10 px-2 py-1 text-[10px] font-semibold text-slate-300 ml-2 z-50 relative';
-      button.textContent = 'Webtoon';
-      button.title = 'Continuous vertical pages';
-      button.hidden = true;
-      
-      button.addEventListener('click', () => {
-        if (!hasPremiumAccess()) { 
-          if (typeof window.showToast === 'function') window.showToast('Webtoon mode is available to Premium readers.');
-          return; 
-        }
-        webtoonEnabled = !webtoonEnabled;
-        view.classList.toggle('opehh-webtoon', webtoonEnabled);
-        button.textContent = webtoonEnabled ? 'Webtoon ✓' : 'Webtoon';
-        const content = $('readerContent');
-        if (content) content.scrollTop = 0;
-      });
-      
-      const buttons = header.querySelectorAll('button');
-      if (buttons.length > 1) header.insertBefore(button, buttons[buttons.length - 1]);
-      else header.appendChild(button);
-      
-      const refresh = () => {
-        const opened = view.classList.contains('flex') && !view.classList.contains('hidden');
-        const allowed = hasPremiumAccess();
-        button.hidden = !opened;
-        button.disabled = !allowed;
-        button.classList.toggle('opacity-50', !allowed);
-      };
-      new MutationObserver(refresh).observe(view, { attributes:true, attributeFilter:['class'] });
-      const plan = $('accountPlan');
-      if (plan) new MutationObserver(refresh).observe(plan, { attributes:true, attributeFilter:['data-premium'] });
-      refresh();
-    } catch (e) {
-      console.warn("Webtoon Toggle Error:", e);
-    }
+    const view = $('readerView');
+    const header = $('readerTopBar');
+    if (!view || !header || header.querySelector('#opehhWebtoonToggle')) return;
+    
+    const button = document.createElement('button');
+    button.id = 'opehhWebtoonToggle';
+    button.type = 'button';
+    button.className = 'rounded-lg border border-white/10 px-2 py-1 text-[10px] font-semibold text-slate-300 ml-2 z-50 relative';
+    button.textContent = 'Webtoon';
+    button.title = 'Continuous vertical pages';
+    button.hidden = true;
+    
+    button.addEventListener('click', () => {
+      if (!hasPremiumAccess()) { 
+        if (typeof window.showToast === 'function') window.showToast('Webtoon mode is available to Premium readers.');
+        return; 
+      }
+      webtoonEnabled = !webtoonEnabled;
+      view.classList.toggle('opehh-webtoon', webtoonEnabled);
+      button.textContent = webtoonEnabled ? 'Webtoon ✓' : 'Webtoon';
+      const content = $('readerContent');
+      if (content) content.scrollTop = 0;
+    });
+    
+    const buttons = header.querySelectorAll('button');
+    if (buttons.length > 1) header.insertBefore(button, buttons[buttons.length - 1]);
+    else header.appendChild(button);
+    
+    const refresh = () => {
+      const opened = view.classList.contains('flex') && !view.classList.contains('hidden');
+      const allowed = hasPremiumAccess();
+      button.hidden = !opened;
+      button.disabled = !allowed;
+      button.classList.toggle('opacity-50', !allowed);
+    };
+    new MutationObserver(refresh).observe(view, { attributes:true, attributeFilter:['class'] });
+    const plan = $('accountPlan');
+    if (plan) new MutationObserver(refresh).observe(plan, { attributes:true, attributeFilter:['data-premium'] });
+    refresh();
   }
   installWebtoonToggle();
   document.addEventListener('DOMContentLoaded', () => { installWebtoonToggle(); }, { once:true });
 
+  // --- INFINITE SCROLL & HEARTBEAT LOGIC ---
   async function loadNextChapterInfinite() {
     if (!webtoonEnabled || isLoadingNext) return;
+    
     if (typeof window.currentChapterIndex === 'undefined' || typeof window.currentChapters === 'undefined') return;
     
     const nextIdx = window.currentChapterIndex + 1;
@@ -220,6 +228,7 @@
     }
   });
 
+  // --- HEARTBEAT & BLACKOUT ---
   function showBlackout() {
     let blackout = $('opehhBlackout');
     if (!blackout) {
@@ -274,6 +283,7 @@
     }
   }
 
+  // --- WRAPPERS ---
   if (typeof window.openReader === 'function') {
     const originalOpenReader = window.openReader;
     window.openReader = async function (index) {
@@ -313,6 +323,7 @@
     };
   }
 
+  // --- IMAGE LOGIC ---
   function attachImageRetry(img) {
     if (img.dataset.opehhRetryAttached) return;
     img.dataset.opehhRetryAttached = 'true';
@@ -345,7 +356,6 @@
     imageObserver.observe(content, { childList:true, subtree:true });
     content.querySelectorAll('img').forEach(attachImageRetry);
   }
-  
   observeReaderImages();
 
 })();
