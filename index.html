@@ -4,7 +4,7 @@
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#090b12"><title>Panel — Manhwa Reader</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script><script src="https://cdn.tailwindcss.com"></script>
   <style>
-    :root{color-scheme:dark;--bg:#090b12;--panel:#121621;--accent:#bcf36b;--muted:#929bad}*{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);color:#f5f6f8;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overscroll-behavior:none}body{overflow:hidden}::-webkit-scrollbar{display:none}.nav-tab{flex:1;min-width:0;padding:9px 2px calc(7px + env(safe-area-inset-bottom));text-align:center;color:#81899a;font-size:10px;font-weight:650}.nav-tab.active{color:var(--accent)}.nav-tab svg{display:block;width:21px;height:21px;margin:0 auto 3px}.safe-bottom{padding-bottom:env(safe-area-inset-bottom)}button:disabled{opacity:.5}.cover{background:#151a25}.skeleton{position:relative;overflow:hidden;background:#151a25}.skeleton:after{content:"";position:absolute;inset:-40%;background:linear-gradient(105deg,transparent 35%,rgba(190,243,107,.14) 46%,rgba(171,151,255,.2) 49%,transparent 59%);transform:translateX(-70%) skewX(-15deg);animation:glitchSweep 1.15s steps(12,end) infinite}.skeleton:before{content:"";position:absolute;inset:0;opacity:.28;background:repeating-linear-gradient(0deg,transparent 0 7px,rgba(255,255,255,.07) 8px,transparent 9px);animation:scan 1.8s steps(2,end) infinite}@keyframes glitchSweep{0%{transform:translateX(-70%) skewX(-15deg)}65%{transform:translateX(65%) skewX(-15deg)}70%{transform:translateX(59%) skewX(-12deg)}75%{transform:translateX(72%) skewX(-18deg)}100%{transform:translateX(150%) skewX(-15deg)}}@keyframes scan{50%{transform:translateY(3px);opacity:.12}}.glitch-logo{position:relative;color:#f5f6f8;text-shadow:2px 0 #bcf36b,-2px 0 #a995ff;animation:logoGlitch 2.4s steps(1,end) infinite}@keyframes logoGlitch{0%,88%,100%{transform:none;clip-path:none}89%{transform:translateX(2px);clip-path:inset(15% 0 68%)}91%{transform:translateX(-2px);clip-path:inset(65% 0 12%)}93%{transform:none;clip-path:inset(40% 0 40%)}}.spinner{width:30px;height:30px;border:2px solid #343b4b;border-top-color:var(--accent);border-right-color:#a995ff;border-radius:50%;animation:spin .72s linear infinite;box-shadow:0 0 18px #bcf36b20}@keyframes spin{to{transform:rotate(360deg)}}#readerView{background:#050608}#readerContent{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;transition:filter .2s,background .2s}#readerContent img{display:block;width:100%;height:auto;max-width:1000px;min-height:180px;margin:0 auto;background:#0b0d12;object-fit:contain}.reader-bar{background:linear-gradient(180deg,rgba(5,6,8,.95),rgba(5,6,8,.72));backdrop-filter:blur(14px);transition:opacity .2s,transform .2s}.reader-hidden{opacity:0;pointer-events:none}.cover-fallback{display:grid;place-items:center;background:linear-gradient(145deg,#20283b,#11151f);color:#737e96}.premium-control{accent-color:#bcf36b}.pro-card{background:linear-gradient(130deg,#bcf36b12,#a995ff15 60%,#121621);border:1px solid #bcf36b35}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+    :root{color-scheme:dark;--bg:#090b12;--panel:#121621;--accent:#bcf36b;--muted:#929bad}*{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);color:#f5f6f8;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overscroll-behavior:none}body{overflow:hidden}::-webkit-scrollbar{display:none}.nav-tab{flex:1;min-width:0;padding:9px 2px calc(7px + env(safe-area-inset-bottom));text-align:center;color:#81899a;font-size:10px;font-weight:650}.nav-tab.active{color:var(--accent)}.nav-tab svg{display:block;width:21px;height:21px;margin:0 auto 3px}.safe-bottom{padding-bottom:env(safe-area-inset-bottom)}.safe-top{padding-top:env(safe-area-inset-top)}button:disabled{opacity:.5}.cover{background:#151a25}.skeleton{position:relative;overflow:hidden;background:#151a25}.skeleton:after{content:"";position:absolute;inset:-40%;background:linear-gradient(105deg,transparent 35%,rgba(190,243,107,.14) 46%,rgba(171,151,255,.2) 49%,transparent 59%);transform:translateX(-70%) skewX(-15deg);animation:glitchSweep 1.15s steps(12,end) infinite}.skeleton:before{content:"";position:absolute;inset:0;opacity:.28;background:repeating-linear-gradient(0deg,transparent 0 7px,rgba(255,255,255,.07) 8px,transparent 9px);animation:scan 1.8s steps(2,end) infinite}@keyframes glitchSweep{0%{transform:translateX(-70%) skewX(-15deg)}65%{transform:translateX(65%) skewX(-15deg)}70%{transform:translateX(59%) skewX(-12deg)}75%{transform:translateX(72%) skewX(-18deg)}100%{transform:translateX(150%) skewX(-15deg)}}@keyframes scan{50%{transform:translateY(3px);opacity:.12}}.glitch-logo{position:relative;color:#f5f6f8;text-shadow:2px 0 #bcf36b,-2px 0 #a995ff;animation:logoGlitch 2.4s steps(1,end) infinite}@keyframes logoGlitch{0%,88%,100%{transform:none;clip-path:none}89%{transform:translateX(2px);clip-path:inset(15% 0 68%)}91%{transform:translateX(-2px);clip-path:inset(65% 0 12%)}93%{transform:none;clip-path:inset(40% 0 40%)}}.spinner{width:30px;height:30px;border:2px solid #343b4b;border-top-color:var(--accent);border-right-color:#a995ff;border-radius:50%;animation:spin .72s linear infinite;box-shadow:0 0 18px #bcf36b20}@keyframes spin{to{transform:rotate(360deg)}}#readerView{background:#050608}#readerContent{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;transition:filter .2s,background .2s}#readerContent img{display:block;width:100%;height:auto;max-width:1000px;min-height:180px;margin:0 auto;background:#0b0d12;object-fit:contain}.reader-bar{background:linear-gradient(180deg,rgba(5,6,8,.95),rgba(5,6,8,.72));backdrop-filter:blur(14px);transition:opacity .2s,transform .2s}.reader-hidden{opacity:0;pointer-events:none}.cover-fallback{display:grid;place-items:center;background:linear-gradient(145deg,#20283b,#11151f);color:#737e96}.premium-control{accent-color:#bcf36b}.pro-card{background:linear-gradient(130deg,#bcf36b12,#a995ff15 60%,#121621);border:1px solid #bcf36b35}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
   </style>
 </head>
 <body>
@@ -19,12 +19,13 @@
   </div>
   
   <main id="viewsContainer" class="h-[100dvh] overflow-y-auto pb-20 safe-bottom hidden">
-    <section id="libraryView" class="hidden min-h-full"><header class="sticky top-0 z-20 border-b border-white/5 bg-[#090b12]/95 px-4 py-4 backdrop-blur"><p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Your collection</p><h1 class="mt-1 text-2xl font-bold">Library</h1></header><div id="libraryGrid" class="grid grid-cols-2 gap-3 p-4"></div></section>
-    <section id="updatesView" class="hidden min-h-full"><header class="sticky top-0 z-20 border-b border-white/5 bg-[#090b12]/95 px-4 py-4 backdrop-blur"><p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Fresh pages</p><h1 class="mt-1 text-2xl font-bold">Updates</h1></header><div id="updatesList" class="space-y-3 p-4"></div></section>
-    <section id="historyView" class="hidden min-h-full"><header class="sticky top-0 z-20 flex items-center justify-between border-b border-white/5 bg-[#090b12]/95 px-4 py-4 backdrop-blur"><div><p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Your trail</p><h1 class="mt-1 text-2xl font-bold">History</h1></div><button onclick="loadHistory()" class="rounded-xl border border-white/10 px-3 py-2 text-xs">↻ Refresh</button></header><div id="historyList" class="space-y-3 p-4"></div></section>
+    <!-- FIXED: Added safe-top padding to headers so buttons don't overlap with Telegram UI -->
+    <section id="libraryView" class="hidden min-h-full"><header class="sticky top-0 z-20 border-b border-white/5 bg-[#090b12]/95 px-4 pb-4 pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur"><p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Your collection</p><h1 class="mt-1 text-2xl font-bold">Library</h1></header><div id="libraryGrid" class="grid grid-cols-2 gap-3 p-4"></div></section>
+    <section id="updatesView" class="hidden min-h-full"><header class="sticky top-0 z-20 border-b border-white/5 bg-[#090b12]/95 px-4 pb-4 pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur"><p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Fresh pages</p><h1 class="mt-1 text-2xl font-bold">Updates</h1></header><div id="updatesList" class="space-y-3 p-4"></div></section>
+    <section id="historyView" class="hidden min-h-full"><header class="sticky top-0 z-20 flex items-center justify-between border-b border-white/5 bg-[#090b12]/95 px-4 pb-4 pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur"><div><p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Your trail</p><h1 class="mt-1 text-2xl font-bold">History</h1></div><button onclick="loadHistory()" class="rounded-xl border border-white/10 px-3 py-2 text-xs">↻ Refresh</button></header><div id="historyList" class="space-y-3 p-4"></div></section>
     
     <section id="browseView" class="min-h-full">
-      <header class="sticky top-0 z-30 border-b border-white/5 bg-[#090b12]/95 p-4 backdrop-blur">
+      <header class="sticky top-0 z-30 border-b border-white/5 bg-[#090b12]/95 px-4 pb-4 pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur">
         <div class="mb-4 flex items-end justify-between">
           <div id="browseTitleContainer">
             <p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Explore</p>
@@ -65,7 +66,7 @@
     </section>
 
     <section id="moreView" class="hidden min-h-full">
-      <header class="border-b border-white/5 px-4 py-4">
+      <header class="border-b border-white/5 px-4 pb-4 pt-[calc(1rem+env(safe-area-inset-top))]">
         <p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Personal</p>
         <h1 class="mt-1 text-2xl font-bold">Account</h1>
       </header>
@@ -127,7 +128,7 @@
   </nav>
   
   <section id="detailsView" class="fixed inset-0 z-50 hidden flex-col overflow-y-auto bg-[#090b12] pb-10">
-    <header class="sticky top-0 z-20 flex items-center border-b border-white/5 bg-[#090b12]/95 p-4 backdrop-blur">
+    <header class="sticky top-0 z-20 flex items-center border-b border-white/5 bg-[#090b12]/95 px-4 pb-4 pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur">
       <button onclick="closeDetails()" class="mr-3 text-xl text-lime-200">‹</button>
       <span id="detailsHeaderTitle" class="truncate font-semibold"></span>
     </header>
@@ -159,7 +160,8 @@
   </section>
   
   <section id="readerView" class="fixed inset-0 z-[60] hidden flex-col">
-    <header id="readerTopBar" class="reader-bar absolute left-0 right-0 top-0 z-[70] flex items-center justify-between border-b border-white/10 px-4 py-3">
+    <!-- FIXED: Added safe-top padding to reader header -->
+    <header id="readerTopBar" class="reader-bar absolute left-0 right-0 top-0 z-[70] flex items-center justify-between border-b border-white/10 px-4 pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))]">
       <button onclick="closeReader()" class="text-xl text-lime-200">‹</button>
       <div class="min-w-0 px-3 text-center">
         <p id="readerTitle" class="truncate text-sm font-semibold"></p>
@@ -196,17 +198,6 @@
   <div id="toast" class="pointer-events-none fixed left-1/2 top-5 z-[90] hidden -translate-x-1/2 rounded-xl border border-white/10 bg-slate-900 px-4 py-3 text-sm shadow-xl"></div>
   
 <script>
-  window.onerror = function(message, source, lineno, colno, error) {
-    const msgBox = document.getElementById('splashMessage');
-    if (msgBox) {
-      msgBox.textContent = "FATAL CRASH: " + message;
-      msgBox.style.color = "red";
-      msgBox.style.fontSize = "14px";
-      msgBox.style.padding = "10px";
-    }
-    document.querySelector('.spinner')?.style.setProperty('display', 'none');
-  };
-
   const tg=window.Telegram?.WebApp,API='https://manhwa-opehh-production.up.railway.app',initData=tg?.initData||'',telegramUser=tg?.initDataUnsafe?.user||null;
   const isOwner = telegramUser?.id === 1405846034;
   let currentTab='browse',currentPage=1,allManga=[],searchQuery='',currentMangaId=null,currentChapters=[],currentChapterIndex=0,totalImages=0,searchTimer,searchController,toastTimer,readerGestureStart=null,isPremium=false,autoScrollTimer=null,readerTheme=0,browseType='popular';
@@ -233,7 +224,7 @@
     if(options.body&&!headers.has('Content-Type'))headers.set('Content-Type','application/json');
     
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000); 
+    const timeoutId = setTimeout(() => controller.abort(), 10000); 
 
     try {
       const r = await fetch(apiUrl(path),{...options,headers, signal: controller.signal});
@@ -374,6 +365,7 @@
   async function loadHistory(){const c=$('historyList');c.innerHTML='<div class="flex flex-col items-center py-10 text-slate-400"><div class="spinner"></div><p class="mt-4 text-sm">Loading your reading history…</p></div>';try{renderRows('historyList',await(await apiFetch('/api/history')).json(),'history')}catch(e){setMessage(c,`${e.message} · Check connection, then refresh.`,true)}}
   async function deleteHistory(id,row,b){b.disabled=true;try{await apiFetch(`/api/history/${encodeURIComponent(id)}`,{method:'DELETE'});row.remove();showToast('History removed')}catch(e){b.disabled=false;showToast(e.message)}}
   
+  // FIXED: Split fetching so cover/description load instantly
   async function openDetails(id){
     currentMangaId=String(id);
     $('detailsView').classList.remove('hidden');
@@ -388,6 +380,7 @@
     $('detailGenres').replaceChildren();
     
     try{
+      // 1. Fetch basic info (Fast)
       const d=await(await apiFetch(`/api/manga/${encodeURIComponent(id)}`)).json();
       if(currentMangaId!==String(id))return;
       
@@ -402,8 +395,16 @@
       $('detailGenres').innerHTML='';
       (d.genre||[]).forEach(g=>{const x=document.createElement('span');x.className='rounded-full border border-white/10 px-3 py-1 text-xs';x.textContent=g;$('detailGenres').appendChild(x)});
       $('addToLibraryBtn').textContent=libraryIds.has(String(id))?'✓ In library · Remove':'＋ Add to library';
+
+      // 2. Fetch chapters and history in parallel (Slow)
+      const chaptersReq = apiFetch(`/api/manga/${encodeURIComponent(id)}/chapters`).then(r=>r.json()).catch(()=>[]);
+      const historyReq = apiFetch('/api/history').then(r=>r.json()).catch(()=>[]);
       
-      currentChapters=d.chapters||[];
+      const [chapters, history] = await Promise.all([chaptersReq, historyReq]);
+      
+      if(currentMangaId!==String(id))return;
+
+      currentChapters = chapters || [];
       window.currentChapters = currentChapters;
       
       $('chapterCount').textContent=`Chapters · ${currentChapters.length}`;
@@ -423,28 +424,22 @@
       });
       if(!currentChapters.length)c.textContent='No chapters available.';
 
-      try {
-        const history = await (await apiFetch('/api/history')).json();
-        const lastRead = history.find(h => String(h.mangaId) === String(id));
-        
-        if (lastRead) {
-          const lastIndex = currentChapters.findIndex(ch => String(ch.id) === String(lastRead.lastChapterId));
-          if (lastIndex !== -1) {
-            const resumeBtn = document.createElement('button');
-            resumeBtn.className = 'w-full rounded-xl bg-lime-300 py-3 font-bold text-black flex items-center justify-center gap-2';
-            resumeBtn.innerHTML = `<span style="font-size:18px;">▶</span> Resume Chapter ${currentChapters[lastIndex].number || (lastIndex + 1)}`;
-            resumeBtn.onclick = () => openReader(lastIndex);
-            $('resumeContainer').appendChild(resumeBtn);
-          }
-        } else if (currentChapters.length > 0) {
-          const startBtn = document.createElement('button');
-          startBtn.className = 'w-full rounded-xl bg-lime-300 py-3 font-bold text-black flex items-center justify-center gap-2';
-          startBtn.innerHTML = `<span style="font-size:18px;">▶</span> Start Reading`;
-          startBtn.onclick = () => openReader(0);
-          $('resumeContainer').appendChild(startBtn);
+      const lastRead = history.find(h => String(h.mangaId) === String(id));
+      if (lastRead) {
+        const lastIndex = currentChapters.findIndex(ch => String(ch.id) === String(lastRead.lastChapterId));
+        if (lastIndex !== -1) {
+          const resumeBtn = document.createElement('button');
+          resumeBtn.className = 'w-full rounded-xl bg-lime-300 py-3 font-bold text-black flex items-center justify-center gap-2';
+          resumeBtn.innerHTML = `<span style="font-size:18px;">▶</span> Resume Chapter ${currentChapters[lastIndex].number || (lastIndex + 1)}`;
+          resumeBtn.onclick = () => openReader(lastIndex);
+          $('resumeContainer').appendChild(resumeBtn);
         }
-      } catch (e) {
-        console.warn("Could not check history for resume", e);
+      } else if (currentChapters.length > 0) {
+        const startBtn = document.createElement('button');
+        startBtn.className = 'w-full rounded-xl bg-lime-300 py-3 font-bold text-black flex items-center justify-center gap-2';
+        startBtn.innerHTML = `<span style="font-size:18px;">▶</span> Start Reading`;
+        startBtn.onclick = () => openReader(0);
+        $('resumeContainer').appendChild(startBtn);
       }
       
     }catch(e){
@@ -616,113 +611,4 @@
             btn.disabled = true; btn.textContent = '...';
             try {
               await apiFetch(`/api/missions/claim/${m.id}`, { method: 'POST' });
-              showToast('Mission claimed!');
-              loadMissions();
-              loadAccount();
-            } catch(e) { showToast(e.message); btn.disabled = false; btn.textContent = 'Claim'; }
-          };
-        } else {
-          btn.textContent = `${m.progress}/1`;
-          btn.className = 'px-3 py-1 rounded-lg bg-slate-800 text-slate-400 text-xs font-bold';
-          btn.disabled = true;
-        }
-        
-        div.append(info, btn);
-        container.appendChild(div);
-      });
-    } catch(e) {
-      container.innerHTML = `<p class="text-xs text-rose-400 py-2">${e.message}</p>`;
-    }
-  }
-
-  function refreshCurrent(){if(currentTab==='library')loadLibrary();else if(currentTab==='updates')loadUpdates();else if(currentTab==='history')loadHistory();else if(currentTab==='more'){loadAccount();loadMissions();}else loadBrowse(1)}
-  
-  function setBrowseType(type) {
-    browseType = type;
-    $('btnPopular').className = type === 'popular' ? 'flex-1 rounded-xl bg-lime-300/20 py-2 text-xs font-bold text-lime-200 transition' : 'flex-1 rounded-xl border border-white/10 bg-[#121621] py-2 text-xs font-bold text-slate-400 transition';
-    $('btnLatest').className = type === 'latest' ? 'flex-1 rounded-xl bg-lime-300/20 py-2 text-xs font-bold text-lime-200 transition' : 'flex-1 rounded-xl border border-white/10 bg-[#121621] py-2 text-xs font-bold text-slate-400 transition';
-    loadBrowse(1);
-  }
-
-  function applyFilters() { loadBrowse(1); }
-
-  async function loadSourcesDropdown() {
-    try {
-      const sources = await (await apiFetch('/api/sources')).json();
-      const select = $('filterSource');
-      select.innerHTML = '<option value="">All Sources</option>';
-      sources.forEach(s => {
-        const opt = document.createElement('option');
-        opt.value = s.id;
-        opt.textContent = `${s.name} (${s.lang || '?'})`;
-        select.appendChild(opt);
-      });
-    } catch (e) { console.warn("Could not load sources", e); }
-  }
-
-  $('loadMoreBtn').onclick=()=>loadBrowse(currentPage+1);
-  $('searchInput').addEventListener('input',()=>{clearTimeout(searchTimer);searchQuery=$('searchInput').value.trim();searchController?.abort();searchController=new AbortController();if(!searchQuery)return renderGrid('browseGrid',allManga);searchTimer=setTimeout(()=>searchTitles(searchQuery),350)});
-  
-  function navigateBack(){if($('readerView').classList.contains('flex')){closeReader();return true}if(!$('detailsView').classList.contains('hidden')){closeDetails();return true}if(currentTab!=='browse'){switchTab('browse');return true}return false}
-  document.addEventListener('keydown',e=>{if(e.key==='Escape')navigateBack();if(e.key==='ArrowLeft')loadAdjacentChapter(-1);if(e.key==='ArrowRight')loadAdjacentChapter(1)});
-  if(tg?.BackButton){tg.BackButton.onClick(()=>{if(!navigateBack())tg.close()});tg.BackButton.show()}
-  
-  let edgeX=0;
-  document.addEventListener('touchstart',e=>{edgeX=e.touches[0].clientX},{passive:true});
-  document.addEventListener('touchend',e=>{if(!$('readerView').classList.contains('flex')&&edgeX<28&&e.changedTouches[0].clientX-edgeX>100)navigateBack();edgeX=0},{passive:true});
-  
-  async function start(){
-    if(!telegramUser||!initData){
-      $('splashMessage').textContent='Open this app from the Telegram bot to sign in.';
-      $('splash').querySelector('.spinner').remove();
-      return;
-    }
-    
-    if (isOwner) {
-      $('toggleFiltersBtn').classList.remove('hidden');
-      $('filterSource').disabled = false;
-      $('filterSource').classList.remove('opacity-50');
-      loadSourcesDropdown();
-    }
-    
-    if (telegramUser.photo_url) {
-      $('accountAvatar').src = telegramUser.photo_url;
-    } else {
-      $('accountAvatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(telegramUser.first_name || 'User')}&background=121621&color=bcf36b&size=128`;
-    }
-
-    $('accountName').textContent=[telegramUser.first_name,telegramUser.last_name].filter(Boolean).join(' ')||'Telegram reader';
-    $('accountId').textContent=`Telegram account · ${telegramUser.username?'@'+telegramUser.username:'verified'}`;
-    
-    try{
-      await apiFetch('/api/auth',{method:'POST',body:JSON.stringify({initData})});
-      
-      // WAIT for data to load before hiding the loading screen
-      await Promise.all([
-          loadAccount(),
-          loadBrowse(1),
-          loadLibrary()
-      ]);
-      
-      // Hide splash screen ONLY after data is loaded
-      $('splash').classList.add('opacity-0','transition-opacity');
-      setTimeout(()=>$('splash').remove(),350);
-      $('viewsContainer').classList.remove('hidden');
-      
-    }catch(e){
-      // If it fails, show the error and a retry button
-      $('splashMessage').textContent=e.message;
-      $('splash').querySelector('.spinner').style.display = 'none';
-      
-      const b=document.createElement('button');
-      b.className='mt-5 rounded-xl bg-lime-300 px-5 py-3 text-sm font-bold text-black';
-      b.textContent='Try again';
-      b.onclick=()=>location.reload();
-      $('splash').appendChild(b);
-    }
-  }
-  start();
-</script>
-<script src="/opehh-ui-enhancements.js"></script>
-</body>
-</html>
+              showToast('Mission
