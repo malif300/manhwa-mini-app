@@ -23,7 +23,6 @@
             <h1 class="mt-1 text-2xl font-bold">Discover</h1>
           </div>
           <div class="flex items-center gap-2">
-            <!-- "MANHWA · MANGA" removed from here -->
             <button id="toggleFiltersBtn" onclick="toggleFilters()" class="hidden text-slate-400 hover:text-lime-200">▼</button>
           </div>
         </div>
@@ -65,7 +64,6 @@
       <div class="space-y-3 p-4">
         <div class="rounded-3xl border border-white/10 bg-[#121621] p-5">
           <div class="flex items-center gap-4 border-b border-white/5 pb-4">
-            <!-- Telegram Profile Picture added here -->
             <img id="accountAvatar" class="h-14 w-14 rounded-full object-cover border-2 border-lime-300/30 bg-[#20283b]" src="" alt="Avatar">
             <div>
               <p class="text-xs uppercase tracking-wider text-slate-500">Signed in with Telegram</p>
@@ -163,7 +161,6 @@
     <div id="readerContent" class="flex-1 overflow-y-auto pb-28 pt-14"></div>
     
     <footer id="readerBottomBar" class="reader-bar absolute bottom-0 left-0 right-0 z-[70] border-t border-white/10 px-3 pt-3 safe-bottom">
-      <!-- Clean Reader Bar: Prev | Slider | Page | Next -->
       <div class="mb-3 flex items-center justify-between gap-2">
         <button id="prevBtn" onclick="loadAdjacentChapter(-1)" class="rounded-lg bg-white/5 px-2 py-1.5 text-xs whitespace-nowrap text-slate-300 font-semibold">← Previous</button>
         <input id="readerSlider" type="range" min="0" max="100" value="0" class="premium-control h-1 flex-1 mx-1 min-w-[50px]">
@@ -433,7 +430,6 @@
     const c=$('readerContent'),max=c.scrollHeight-c.clientHeight;
     if(max>0)$('readerSlider').value=String(c.scrollTop/max*100);
     const image=[...c.querySelectorAll('img')].find(x=>x.getBoundingClientRect().bottom>90);
-    // FIXED: Check if dataset.page exists to prevent 'undefined'
     if(image && image.dataset.page) {
       $('pageCounter').textContent=`${image.dataset.page} / ${totalImages}`;
     }
@@ -601,14 +597,12 @@
     
     try{
       await apiFetch('/api/auth',{method:'POST',body:JSON.stringify({initData})});
-      await loadAccount();
       
-      // FIX: Remove splash screen immediately, don't wait for loadBrowse (which depends on Suwayomi)
+      // REVERTED: Waits for browse to load before hiding splash
+      await Promise.all([loadBrowse(1), loadAccount()]);
+      
       $('splash').classList.add('opacity-0','transition-opacity');
       setTimeout(()=>$('splash').remove(),350);
-      
-      // Load browse in the background
-      loadBrowse(1).catch(e => console.warn("Could not load browse on startup:", e));
       
     }catch(e){
       $('splashMessage').textContent=e.message;
