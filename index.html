@@ -4,10 +4,7 @@
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#090b12"><title>Panel — Manhwa Reader</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script><script src="https://cdn.tailwindcss.com"></script>
   <style>
-    :root{color-scheme:dark;--bg:#090b12;--panel:#121621;--accent:#bcf36b;--muted:#929bad}*{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);color:#f5f6f8;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overscroll-behavior:none}body{overflow:hidden}::-webkit-scrollbar{display:none}.nav-tab{flex:1;min-width:0;padding:9px 2px calc(7px + env(safe-area-inset-bottom));text-align:center;color:#81899a;font-size:10px;font-weight:650}.nav-tab.active{color:var(--accent)}.nav-tab svg{display:block;width:24px;height:24px;margin:0 auto 3px}.safe-bottom{padding-bottom:env(safe-area-inset-bottom)}button:disabled{opacity:.5}.cover{background:#151a25}.skeleton{position:relative;overflow:hidden;background:#151a25}.skeleton:after{content:"";position:absolute;inset:-40%;background:linear-gradient(105deg,transparent 35%,rgba(190,243,107,.14) 46%,rgba(171,151,255,.2) 49%,transparent 59%);transform:translateX(-70%) skewX(-15deg);animation:glitchSweep 1.15s steps(12,end) infinite}.skeleton:before{content:"";position:absolute;inset:0;opacity:.28;background:repeating-linear-gradient(0deg,transparent 0 7px,rgba(255,255,255,.07) 8px,transparent 9px);animation:scan 1.8s steps(2,end) infinite}@keyframes glitchSweep{0%{transform:translateX(-70%) skewX(-15deg)}65%{transform:translateX(65%) skewX(-15deg)}70%{transform:translateX(59%) skewX(-12deg)}75%{transform:translateX(72%) skewX(-18deg)}100%{transform:translateX(150%) skewX(-15deg)}}@keyframes scan{50%{transform:translateY(3px);opacity:.12}}.glitch-logo{position:relative;color:#f5f6f8;text-shadow:2px 0 #bcf36b,-2px 0 #a995ff;animation:logoGlitch 2.4s steps(1,end) infinite}@keyframes logoGlitch{0%,88%,100%{transform:none;clip-path:none}89%{transform:translateX(2px);clip-path:inset(15% 0 68%)}91%{transform:translateX(-2px);clip-path:inset(65% 0 12%)}93%{transform:none;clip-path:inset(40% 0 40%)}}.spinner{width:30px;height:30px;border:2px solid #343b4b;border-top-color:var(--accent);border-right-color:#a995ff;border-radius:50%;animation:spin .72s linear infinite;box-shadow:0 0 18px #bcf36b20}@keyframes spin{to{transform:rotate(360deg)}}#readerView{background:#050608}#readerContent{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;transition:filter .2s,background .2s}#readerContent img{display:block;width:100%;height:auto;max-width:1000px;min-height:180px;margin:0 auto;background:#0b0d12;object-fit:contain}.reader-bar{background:linear-gradient(180deg,rgba(5,6,8,.95),rgba(5,6,8,.72));backdrop-filter:blur(14px);transition:opacity .2s,transform .2s}.reader-hidden{opacity:0;pointer-events:none}.cover-fallback{display:grid;place-items:center;background:linear-gradient(145deg,#20283b,#11151f);color:#737e96}.premium-control{accent-color:#bcf36b}.pro-card{background:linear-gradient(130deg,#bcf36b12,#a995ff15 60%,#121621);border:1px solid #bcf36b35}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-    
-    /* Disable long press on images globally */
-    * { -webkit-touch-callout: none; user-select: none; }
+    :root{color-scheme:dark;--bg:#090b12;--panel:#121621;--accent:#bcf36b;--muted:#929bad}*{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);color:#f5f6f8;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overscroll-behavior:none}body{overflow:hidden}::-webkit-scrollbar{display:none}.nav-tab{flex:1;min-width:0;padding:9px 2px calc(7px + env(safe-area-inset-bottom));text-align:center;color:#81899a;font-size:10px;font-weight:650}.nav-tab.active{color:var(--accent)}.nav-tab svg{display:block;width:21px;height:21px;margin:0 auto 3px}.safe-bottom{padding-bottom:env(safe-area-inset-bottom)}button:disabled{opacity:.5}.cover{background:#151a25}.skeleton{position:relative;overflow:hidden;background:#151a25}.skeleton:after{content:"";position:absolute;inset:-40%;background:linear-gradient(105deg,transparent 35%,rgba(190,243,107,.14) 46%,rgba(171,151,255,.2) 49%,transparent 59%);transform:translateX(-70%) skewX(-15deg);animation:glitchSweep 1.15s steps(12,end) infinite}.skeleton:before{content:"";position:absolute;inset:0;opacity:.28;background:repeating-linear-gradient(0deg,transparent 0 7px,rgba(255,255,255,.07) 8px,transparent 9px);animation:scan 1.8s steps(2,end) infinite}@keyframes glitchSweep{0%{transform:translateX(-70%) skewX(-15deg)}65%{transform:translateX(65%) skewX(-15deg)}70%{transform:translateX(59%) skewX(-12deg)}75%{transform:translateX(72%) skewX(-18deg)}100%{transform:translateX(150%) skewX(-15deg)}}@keyframes scan{50%{transform:translateY(3px);opacity:.12}}.glitch-logo{position:relative;color:#f5f6f8;text-shadow:2px 0 #bcf36b,-2px 0 #a995ff;animation:logoGlitch 2.4s steps(1,end) infinite}@keyframes logoGlitch{0%,88%,100%{transform:none;clip-path:none}89%{transform:translateX(2px);clip-path:inset(15% 0 68%)}91%{transform:translateX(-2px);clip-path:inset(65% 0 12%)}93%{transform:none;clip-path:inset(40% 0 40%)}}.spinner{width:30px;height:30px;border:2px solid #343b4b;border-top-color:var(--accent);border-right-color:#a995ff;border-radius:50%;animation:spin .72s linear infinite;box-shadow:0 0 18px #bcf36b20}@keyframes spin{to{transform:rotate(360deg)}}#readerView{background:#050608}#readerContent{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;transition:filter .2s,background .2s}#readerContent img{display:block;width:100%;height:auto;max-width:1000px;min-height:180px;margin:0 auto;background:#0b0d12;object-fit:contain}.reader-bar{background:linear-gradient(180deg,rgba(5,6,8,.95),rgba(5,6,8,.72));backdrop-filter:blur(14px);transition:opacity .2s,transform .2s}.reader-hidden{opacity:0;pointer-events:none}.cover-fallback{display:grid;place-items:center;background:linear-gradient(145deg,#20283b,#11151f);color:#737e96}.premium-control{accent-color:#bcf36b}.pro-card{background:linear-gradient(130deg,#bcf36b12,#a995ff15 60%,#121621);border:1px solid #bcf36b35}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
   </style>
 </head>
 <body>
@@ -21,13 +18,14 @@
     <section id="browseView" class="min-h-full">
       <header class="sticky top-0 z-20 border-b border-white/5 bg-[#090b12]/95 p-4 backdrop-blur">
         <div class="mb-4 flex items-end justify-between">
-          <div>
+          <div id="browseTitleContainer">
             <p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Explore</p>
-            <h1 class="mt-1 text-2xl font-bold glitch-logo">MANHWA OPEHH</h1>
+            <h1 class="mt-1 text-2xl font-bold">Discover</h1>
           </div>
           <div class="flex items-center gap-2">
-            <!-- Collapsible Arrow -->
-            <button id="toggleFiltersBtn" onclick="toggleFilters()" class="hidden text-slate-400 hover:text-lime-200 text-lg">▼</button>
+            <span class="rounded-full border border-white/10 px-3 py-1 text-[10px] text-slate-400">MANHWA · MANGA</span>
+            <!-- Collapsible Arrow (Only for Owner) -->
+            <button id="toggleFiltersBtn" onclick="toggleFilters()" class="hidden text-slate-400 hover:text-lime-200">▼</button>
           </div>
         </div>
 
@@ -37,20 +35,19 @@
             <button id="btnLatest" onclick="setBrowseType('latest')" class="flex-1 rounded-xl border border-white/10 bg-[#121621] py-2 text-xs font-bold text-slate-400 transition">Latest</button>
           </div>
           
-          <!-- Owner Only Filter -->
-          <div id="ownerFilters" class="mb-3 hidden flex gap-2">
-            <select id="filterSource" onchange="applyFilters()" class="w-1/2 rounded-xl border border-white/10 bg-[#121621] p-2 text-xs text-slate-200 outline-none">
-              <option value="">All Sources</option>
-            </select>
-          </div>
-          <!-- Language Filter (Everyone) -->
           <div class="mb-3 flex gap-2">
+            <!-- Language Filter (Visible to ALL) -->
             <select id="filterLang" onchange="applyFilters()" class="w-full rounded-xl border border-white/10 bg-[#121621] p-2 text-xs text-slate-200 outline-none">
               <option value="">All Languages</option>
               <option value="en">English</option>
-              <option value="id">Indonesian</option>
-              <option value="es">Spanish</option>
               <option value="ja">Japanese</option>
+              <option value="ko">Korean</option>
+              <option value="zh">Chinese</option>
+              <option value="id">Indonesian</option>
+            </select>
+            <!-- Source Filter (Owner Only - Locked) -->
+            <select id="filterSource" onchange="applyFilters()" disabled class="w-full rounded-xl border border-white/10 bg-[#121621] p-2 text-xs text-slate-200 outline-none opacity-50">
+              <option value="">🔒 All Sources (Owner Only)</option>
             </select>
           </div>
         </div>
@@ -78,50 +75,54 @@
             <span class="text-sm text-slate-400">Membership</span>
             <span id="accountPlan" class="rounded-full bg-lime-300/10 px-3 py-1 text-xs font-semibold text-lime-200">Loading…</span>
           </div>
-          <div class="mt-2 flex items-center justify-between">
-            <span class="text-sm text-slate-400">Level & Title</span>
-            <span id="accountLevel" class="text-xs font-bold text-lime-300">Lvl 1 - Novice</span>
+          <p id="premiumExpiry" class="mt-2 text-xs text-slate-500"></p>
+          
+          <!-- NEW: Time Limit & XP Stats -->
+          <div class="mt-4 grid grid-cols-2 gap-3 border-t border-white/5 pt-4">
+            <div>
+              <p class="text-[10px] uppercase text-slate-500">Reading Time</p>
+              <p id="accountTimeLeft" class="text-sm font-bold text-lime-300 mt-1">Loading…</p>
+            </div>
+            <div>
+              <p class="text-[10px] uppercase text-slate-500">Level & XP</p>
+              <p id="accountLevel" class="text-sm font-bold text-white mt-1">Level 1</p>
+              <div class="w-full bg-slate-800 rounded-full h-1.5 mt-1"><div id="accountXpBar" class="bg-lime-400 h-1.5 rounded-full" style="width: 0%"></div></div>
+            </div>
           </div>
-          <div class="mt-2 flex items-center justify-between">
-            <span class="text-sm text-slate-400">Time Remaining</span>
-            <span id="accountTime" class="text-xs font-bold text-slate-200">Loading…</span>
-          </div>
-          <p id="memberSince" class="mt-3 text-xs text-slate-500"></p>
+          <p id="memberSince" class="mt-4 text-[10px] text-slate-500 border-t border-white/5 pt-3"></p>
         </div>
 
-        <!-- MISSIONS -->
-        <div class="pro-card rounded-2xl p-4">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-xs font-bold uppercase tracking-wider text-lime-200">Missions</p>
-              <p class="mt-1 text-xs text-slate-400">Earn free reading time</p>
-            </div>
-            <span class="text-2xl">🎯</span>
+        <!-- NEW: Missions Section -->
+        <div class="rounded-3xl border border-white/10 bg-[#121621] p-5">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-sm font-bold text-white">🎯 Daily Missions</h2>
+            <span class="text-[10px] text-slate-500">Earn Time & XP</span>
           </div>
-          <div class="mt-4 space-y-3">
-            <div class="flex items-center justify-between rounded-xl bg-black/20 p-3">
-              <div class="text-xs">Invite a Friend<br><span class="text-lime-300">+60 mins</span></div>
-              <button onclick="shareReferral()" class="rounded-lg bg-lime-300/20 px-3 py-1 text-xs font-bold text-lime-200">Share</button>
-            </div>
-            <div class="flex items-center justify-between rounded-xl bg-black/20 p-3">
-              <div class="text-xs">Daily Login<br><span class="text-lime-300">+15 mins</span></div>
-              <span class="text-xs text-slate-500">Auto</span>
-            </div>
+          <div id="missionsList" class="space-y-3 text-sm text-slate-400">
+            <div class="spinner mx-auto my-4"></div>
           </div>
         </div>
 
         <button class="w-full rounded-2xl border border-white/10 bg-[#121621] p-4 text-left" onclick="switchTab('library')"><b>▤ &nbsp;My library</b></button>
         <button class="w-full rounded-2xl border border-white/10 bg-[#121621] p-4 text-left" onclick="switchTab('history')"><b>◷ &nbsp;Reading history</b></button>
         <button class="w-full rounded-2xl border border-white/10 bg-[#121621] p-4 text-left" onclick="refreshCurrent()"><b>↻ &nbsp;Refresh data</b></button>
+        <p class="px-1 text-[11px] leading-relaxed text-slate-500">Your library and reading history are private to your Telegram account.</p>
       </div>
     </section>
   </main>
   
-  <nav id="bottomNav" class="fixed bottom-0 left-0 right-0 z-40 flex border-t border-white/5 bg-[#090b12]/95 backdrop-blur safe-bottom"><button data-tab="library" class="nav-tab" onclick="switchTab('library')">▤<br>Library</button><button data-tab="updates" class="nav-tab" onclick="switchTab('updates')">⟳<br>Updates</button><button data-tab="history" class="nav-tab" onclick="switchTab('history')">◷<br>History</button><button data-tab="browse" class="nav-tab active" onclick="switchTab('browse')">⌕<br>Browse</button><button data-tab="more" class="nav-tab" onclick="switchTab('more')">•••<br>More</button></nav>
+  <nav id="bottomNav" class="fixed bottom-0 left-0 right-0 z-40 flex border-t border-white/5 bg-[#090b12]/95 backdrop-blur safe-bottom">
+    <button data-tab="library" class="nav-tab" onclick="switchTab('library')"><span style="font-size:20px;">▤</span><br>Library</button>
+    <button data-tab="updates" class="nav-tab" onclick="switchTab('updates')"><span style="font-size:20px;">⟳</span><br>Updates</button>
+    <button data-tab="history" class="nav-tab" onclick="switchTab('history')"><span style="font-size:20px;">◷</span><br>History</button>
+    <button data-tab="browse" class="nav-tab active" onclick="switchTab('browse')"><span style="font-size:20px;">⌕</span><br>Browse</button>
+    <button data-tab="more" class="nav-tab" onclick="switchTab('more')"><span style="font-size:20px;">•••</span><br>More</button>
+  </nav>
   
   <section id="detailsView" class="fixed inset-0 z-50 hidden flex-col overflow-y-auto bg-[#090b12] pb-10">
     <header class="sticky top-0 z-20 flex items-center border-b border-white/5 bg-[#090b12]/95 p-4 backdrop-blur">
-      <button onclick="closeDetails()" class="mr-3 text-xl text-lime-200">‹</button><span id="detailsHeaderTitle" class="truncate font-semibold"></span>
+      <button onclick="closeDetails()" class="mr-3 text-xl text-lime-200">‹</button>
+      <span id="detailsHeaderTitle" class="truncate font-semibold"></span>
     </header>
     <div class="p-4">
       <div class="flex gap-4">
@@ -134,9 +135,10 @@
         </div>
       </div>
       
-      <button id="addToLibraryBtn" class="mt-5 w-full rounded-xl border border-lime-300/30 bg-lime-300/10 py-3 font-semibold text-lime-100" onclick="toggleLibrary()">＋ Add to library</button>
-      <button id="resumeBtn" class="hidden mt-2 w-full rounded-xl border border-indigo-400/30 bg-indigo-500/10 py-3 font-semibold text-indigo-200" onclick="resumeReading()">▶ Resume Chapter</button>
+      <!-- NEW: Resume / Start Button -->
+      <div id="resumeContainer" class="mt-5"></div>
 
+      <button id="addToLibraryBtn" class="mt-3 w-full rounded-xl border border-lime-300/30 bg-lime-300/10 py-3 font-semibold text-lime-100" onclick="toggleLibrary()">＋ Add to library</button>
       <div id="detailGenres" class="mt-4 flex flex-wrap gap-2"></div>
       <div class="mt-4 rounded-2xl border border-white/5 bg-[#121621] p-4">
         <h2 class="mb-2 text-sm font-bold">Synopsis</h2>
@@ -153,24 +155,23 @@
   </section>
   
   <section id="readerView" class="fixed inset-0 z-[60] hidden flex-col">
-    <!-- PRO BUTTON RESTORED -->
     <header id="readerTopBar" class="reader-bar absolute left-0 right-0 top-0 z-20 flex items-center justify-between border-b border-white/10 px-4 py-3">
       <button onclick="closeReader()" class="text-xl text-lime-200">‹</button>
       <div class="min-w-0 px-3 text-center">
         <p id="readerTitle" class="truncate text-sm font-semibold"></p>
+        <p id="readerPageLabel" class="text-[10px] text-slate-400">Tap a page to hide controls</p>
       </div>
       <button onclick="togglePremiumPanel()" class="rounded-lg border border-lime-300/20 px-2 py-1 text-xs text-lime-200">✦ Pro</button>
     </header>
-
     <div id="readerContent" class="flex-1 overflow-y-auto pb-28 pt-14"></div>
-
-    <!-- BOTTOM BAR: Arrows slightly larger, Pro panel intact -->
+    
     <footer id="readerBottomBar" class="reader-bar absolute bottom-0 left-0 right-0 z-20 border-t border-white/10 px-3 pt-3 safe-bottom">
+      <!-- Order changed to: Prev | Slider | Page | Next -->
       <div class="mb-3 flex items-center justify-between gap-2">
-        <button id="prevBtn" onclick="loadAdjacentChapter(-1)" class="rounded-lg bg-white/5 px-4 py-2 text-lg">‹</button>
-        <input id="readerSlider" type="range" min="0" max="100" value="0" class="flex-1 premium-control mx-2 h-1">
-        <span id="pageCounter" class="text-xs text-slate-300 min-w-[40px] text-center">0 / 0</span>
-        <button id="nextBtn" onclick="loadAdjacentChapter(1)" class="rounded-lg bg-white/5 px-4 py-2 text-lg">›</button>
+        <button id="prevBtn" onclick="loadAdjacentChapter(-1)" class="rounded-lg bg-white/5 px-3 py-2 text-xs">← Previous</button>
+        <input id="readerSlider" type="range" min="0" max="100" value="0" class="premium-control h-1 flex-1 mx-2">
+        <span id="pageCounter" class="text-xs text-slate-300 whitespace-nowrap">Loading…</span>
+        <button id="nextBtn" onclick="loadAdjacentChapter(1)" class="rounded-lg bg-white/5 px-3 py-2 text-xs">Next →</button>
       </div>
       
       <div id="premiumPanel" class="hidden border-t border-white/10 pt-2 pb-2">
@@ -184,35 +185,40 @@
         </div>
         <label class="mt-2 flex items-center justify-between gap-3 text-[10px] text-slate-400">Scroll speed <input id="scrollSpeed" type="range" min="1" max="10" value="4" class="premium-control w-2/3"></label>
         <label class="mt-2 flex items-center justify-between gap-3 text-[10px] text-slate-400">Brightness <input id="readerBrightness" type="range" min="50" max="130" value="100" class="premium-control w-2/3"></label>
+        <p class="mt-2 text-[9px] text-slate-500">Hands-free scroll, warm/OLED themes and reader brightness are Premium features.</p>
       </div>
     </footer>
   </section>
-
-  <!-- TIME'S UP OVERLAY -->
-  <div id="timeUpOverlay" class="fixed inset-0 z-[100] hidden flex-col items-center justify-center bg-black/95 p-6 text-center">
-    <div class="text-5xl mb-4">⏳</div>
-    <h2 class="text-2xl font-bold text-white mb-2">Time's Up!</h2>
-    <p class="text-sm text-slate-400 mb-6">You've run out of free reading time for today. It will reset in 12 hours.</p>
-    
-    <button onclick="switchTab('more'); closeReader();" class="w-full max-w-xs rounded-xl bg-lime-500 py-3 font-bold text-black mb-3">Complete Missions</button>
-    <button onclick="showToast('Premium purchases coming soon!')" class="w-full max-w-xs rounded-xl border border-lime-500 py-3 font-bold text-lime-300 mb-3">Get Premium</button>
-    <button onclick="document.getElementById('timeUpOverlay').classList.add('hidden'); closeReader();" class="text-slate-400 text-sm font-semibold mt-4">✕ Close</button>
-  </div>
-
+  
   <div id="toast" class="pointer-events-none fixed left-1/2 top-5 z-[90] hidden -translate-x-1/2 rounded-xl border border-white/10 bg-slate-900 px-4 py-3 text-sm shadow-xl"></div>
-
+  
 <script>
   const tg=window.Telegram?.WebApp,API='https://manhwa-opehh-production.up.railway.app',initData=tg?.initData||'',telegramUser=tg?.initDataUnsafe?.user||null;
   const isOwner = telegramUser?.id === 1405846034;
   let currentTab='browse',currentPage=1,allManga=[],searchQuery='',currentMangaId=null,currentChapters=[],currentChapterIndex=0,totalImages=0,searchTimer,searchController,toastTimer,readerGestureStart=null,isPremium=false,autoScrollTimer=null,readerTheme=0,browseType='popular';
-  let heartbeatTimer = null;
-  let timeLeftMins = 300;
-  
   const libraryIds=new Set(),$=id=>document.getElementById(id);
+  
+  // EXPOSE FOR ENHANCEMENTS SCRIPT
+  window.currentChapters = currentChapters;
+  window.currentChapterIndex = currentChapterIndex;
+
   if(tg){tg.ready();tg.expand();tg.setHeaderColor('#090b12');tg.setBackgroundColor('#090b12');if(tg.disableVerticalSwipes)tg.disableVerticalSwipes()}
   
-  function apiUrl(p){return p.startsWith('http')?p:`${API}${p}`}function resolveImage(p){return p?(p.startsWith('http')?p:`${API}${p.startsWith('/')?'':'/'}${p}`):''}async function apiFetch(path,options={}){if(!initData)throw Error('Open the app using its Telegram button so your account can be verified.');const headers=new Headers(options.headers||{});headers.set('X-Telegram-Init-Data',initData);if(options.body&&!headers.has('Content-Type'))headers.set('Content-Type','application/json');const r=await fetch(apiUrl(path),{...options,headers});if(!r.ok){const j=await r.json().catch(()=>({}));throw Error(j.error||`Request failed (${r.status})`)}return r}
+  function apiUrl(p){return p.startsWith('http')?p:`${API}${p}`}
+  function resolveImage(p){return p?(p.startsWith('http')?p:`${API}${p.startsWith('/')?'':'/'}${p}`):''}
   
+  async function apiFetch(path,options={}){
+    if(!initData)throw Error('Open the app using its Telegram button so your account can be verified.');
+    const headers=new Headers(options.headers||{});
+    headers.set('X-Telegram-Init-Data',initData);
+    if(options.body&&!headers.has('Content-Type'))headers.set('Content-Type','application/json');
+    const r=await fetch(apiUrl(path),{...options,headers});
+    if(!r.ok){const j=await r.json().catch(()=>({}));throw Error(j.error||`Request failed (${r.status})`)}
+    return r;
+  }
+  window.apiFetch = apiFetch;
+  window.resolveImage = resolveImage;
+
   function showToast(s){const t=$('toast');t.textContent=s;t.classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.add('hidden'),2600)}
   function setMessage(c,s,error=false){c.innerHTML='';const p=document.createElement('p');p.className=`col-span-2 py-10 text-center text-sm ${error?'text-rose-300':'text-slate-400'}`;p.textContent=s;c.appendChild(p)}
   function skeletonGrid(c,n=6){c.innerHTML='';for(let i=0;i<n;i++){const d=document.createElement('div');d.className='overflow-hidden rounded-2xl border border-white/5 bg-[#121621]';d.innerHTML='<div class="skeleton aspect-[3/4]"></div><div class="space-y-2 p-3"><div class="skeleton h-3 rounded"></div><div class="skeleton h-2 w-2/3 rounded"></div></div>';c.appendChild(d)}}
@@ -230,7 +236,17 @@
     }
   }
 
-  function switchTab(name){currentTab=name;document.querySelectorAll('#viewsContainer>section').forEach(s=>s.classList.toggle('hidden',s.id!==`${name}View`));document.querySelectorAll('.nav-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));$('viewsContainer').scrollTop=0;if(name==='library')loadLibrary();if(name==='updates')loadUpdates();if(name==='history')loadHistory();if(name==='browse'&&!allManga.length)loadBrowse(1)}
+  function switchTab(name){
+    currentTab=name;
+    document.querySelectorAll('#viewsContainer>section').forEach(s=>s.classList.toggle('hidden',s.id!==`${name}View`));
+    document.querySelectorAll('.nav-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));
+    $('viewsContainer').scrollTop=0;
+    if(name==='library')loadLibrary();
+    if(name==='updates')loadUpdates();
+    if(name==='history')loadHistory();
+    if(name==='more') loadMissions(); // Load missions when account tab opens
+    if(name==='browse'&&!allManga.length)loadBrowse(1);
+  }
   
   function renderGrid(id,items){const c=$(id);c.innerHTML='';if(!items?.length)return setMessage(c,id==='browseGrid'?'No titles found. Try another search.':'Nothing here yet. Browse titles and add them to your library.');items.forEach(m=>{const b=document.createElement('button');b.className='overflow-hidden rounded-2xl border border-white/5 bg-[#121621] text-left active:scale-[.98]';const im=document.createElement('img');im.className='cover aspect-[3/4] w-full object-cover';im.loading='lazy';im.alt=m.title||'Cover';const src=resolveImage(m.thumbnailUrl);if(src){im.src=src;retryImage(im,src)}const body=document.createElement('div');body.className='p-3';const title=document.createElement('p');title.className='truncate text-sm font-semibold';title.textContent=m.title||'Untitled';body.appendChild(title);if(m.chapterName){const ch=document.createElement('p');ch.className='mt-1 truncate text-xs text-lime-200';ch.textContent=m.chapterName;body.appendChild(ch)}b.append(im,body);b.onclick=()=>openDetails(m.mangaId??m.id);c.appendChild(b)})}
   
@@ -244,7 +260,7 @@
     
     let url = `/api/popular?page=${page}`;
     if (browseType === 'latest') url = `/api/latest?page=${page}`;
-    if (sourceVal) url += `&source=${encodeURIComponent(sourceVal)}`;
+    if (sourceVal && isOwner) url += `&source=${encodeURIComponent(sourceVal)}`; // Only send if owner
     if (langVal) url += `&lang=${encodeURIComponent(langVal)}`;
 
     try {
@@ -260,15 +276,12 @@
   }
   
   async function searchTitles(q){if(!q)return renderGrid('browseGrid',allManga);skeletonGrid($('browseGrid'),4);try{const d=await(await apiFetch(`/api/search?q=${encodeURIComponent(q)}&page=1`,{signal:searchController?.signal})).json();if(searchQuery===q)renderGrid('browseGrid',d)}catch(e){if(e.name!=='AbortError'&&searchQuery===q)setMessage($('browseGrid'),e.message,true)}}
-  
   async function loadLibrary(){skeletonGrid($('libraryGrid'),4);try{const a=await(await apiFetch('/api/library')).json();libraryIds.clear();a.forEach(x=>libraryIds.add(String(x.id)));renderGrid('libraryGrid',a)}catch(e){setMessage($('libraryGrid'),`${e.message} · Tap Library again to retry.`,true)}}
   
   function renderRows(id,items,type){const c=$(id);c.innerHTML='';if(!items?.length){const p=document.createElement('p');p.className='py-10 text-center text-sm text-slate-400';p.textContent=type==='updates'?'No unread updates in your library.':'No reading history yet. Your chapters appear here when you read.';return c.appendChild(p)}items.forEach(x=>{const row=document.createElement('div');row.className='flex items-center gap-3 rounded-2xl border border-white/5 bg-[#121621] p-3';const im=document.createElement('img');im.className='cover h-16 w-12 rounded-lg object-cover';const src=resolveImage(x.thumbnailUrl);if(src){im.src=src;retryImage(im,src)}const b=document.createElement('button');b.className='min-w-0 flex-1 text-left';b.onclick=()=>openDetails(x.mangaId??x.id);const t=document.createElement('span');t.className='block truncate text-sm font-semibold';t.textContent=x.title||'Untitled';const sub=document.createElement('span');sub.className='mt-1 block truncate text-xs text-lime-200';sub.textContent=type==='updates'?(x.chapterName||`Chapter ${x.chapterNumber??''}`):'Recently read · tap to continue';b.append(t,sub);row.append(im,b);if(type==='history'){const del=document.createElement('button');del.textContent='✕';del.className='px-2 text-slate-500';del.onclick=()=>deleteHistory(x.mangaId,row,del);row.appendChild(del)}c.appendChild(row)})}
   
   async function loadUpdates(){const c=$('updatesList');c.textContent='Checking your library…';try{renderRows('updatesList',await(await apiFetch('/api/updates')).json(),'updates')}catch(e){setMessage(c,`${e.message} · Tap Updates again to retry.`,true)}}
-  
   async function loadHistory(){const c=$('historyList');c.innerHTML='<div class="flex flex-col items-center py-10 text-slate-400"><div class="spinner"></div><p class="mt-4 text-sm">Loading your reading history…</p></div>';try{renderRows('historyList',await(await apiFetch('/api/history')).json(),'history')}catch(e){setMessage(c,`${e.message} · Check connection, then refresh.`,true)}}
-  
   async function deleteHistory(id,row,b){b.disabled=true;try{await apiFetch(`/api/history/${encodeURIComponent(id)}`,{method:'DELETE'});row.remove();showToast('History removed')}catch(e){b.disabled=false;showToast(e.message)}}
   
   async function openDetails(id){
@@ -277,17 +290,19 @@
     $('detailsView').classList.add('flex');
     $('detailTitle').textContent='Loading…';
     $('chapterList').textContent='Loading chapters…';
+    $('resumeContainer').innerHTML=''; // Clear resume button
     
+    // Clear previous data immediately
     $('detailCover').removeAttribute('src');
     $('detailCover').alt='Loading cover';
     $('detailDescription').textContent='';
     $('detailGenres').replaceChildren();
-    $('resumeBtn').classList.add('hidden');
     
     try{
       const d=await(await apiFetch(`/api/manga/${encodeURIComponent(id)}`)).json();
       if(currentMangaId!==String(id))return;
       
+      // 1. Load Main Data FIRST (Fast)
       $('detailTitle').textContent=d.title||'Untitled';
       $('detailsHeaderTitle').textContent=d.title||'';
       const src=resolveImage(d.thumbnailUrl);
@@ -300,7 +315,10 @@
       (d.genre||[]).forEach(g=>{const x=document.createElement('span');x.className='rounded-full border border-white/10 px-3 py-1 text-xs';x.textContent=g;$('detailGenres').appendChild(x)});
       $('addToLibraryBtn').textContent=libraryIds.has(String(id))?'✓ In library · Remove':'＋ Add to library';
       
+      // 2. Load Chapters SECONDARY
       currentChapters=d.chapters||[];
+      window.currentChapters = currentChapters;
+      
       $('chapterCount').textContent=`Chapters · ${currentChapters.length}`;
       const c=$('chapterList');
       c.innerHTML='';
@@ -317,20 +335,32 @@
         c.appendChild(b)
       });
       if(!currentChapters.length)c.textContent='No chapters available.';
-      
+
+      // 3. Check Resume Logic
       try {
-          const res = await (await apiFetch(`/api/resume/${id}`)).json();
-          if (res.available) {
-              $('resumeBtn').textContent = `▶ ${res.chapterName}`;
-              $('resumeBtn').classList.remove('hidden');
-              window.lastReadChapterId = res.chapterId;
-              window.lastReadChapterIndex = currentChapters.findIndex(c => String(c.id) === res.chapterId);
-          } else {
-              $('resumeBtn').textContent = `▶ Start Reading`;
-              $('resumeBtn').classList.remove('hidden');
-              window.lastReadChapterIndex = 0;
+        const history = await (await apiFetch('/api/history')).json();
+        const lastRead = history.find(h => String(h.mangaId) === String(id));
+        
+        if (lastRead) {
+          const lastIndex = currentChapters.findIndex(ch => String(ch.id) === String(lastRead.lastChapterId));
+          if (lastIndex !== -1) {
+            const resumeBtn = document.createElement('button');
+            resumeBtn.className = 'w-full rounded-xl bg-lime-300 py-3 font-bold text-black flex items-center justify-center gap-2';
+            resumeBtn.innerHTML = `<span style="font-size:18px;">▶</span> Resume Chapter ${currentChapters[lastIndex].number || (lastIndex + 1)}`;
+            resumeBtn.onclick = () => openReader(lastIndex);
+            $('resumeContainer').appendChild(resumeBtn);
           }
-      } catch(e) {}
+        } else if (currentChapters.length > 0) {
+          // Start reading button if never read
+          const startBtn = document.createElement('button');
+          startBtn.className = 'w-full rounded-xl bg-lime-300 py-3 font-bold text-black flex items-center justify-center gap-2';
+          startBtn.innerHTML = `<span style="font-size:18px;">▶</span> Start Reading`;
+          startBtn.onclick = () => openReader(0);
+          $('resumeContainer').appendChild(startBtn);
+        }
+      } catch (e) {
+        console.warn("Could not check history for resume", e);
+      }
       
     }catch(e){
       $('detailTitle').textContent='Could not load title';
@@ -338,21 +368,16 @@
     }
   }
   
-  function resumeReading() {
-      if(window.lastReadChapterIndex !== undefined) {
-          openReader(window.lastReadChapterIndex);
-      }
-  }
-  
   async function toggleLibrary(){const id=currentMangaId,b=$('addToLibraryBtn'),was=libraryIds.has(id);b.disabled=true;try{await apiFetch(`/api/library/${encodeURIComponent(id)}`,{method:was?'DELETE':'POST'});was?libraryIds.delete(id):libraryIds.add(id);b.textContent=was?'＋ Add to library':'✓ In library · Remove';showToast(was?'Removed from library':'Added to library')}catch(e){showToast(e.message)}finally{b.disabled=false}}
   
-  function closeDetails(){$('detailsView').classList.add('hidden');$('detailsView').classList.remove('flex');currentMangaId=null;currentChapters=[]}
+  function closeDetails(){$('detailsView').classList.add('hidden');$('detailsView').classList.remove('flex');currentMangaId=null;currentChapters=[];window.currentChapters=[];}
   
   async function openReader(i){
     const ch=currentChapters[i];
     if(!ch)return;
     stopAutoScroll();
     currentChapterIndex=i;
+    window.currentChapterIndex = i;
     readerTheme=0;
     $('readerContent').style.background='#050608';
     $('readerContent').style.filter='none';
@@ -369,9 +394,6 @@
     $('pageCounter').textContent='Loading pages…';
     $('prevBtn').disabled=i===0;
     $('nextBtn').disabled=i===currentChapters.length-1;
-    
-    if (!isPremium) startHeartbeat();
-    
     try{
       const result=await(await apiFetch(`/api/chapter/${encodeURIComponent(ch.id)}`)).json();
       if(!view.classList.contains('flex')||currentChapterIndex!==i)return;
@@ -411,51 +433,13 @@
     }
   }
   
-  function closeReader(){
-    stopAutoScroll();
-    if (heartbeatTimer) clearInterval(heartbeatTimer);
-    $('readerView').classList.add('hidden');
-    $('readerView').classList.remove('flex');
-    $('readerContent').innerHTML='';
-    if(currentTab==='history')loadHistory()
-  }
-  
-  function startHeartbeat() {
-      if (heartbeatTimer) clearInterval(heartbeatTimer);
-      if (isPremium) return; 
-      
-      heartbeatTimer = setInterval(async () => {
-          if ($('readerView').classList.contains('hidden')) return;
-          
-          if (timeLeftMins <= 0) {
-              $('readerContent').innerHTML = '';
-              $('timeUpOverlay').classList.remove('hidden');
-              clearInterval(heartbeatTimer);
-              return;
-          }
-          
-          try {
-              await apiFetch('/api/heartbeat', { method: 'POST' });
-              timeLeftMins--;
-              if(timeLeftMins <= 0) {
-                  $('readerContent').innerHTML = '';
-                  $('timeUpOverlay').classList.remove('hidden');
-                  clearInterval(heartbeatTimer);
-              }
-          } catch(e) {}
-      }, 60000);
-  }
-  
+  function closeReader(){stopAutoScroll();$('readerView').classList.add('hidden');$('readerView').classList.remove('flex');$('readerContent').innerHTML='';if(currentTab==='history')loadHistory()}
+  window.closeReader = closeReader; // Expose for enhancement script
+
   function loadAdjacentChapter(d){const n=currentChapterIndex+d;if(n>=0&&n<currentChapters.length)openReader(n)}
   function toggleReaderUI(){$('readerTopBar').classList.toggle('reader-hidden');$('readerBottomBar').classList.toggle('reader-hidden')}
   
-  function updateReaderPosition(){
-    const c=$('readerContent'),max=c.scrollHeight-c.clientHeight;
-    if(max>0)$('readerSlider').value=String(c.scrollTop/max*100);
-    const image=[...c.querySelectorAll('img')].find(x=>x.getBoundingClientRect().bottom>90);
-    if(image)$('pageCounter').textContent=`${image.dataset.page} / ${totalImages}`
-  }
-  
+  function updateReaderPosition(){const c=$('readerContent'),max=c.scrollHeight-c.clientHeight;if(max>0)$('readerSlider').value=String(c.scrollTop/max*100);const image=[...c.querySelectorAll('img')].find(x=>x.getBoundingClientRect().bottom>90);if(image)$('pageCounter').textContent=`${image.dataset.page} / ${totalImages}`}
   $('readerContent').addEventListener('scroll',()=>requestAnimationFrame(updateReaderPosition),{passive:true});
   $('readerContent').addEventListener('click',e=>{if(e.target.tagName==='IMG')toggleReaderUI()});
   $('readerSlider').addEventListener('input',e=>{const c=$('readerContent');c.scrollTop=(Number(e.target.value)/100)*(c.scrollHeight-c.clientHeight)});
@@ -463,57 +447,104 @@
   function premiumGate(){if(isPremium)return true;showToast('Premium reader tools · Upgrade with ⭐ Premium in the bot.');return false}
   function togglePremiumPanel(){const p=$('premiumPanel');if(p.classList.contains('hidden')){$('readerTopBar').classList.remove('reader-hidden');$('readerBottomBar').classList.remove('reader-hidden');p.classList.remove('hidden');$('premiumLockLabel').textContent=isPremium?'UNLOCKED':'🔒 PREMIUM';if(!isPremium)showToast('Preview: auto-scroll, themes and brightness require Premium.')}else p.classList.add('hidden')}
   function stopAutoScroll(){if(autoScrollTimer){clearInterval(autoScrollTimer);autoScrollTimer=null}const b=$('autoScrollBtn');if(b)b.textContent='▶ Auto-scroll'}
-  function toggleAutoScroll(){if(!premiumGate())return;if(autoScrollTimer){stopAutoScroll();return}const speed=Number($('scrollSpeed')?.value||5);$('autoScrollBtn').textContent='Ⅱ Pause scroll';autoScrollTimer=setInterval(()=>{const c=$('readerContent');c.scrollTop+=speed;if(c.scrollTop+c.clientHeight>=c.scrollHeight-2)stopAutoScroll()},50)}
-  function cycleReaderTheme(){if(!premiumGate())return;readerTheme=(readerTheme+1)%3;const c=$('readerContent'),b=$('readerThemeBtn'),brightness=Number($('readerBrightness')?.value||100);if(readerTheme===0){c.style.background='#050608';c.style.filter=`brightness(${brightness}%)`;b.textContent='◐ Theme: Dark'}else if(readerTheme===1){c.style.background='#f0e5c9';c.style.filter=`brightness(${brightness}%) sepia(.18)`;b.textContent='◐ Theme: Warm'}else{c.style.background='#000';c.style.filter=`brightness(${brightness*.78}%) grayscale(.15)`;b.textContent='◐ Theme: OLED'}}
+  function toggleAutoScroll(){if(!premiumGate())return;if(autoScrollTimer){stopAutoScroll();return}const speed=Number($('scrollSpeed').value);$('autoScrollBtn').textContent='Ⅱ Pause scroll';autoScrollTimer=setInterval(()=>{const c=$('readerContent');c.scrollTop+=speed;if(c.scrollTop+c.clientHeight>=c.scrollHeight-2)stopAutoScroll()},50)}
+  function cycleReaderTheme(){if(!premiumGate())return;readerTheme=(readerTheme+1)%3;const c=$('readerContent'),b=$('readerThemeBtn'),brightness=Number($('readerBrightness').value);if(readerTheme===0){c.style.background='#050608';c.style.filter=`brightness(${brightness}%)`;b.textContent='◐ Theme: Dark'}else if(readerTheme===1){c.style.background='#f0e5c9';c.style.filter=`brightness(${brightness}%) sepia(.18)`;b.textContent='◐ Theme: Warm'}else{c.style.background='#000';c.style.filter=`brightness(${brightness*.78}%) grayscale(.15)`;b.textContent='◐ Theme: OLED'}}
+  $('readerBrightness').addEventListener('input',e=>{if(!premiumGate()){e.target.value=100;return}const factor=readerTheme===2?.78:1,sepia=readerTheme===1?'.18':readerTheme===2?'.15':'0';$('readerContent').style.filter=`brightness(${Number(e.target.value)*factor}%) sepia(${sepia})`});
   
   let gestureStart=null;
   $('readerContent').addEventListener('touchstart',e=>{gestureStart={x:e.touches[0].clientX,y:e.touches[0].clientY}},{passive:true});
-  $('readerContent').addEventListener('touchend',e=>{
-    if(!gestureStart)return;
-    const dx=e.changedTouches[0].clientX-gestureStart.x,dy=e.changedTouches[0].clientY-gestureStart.y;
-    if(Math.abs(dx)>95&&Math.abs(dx)>Math.abs(dy)*1.3&&$('readerContent').scrollTop<35)loadAdjacentChapter(dx>0?-1:1);
-    gestureStart=null
-  },{passive:true});
-  
+  $('readerContent').addEventListener('touchend',e=>{if(!gestureStart)return;const dx=e.changedTouches[0].clientX-gestureStart.x,dy=e.changedTouches[0].clientY-gestureStart.y;if(Math.abs(dx)>95&&Math.abs(dx)>Math.abs(dy)*1.3&&$('readerContent').scrollTop<35)loadAdjacentChapter(dx>0?-1:1);gestureStart=null},{passive:true});
+
   async function loadAccount(){
     try{
       const a=await(await apiFetch('/api/account')).json();
       isPremium=!!a.premium;
-      timeLeftMins = a.time_left_mins;
-      
       $('accountPlan').textContent=isPremium?'Premium':'Free';
       $('accountPlan').dataset.premium=String(isPremium);
       
-      let level = 1;
-      let xpNeeded = 100;
-      let tempXp = a.xp || 0;
-      while (tempXp >= xpNeeded) {
-        tempXp -= xpNeeded;
-        level += 1;
-        xpNeeded = level * 100;
-      }
-      $('accountLevel').textContent = `Lvl ${level} - ${a.title}`;
-      
-      if(isPremium) {
-          $('accountTime').textContent = "Unlimited";
+      // Time Limit Display
+      if (a.timeLeft === -1) {
+        $('accountTimeLeft').textContent = 'Unlimited (Owner/Premium)';
       } else {
-          const hours = Math.floor(timeLeftMins / 60);
-          const mins = timeLeftMins % 60;
-          $('accountTime').textContent = `${hours}h ${mins}m`;
+        const h = Math.floor(a.timeLeft / 3600);
+        const m = Math.floor((a.timeLeft % 3600) / 60);
+        $('accountTimeLeft').textContent = `${h}h ${m}m left today`;
+        if (a.timeLeft <= 0) $('accountTimeLeft').classList.add('text-rose-400');
       }
-      
+
+      // XP & Level Display
+      const xp = Number(a.xp || 0);
+      let level = 1, xpNeeded = 100, tempXp = xp;
+      while (tempXp >= xpNeeded) { tempXp -= xpNeeded; level += 1; xpNeeded = level * 100; }
+      $('accountLevel').textContent = `Level ${level} (${xp} XP)`;
+      $('accountXpBar').style.width = `${(tempXp / xpNeeded) * 100}%`;
+
+      // Expiry Display
+      if (isPremium && a.premiumUntil) {
+        $('premiumExpiry').textContent = `Premium ends on: ${new Date(a.premiumUntil).toLocaleDateString()}`;
+      } else if (isOwner) {
+        $('premiumExpiry').textContent = `Owner Account (No limits)`;
+      } else {
+        $('premiumExpiry').textContent = `Free Plan (5 hrs/day)`;
+      }
+
       $('memberSince').textContent=a.memberSince?`Member since ${new Date(a.memberSince).toLocaleDateString()}`:'';
-      
-      if (timeLeftMins <= 0 && !isPremium && currentTab === 'more') {
-          $('timeUpOverlay').classList.remove('hidden');
-      }
-      
-    }catch{
+    } catch(e) {
       $('accountPlan').textContent='Unavailable';
     }
   }
-  
-  function refreshCurrent(){if(currentTab==='library')loadLibrary();else if(currentTab==='updates')loadUpdates();else if(currentTab==='history')loadHistory();else loadBrowse(1)}
+
+  async function loadMissions() {
+    const container = $('missionsList');
+    try {
+      const missions = await (await apiFetch('/api/missions')).json();
+      container.innerHTML = '';
+      
+      if (!missions.length) {
+        container.innerHTML = '<p class="text-xs text-center text-slate-500 py-2">No missions available right now.</p>';
+        return;
+      }
+
+      missions.forEach(m => {
+        const div = document.createElement('div');
+        div.className = 'flex items-center justify-between p-3 rounded-xl bg-black/20 border border-white/5';
+        
+        const info = document.createElement('div');
+        info.innerHTML = `<p class="font-bold text-white text-sm">${m.name}</p>
+                          <p class="text-[10px] text-lime-200 mt-1">+${m.reward_time_minutes}m Time | +${m.reward_xp} XP</p>`;
+                          
+        const btn = document.createElement('button');
+        if (m.claimed) {
+          btn.textContent = 'Claimed';
+          btn.className = 'px-3 py-1 rounded-lg bg-slate-700 text-slate-400 text-xs font-bold cursor-not-allowed';
+          btn.disabled = true;
+        } else if (m.progress >= 1) {
+          btn.textContent = 'Claim';
+          btn.className = 'px-3 py-1 rounded-lg bg-lime-300 text-black text-xs font-bold';
+          btn.onclick = async () => {
+            btn.disabled = true; btn.textContent = '...';
+            try {
+              await apiFetch(`/api/missions/claim/${m.id}`, { method: 'POST' });
+              showToast('Mission claimed!');
+              loadMissions();
+              loadAccount();
+            } catch(e) { showToast(e.message); btn.disabled = false; btn.textContent = 'Claim'; }
+          };
+        } else {
+          btn.textContent = `${m.progress}/1`;
+          btn.className = 'px-3 py-1 rounded-lg bg-slate-800 text-slate-400 text-xs font-bold';
+          btn.disabled = true;
+        }
+        
+        div.append(info, btn);
+        container.appendChild(div);
+      });
+    } catch(e) {
+      container.innerHTML = `<p class="text-xs text-rose-400 py-2">${e.message}</p>`;
+    }
+  }
+
+  function refreshCurrent(){if(currentTab==='library')loadLibrary();else if(currentTab==='updates')loadUpdates();else if(currentTab==='history')loadHistory();else if(currentTab==='more'){loadAccount();loadMissions();}else loadBrowse(1)}
   
   function setBrowseType(type) {
     browseType = type;
@@ -528,6 +559,7 @@
     try {
       const sources = await (await apiFetch('/api/sources')).json();
       const select = $('filterSource');
+      select.innerHTML = '<option value="">All Sources</option>';
       sources.forEach(s => {
         const opt = document.createElement('option');
         opt.value = s.id;
@@ -537,25 +569,11 @@
     } catch (e) { console.warn("Could not load sources", e); }
   }
 
-  function shareReferral() {
-      const text = `Read Manhwa for free on Opehh! https://t.me/ManhwaOpehh_bot?start=ref_${telegramUser.id}`;
-      const url = `https://t.me/share/url?url=${encodeURIComponent(text)}&text=Join+me+on+Manhwa+Opehh!`;
-      if (tg.openTelegramLink) tg.openTelegramLink(url);
-      else window.open(url, '_blank');
-  }
-
   $('loadMoreBtn').onclick=()=>loadBrowse(currentPage+1);
   $('searchInput').addEventListener('input',()=>{clearTimeout(searchTimer);searchQuery=$('searchInput').value.trim();searchController?.abort();searchController=new AbortController();if(!searchQuery)return renderGrid('browseGrid',allManga);searchTimer=setTimeout(()=>searchTitles(searchQuery),350)});
   
-  function navigateBack(){
-    if($('readerView').classList.contains('flex')){closeReader();return true}
-    if(!$('detailsView').classList.contains('hidden')){closeDetails();return true}
-    if(currentTab!=='browse'){switchTab('browse');return true}
-    return false
-  }
-  
+  function navigateBack(){if($('readerView').classList.contains('flex')){closeReader();return true}if(!$('detailsView').classList.contains('hidden')){closeDetails();return true}if(currentTab!=='browse'){switchTab('browse');return true}return false}
   document.addEventListener('keydown',e=>{if(e.key==='Escape')navigateBack();if(e.key==='ArrowLeft')loadAdjacentChapter(-1);if(e.key==='ArrowRight')loadAdjacentChapter(1)});
-  
   if(tg?.BackButton){tg.BackButton.onClick(()=>{if(!navigateBack())tg.close()});tg.BackButton.show()}
   
   let edgeX=0;
@@ -569,14 +587,17 @@
       return;
     }
     
+    // OWNER ONLY FEATURES
     if (isOwner) {
       $('toggleFiltersBtn').classList.remove('hidden');
-      $('ownerFilters').classList.remove('hidden');
+      $('filterSource').disabled = false;
+      $('filterSource').classList.remove('opacity-50');
       loadSourcesDropdown();
     }
     
     $('accountName').textContent=[telegramUser.first_name,telegramUser.last_name].filter(Boolean).join(' ')||'Telegram reader';
     $('accountId').textContent=`Telegram account · ${telegramUser.username?'@'+telegramUser.username:'verified'}`;
+    
     try{
       await apiFetch('/api/auth',{method:'POST',body:JSON.stringify({initData})});
       await Promise.all([loadBrowse(1),loadAccount()]);
