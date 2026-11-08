@@ -10,11 +10,9 @@
   let isFullscreen = false;
 
   const css = `
-    /* Bigger bottom nav symbols */
     #bottomNav .nav-tab { font-size: 14px; }
     #bottomNav .nav-tab br + * { display: block; margin-top: 2px; font-size: 10px; }
     
-    /* Splash effects */
     #splash .opehh-mark { position:relative; isolation:isolate; overflow:hidden; }
     #splash .opehh-mark::before { content:""; position:absolute; inset:-50%; z-index:-1; background:linear-gradient(105deg,transparent 42%,rgba(126,249,255,.55) 49%,rgba(169,149,255,.62) 51%,transparent 58%); animation:opehh-sweep 1.15s steps(10,end) infinite; }
     #splash .opehh-mark::after { content:""; position:absolute; inset:0; z-index:-1; background:repeating-linear-gradient(0deg,transparent 0 6px,rgba(255,255,255,.08) 7px,transparent 8px); animation:opehh-scan 1.6s steps(2,end) infinite; }
@@ -24,22 +22,17 @@
     @keyframes opehh-scan { 50%{transform:translateY(3px);opacity:.12} }
     @keyframes opehh-flicker { 0%,88%,100%{transform:none;clip-path:none}89%{transform:translateX(2px);clip-path:inset(15% 0 68%)}91%{transform:translateX(-2px);clip-path:inset(65% 0 12%)}93%{transform:none;clip-path:inset(40% 0 40%)} }
     
-    /* Webtoon mode */
     #readerView.opehh-webtoon #readerContent { padding-top:3.5rem!important; padding-bottom:9rem!important; scroll-behavior:auto; }
     #readerView.opehh-webtoon #readerContent img { display:block; width:100%; max-width:none; height:auto; margin:0; border-radius:0!important; }
     
-    /* Disable image long press */
     #readerContent img { -webkit-touch-callout: none; user-select: none; pointer-events: auto; }
     
-    /* Infinite Scroll Loader */
     #opehhInfiniteLoader { text-align: center; padding: 20px; color: #aeb8ca; font-size: 12px; display: none; }
     #opehhInfiniteLoader.show { display: block; }
     
-    /* Header Glitch Effect */
     .header-opehh-title { position:relative; color:#f5f6f8; text-shadow:2px 0 #bcf36b,-2px 0 #a995ff; animation:logoGlitch 2.4s steps(1,end) infinite; }
     @keyframes logoGlitch { 0%,88%,100%{transform:none;clip-path:none}89%{transform:translateX(2px);clip-path:inset(15% 0 68%)}91%{transform:translateX(-2px);clip-path:inset(65% 0 12%)}93%{transform:none;clip-path:inset(40% 0 40%)} }
 
-    /* Blackout Screen */
     #opehhBlackout { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.95); display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
     #opehhBlackout.show { display: flex; }
 
@@ -51,7 +44,6 @@
 
   const hasPremiumAccess = () => $('accountPlan')?.dataset?.premium === 'true';
 
-  // --- HEADER & UI CHANGES ---
   function applyUIChanges() {
     try {
       const splash = $('splash');
@@ -75,7 +67,6 @@
         }
       }
 
-      // Header text replacement
       const browseHeader = $('browseView')?.querySelector('header');
       if (browseHeader && !$('opehhFullscreenBtn')) {
         const titleContainer = $('browseTitleContainer');
@@ -83,7 +74,7 @@
           titleContainer.innerHTML = `<p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Explore</p><h1 class="mt-1 text-2xl font-bold header-opehh-title">Manhwa Opehh</h1>`;
         }
         
-        // Add Fullscreen button with TOGGLE logic
+        // Fixed Fullscreen Toggle
         const btn = document.createElement('button');
         btn.id = 'opehhFullscreenBtn';
         btn.className = 'ml-2 text-slate-400 hover:text-lime-200 text-lg z-50 relative';
@@ -116,12 +107,10 @@
   applyUIChanges();
   document.addEventListener('DOMContentLoaded', applyUIChanges);
 
-  // Disable Context Menu on Images
   $('readerContent')?.addEventListener('contextmenu', (e) => {
     if (e.target.tagName === 'IMG') e.preventDefault();
   });
 
-  // --- WEBTOON TOGGLE ---
   function installWebtoonToggle() {
     try {
       const view = $('readerView');
@@ -170,10 +159,8 @@
   installWebtoonToggle();
   document.addEventListener('DOMContentLoaded', () => { installWebtoonToggle(); }, { once:true });
 
-  // --- INFINITE SCROLL & HEARTBEAT LOGIC ---
   async function loadNextChapterInfinite() {
     if (!webtoonEnabled || isLoadingNext) return;
-    
     if (typeof window.currentChapterIndex === 'undefined' || typeof window.currentChapters === 'undefined') return;
     
     const nextIdx = window.currentChapterIndex + 1;
@@ -233,7 +220,6 @@
     }
   });
 
-  // --- HEARTBEAT & BLACKOUT ---
   function showBlackout() {
     let blackout = $('opehhBlackout');
     if (!blackout) {
@@ -288,7 +274,6 @@
     }
   }
 
-  // --- WRAPPERS ---
   if (typeof window.openReader === 'function') {
     const originalOpenReader = window.openReader;
     window.openReader = async function (index) {
@@ -328,7 +313,6 @@
     };
   }
 
-  // --- IMAGE LOGIC ---
   function attachImageRetry(img) {
     if (img.dataset.opehhRetryAttached) return;
     img.dataset.opehhRetryAttached = 'true';
@@ -362,7 +346,6 @@
     content.querySelectorAll('img').forEach(attachImageRetry);
   }
   
-  // FIXED: Changed from observeImageRetry to observeReaderImages
   observeReaderImages();
 
 })();
