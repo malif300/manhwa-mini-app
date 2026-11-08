@@ -23,7 +23,7 @@
             <h1 class="mt-1 text-2xl font-bold">Discover</h1>
           </div>
           <div class="flex items-center gap-2">
-            <span class="rounded-full border border-white/10 px-3 py-1 text-[10px] text-slate-400">MANHWA · MANGA</span>
+            <!-- Removed the MANHWA · MANGA span here -->
             <!-- Collapsible Arrow (Only for Owner) -->
             <button id="toggleFiltersBtn" onclick="toggleFilters()" class="hidden text-slate-400 hover:text-lime-200">▼</button>
           </div>
@@ -77,7 +77,7 @@
           </div>
           <p id="premiumExpiry" class="mt-2 text-xs text-slate-500"></p>
           
-          <!-- NEW: Time Limit & XP Stats -->
+          <!-- Time Limit & XP Stats -->
           <div class="mt-4 grid grid-cols-2 gap-3 border-t border-white/5 pt-4">
             <div>
               <p class="text-[10px] uppercase text-slate-500">Reading Time</p>
@@ -92,7 +92,7 @@
           <p id="memberSince" class="mt-4 text-[10px] text-slate-500 border-t border-white/5 pt-3"></p>
         </div>
 
-        <!-- NEW: Missions Section -->
+        <!-- Missions Section -->
         <div class="rounded-3xl border border-white/10 bg-[#121621] p-5">
           <div class="flex items-center justify-between mb-4">
             <h2 class="text-sm font-bold text-white">🎯 Daily Missions</h2>
@@ -135,7 +135,7 @@
         </div>
       </div>
       
-      <!-- NEW: Resume / Start Button -->
+      <!-- Resume / Start Button -->
       <div id="resumeContainer" class="mt-5"></div>
 
       <button id="addToLibraryBtn" class="mt-3 w-full rounded-xl border border-lime-300/30 bg-lime-300/10 py-3 font-semibold text-lime-100" onclick="toggleLibrary()">＋ Add to library</button>
@@ -166,11 +166,11 @@
     <div id="readerContent" class="flex-1 overflow-y-auto pb-28 pt-14"></div>
     
     <footer id="readerBottomBar" class="reader-bar absolute bottom-0 left-0 right-0 z-20 border-t border-white/10 px-3 pt-3 safe-bottom">
-      <!-- Order changed to: Prev | Slider | Page | Next -->
+      <!-- Order: Previous | Slider | Page | Next -->
       <div class="mb-3 flex items-center justify-between gap-2">
         <button id="prevBtn" onclick="loadAdjacentChapter(-1)" class="rounded-lg bg-white/5 px-3 py-2 text-xs">← Previous</button>
         <input id="readerSlider" type="range" min="0" max="100" value="0" class="premium-control h-1 flex-1 mx-2">
-        <span id="pageCounter" class="text-xs text-slate-300 whitespace-nowrap">Loading…</span>
+        <span id="pageCounter" class="text-xs text-slate-300 whitespace-nowrap">1 / 1</span>
         <button id="nextBtn" onclick="loadAdjacentChapter(1)" class="rounded-lg bg-white/5 px-3 py-2 text-xs">Next →</button>
       </div>
       
@@ -198,7 +198,6 @@
   let currentTab='browse',currentPage=1,allManga=[],searchQuery='',currentMangaId=null,currentChapters=[],currentChapterIndex=0,totalImages=0,searchTimer,searchController,toastTimer,readerGestureStart=null,isPremium=false,autoScrollTimer=null,readerTheme=0,browseType='popular';
   const libraryIds=new Set(),$=id=>document.getElementById(id);
   
-  // EXPOSE FOR ENHANCEMENTS SCRIPT
   window.currentChapters = currentChapters;
   window.currentChapterIndex = currentChapterIndex;
 
@@ -244,7 +243,7 @@
     if(name==='library')loadLibrary();
     if(name==='updates')loadUpdates();
     if(name==='history')loadHistory();
-    if(name==='more') loadMissions(); // Load missions when account tab opens
+    if(name==='more') loadMissions(); 
     if(name==='browse'&&!allManga.length)loadBrowse(1);
   }
   
@@ -260,7 +259,7 @@
     
     let url = `/api/popular?page=${page}`;
     if (browseType === 'latest') url = `/api/latest?page=${page}`;
-    if (sourceVal && isOwner) url += `&source=${encodeURIComponent(sourceVal)}`; // Only send if owner
+    if (sourceVal && isOwner) url += `&source=${encodeURIComponent(sourceVal)}`;
     if (langVal) url += `&lang=${encodeURIComponent(langVal)}`;
 
     try {
@@ -290,9 +289,8 @@
     $('detailsView').classList.add('flex');
     $('detailTitle').textContent='Loading…';
     $('chapterList').textContent='Loading chapters…';
-    $('resumeContainer').innerHTML=''; // Clear resume button
+    $('resumeContainer').innerHTML=''; 
     
-    // Clear previous data immediately
     $('detailCover').removeAttribute('src');
     $('detailCover').alt='Loading cover';
     $('detailDescription').textContent='';
@@ -302,7 +300,6 @@
       const d=await(await apiFetch(`/api/manga/${encodeURIComponent(id)}`)).json();
       if(currentMangaId!==String(id))return;
       
-      // 1. Load Main Data FIRST (Fast)
       $('detailTitle').textContent=d.title||'Untitled';
       $('detailsHeaderTitle').textContent=d.title||'';
       const src=resolveImage(d.thumbnailUrl);
@@ -315,7 +312,6 @@
       (d.genre||[]).forEach(g=>{const x=document.createElement('span');x.className='rounded-full border border-white/10 px-3 py-1 text-xs';x.textContent=g;$('detailGenres').appendChild(x)});
       $('addToLibraryBtn').textContent=libraryIds.has(String(id))?'✓ In library · Remove':'＋ Add to library';
       
-      // 2. Load Chapters SECONDARY
       currentChapters=d.chapters||[];
       window.currentChapters = currentChapters;
       
@@ -336,7 +332,6 @@
       });
       if(!currentChapters.length)c.textContent='No chapters available.';
 
-      // 3. Check Resume Logic
       try {
         const history = await (await apiFetch('/api/history')).json();
         const lastRead = history.find(h => String(h.mangaId) === String(id));
@@ -351,7 +346,6 @@
             $('resumeContainer').appendChild(resumeBtn);
           }
         } else if (currentChapters.length > 0) {
-          // Start reading button if never read
           const startBtn = document.createElement('button');
           startBtn.className = 'w-full rounded-xl bg-lime-300 py-3 font-bold text-black flex items-center justify-center gap-2';
           startBtn.innerHTML = `<span style="font-size:18px;">▶</span> Start Reading`;
@@ -434,7 +428,7 @@
   }
   
   function closeReader(){stopAutoScroll();$('readerView').classList.add('hidden');$('readerView').classList.remove('flex');$('readerContent').innerHTML='';if(currentTab==='history')loadHistory()}
-  window.closeReader = closeReader; // Expose for enhancement script
+  window.closeReader = closeReader; 
 
   function loadAdjacentChapter(d){const n=currentChapterIndex+d;if(n>=0&&n<currentChapters.length)openReader(n)}
   function toggleReaderUI(){$('readerTopBar').classList.toggle('reader-hidden');$('readerBottomBar').classList.toggle('reader-hidden')}
@@ -462,7 +456,6 @@
       $('accountPlan').textContent=isPremium?'Premium':'Free';
       $('accountPlan').dataset.premium=String(isPremium);
       
-      // Time Limit Display
       if (a.timeLeft === -1) {
         $('accountTimeLeft').textContent = 'Unlimited (Owner/Premium)';
       } else {
@@ -472,14 +465,12 @@
         if (a.timeLeft <= 0) $('accountTimeLeft').classList.add('text-rose-400');
       }
 
-      // XP & Level Display
       const xp = Number(a.xp || 0);
       let level = 1, xpNeeded = 100, tempXp = xp;
       while (tempXp >= xpNeeded) { tempXp -= xpNeeded; level += 1; xpNeeded = level * 100; }
       $('accountLevel').textContent = `Level ${level} (${xp} XP)`;
       $('accountXpBar').style.width = `${(tempXp / xpNeeded) * 100}%`;
 
-      // Expiry Display
       if (isPremium && a.premiumUntil) {
         $('premiumExpiry').textContent = `Premium ends on: ${new Date(a.premiumUntil).toLocaleDateString()}`;
       } else if (isOwner) {
@@ -587,7 +578,6 @@
       return;
     }
     
-    // OWNER ONLY FEATURES
     if (isOwner) {
       $('toggleFiltersBtn').classList.remove('hidden');
       $('filterSource').disabled = false;
