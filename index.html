@@ -76,7 +76,6 @@
             <div>
               <p class="text-xs uppercase tracking-wider text-slate-500">Signed in with Telegram</p>
               <p id="accountName" class="text-lg font-bold">—</p>
-              <!-- FIXED: Restored missing element -->
               <p id="accountId" class="mt-1 text-xs text-slate-400"></p>
             </div>
           </div>
@@ -197,17 +196,6 @@
   <div id="toast" class="pointer-events-none fixed left-1/2 top-5 z-[90] hidden -translate-x-1/2 rounded-xl border border-white/10 bg-slate-900 px-4 py-3 text-sm shadow-xl"></div>
   
 <script>
-  window.onerror = function(message, source, lineno, colno, error) {
-    const msgBox = document.getElementById('splashMessage');
-    if (msgBox) {
-      msgBox.textContent = "FATAL CRASH: " + message;
-      msgBox.style.color = "red";
-      msgBox.style.fontSize = "14px";
-      msgBox.style.padding = "10px";
-    }
-    document.querySelector('.spinner')?.style.setProperty('display', 'none');
-  };
-
   const tg=window.Telegram?.WebApp,API='https://manhwa-opehh-production.up.railway.app',initData=tg?.initData||'',telegramUser=tg?.initDataUnsafe?.user||null;
   const isOwner = telegramUser?.id === 1405846034;
   let currentTab='browse',currentPage=1,allManga=[],searchQuery='',currentMangaId=null,currentChapters=[],currentChapterIndex=0,totalImages=0,searchTimer,searchController,toastTimer,readerGestureStart=null,isPremium=false,autoScrollTimer=null,readerTheme=0,browseType='popular';
@@ -673,53 +661,43 @@
   document.addEventListener('touchend',e=>{if(!$('readerView').classList.contains('flex')&&edgeX<28&&e.changedTouches[0].clientX-edgeX>100)navigateBack();edgeX=0},{passive:true});
   
   async function start(){
-    $('splashMessage').textContent = "1. Checking Telegram...";
-    
     if(!telegramUser||!initData){
-      $('splashMessage').textContent='ERROR: Open this app from the Telegram bot to sign in.';
+      $('splashMessage').textContent='Open this app from the Telegram bot to sign in.';
       $('splash').querySelector('.spinner').remove();
       return;
     }
     
-    $('splashMessage').textContent = "2. Telegram OK. Initializing UI...";
-    
-    try {
-      if (isOwner) {
-        $('toggleFiltersBtn').classList.remove('hidden');
-        $('filterSource').disabled = false;
-        $('filterSource').classList.remove('opacity-50');
-        loadSourcesDropdown();
-      }
-      
-      if (telegramUser.photo_url) {
-        $('accountAvatar').src = telegramUser.photo_url;
-      } else {
-        $('accountAvatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(telegramUser.first_name || 'User')}&background=121621&color=bcf36b&size=128`;
-      }
-
-      $('accountName').textContent=[telegramUser.first_name,telegramUser.last_name].filter(Boolean).join(' ')||'Telegram reader';
-      $('accountId').textContent=`Telegram account · ${telegramUser.username?'@'+telegramUser.username:'verified'}`;
-      
-      $('splashMessage').textContent = "3. UI Init OK. Hiding splash...";
-      
-      // HIDE SPLASH SCREEN IMMEDIATELY (No waiting for backend)
-      $('splash').classList.add('opacity-0','transition-opacity');
-      setTimeout(()=>$('splash').remove(),350);
-      $('viewsContainer').classList.remove('hidden');
-      
-      // NOW TALK TO BACKEND IN BACKGROUND
-      apiFetch('/api/auth',{method:'POST',body:JSON.stringify({initData})})
-        .then(() => {
-            loadAccount().catch(console.warn);
-            loadBrowse(1).catch(console.warn);
-            loadLibrary().catch(console.warn);
-        })
-        .catch((e) => {
-            showDebugError("Auth failed: " + e.message);
-        });
-    } catch(e) {
-      $('splashMessage').textContent = "CRASH AT START: " + e.message;
+    if (isOwner) {
+      $('toggleFiltersBtn').classList.remove('hidden');
+      $('filterSource').disabled = false;
+      $('filterSource').classList.remove('opacity-50');
+      loadSourcesDropdown();
     }
+    
+    if (telegramUser.photo_url) {
+      $('accountAvatar').src = telegramUser.photo_url;
+    } else {
+      $('accountAvatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(telegramUser.first_name || 'User')}&background=121621&color=bcf36b&size=128`;
+    }
+
+    $('accountName').textContent=[telegramUser.first_name,telegramUser.last_name].filter(Boolean).join(' ')||'Telegram reader';
+    $('accountId').textContent=`Telegram account · ${telegramUser.username?'@'+telegramUser.username:'verified'}`;
+    
+    // HIDE SPLASH SCREEN IMMEDIATELY (No waiting for backend)
+    $('splash').classList.add('opacity-0','transition-opacity');
+    setTimeout(()=>$('splash').remove(),350);
+    $('viewsContainer').classList.remove('hidden');
+    
+    // NOW TALK TO BACKEND IN BACKGROUND
+    apiFetch('/api/auth',{method:'POST',body:JSON.stringify({initData})})
+      .then(() => {
+          loadAccount().catch(console.warn);
+          loadBrowse(1).catch(console.warn);
+          loadLibrary().catch(console.warn);
+      })
+      .catch((e) => {
+          showDebugError("Auth failed: " + e.message);
+      });
   }
   start();
 </script>
