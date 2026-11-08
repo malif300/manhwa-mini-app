@@ -19,12 +19,13 @@
   </div>
   
   <main id="viewsContainer" class="h-[100dvh] overflow-y-auto pb-20 safe-bottom hidden">
-    <section id="libraryView" class="hidden min-h-full"><header class="sticky top-0 z-20 border-b border-white/5 bg-[#090b12]/95 px-4 py-4 backdrop-blur"><p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Your collection</p><h1 class="mt-1 text-2xl font-bold">Library</h1></header><div id="libraryGrid" class="grid grid-cols-2 gap-3 p-4"></div></section>
-    <section id="updatesView" class="hidden min-h-full"><header class="sticky top-0 z-20 border-b border-white/5 bg-[#090b12]/95 px-4 py-4 backdrop-blur"><p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Fresh pages</p><h1 class="mt-1 text-2xl font-bold">Updates</h1></header><div id="updatesList" class="space-y-3 p-4"></div></section>
-    <section id="historyView" class="hidden min-h-full"><header class="sticky top-0 z-20 flex items-center justify-between border-b border-white/5 bg-[#090b12]/95 px-4 py-4 backdrop-blur"><div><p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Your trail</p><h1 class="mt-1 text-2xl font-bold">History</h1></div><button onclick="loadHistory()" class="rounded-xl border border-white/10 px-3 py-2 text-xs">↻ Refresh</button></header><div id="historyList" class="space-y-3 p-4"></div></section>
+    <!-- FIX: Changed py-4 to pt-16 pb-4 so the header pushes down below Telegram's native buttons -->
+    <section id="libraryView" class="hidden min-h-full"><header class="sticky top-0 z-20 border-b border-white/5 bg-[#090b12]/95 px-4 pt-16 pb-4 backdrop-blur"><p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Your collection</p><h1 class="mt-1 text-2xl font-bold">Library</h1></header><div id="libraryGrid" class="grid grid-cols-2 gap-3 p-4"></div></section>
+    <section id="updatesView" class="hidden min-h-full"><header class="sticky top-0 z-20 border-b border-white/5 bg-[#090b12]/95 px-4 pt-16 pb-4 backdrop-blur"><p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Fresh pages</p><h1 class="mt-1 text-2xl font-bold">Updates</h1></header><div id="updatesList" class="space-y-3 p-4"></div></section>
+    <section id="historyView" class="hidden min-h-full"><header class="sticky top-0 z-20 flex items-center justify-between border-b border-white/5 bg-[#090b12]/95 px-4 pt-16 pb-4 backdrop-blur"><div><p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Your trail</p><h1 class="mt-1 text-2xl font-bold">History</h1></div><button onclick="loadHistory()" class="rounded-xl border border-white/10 px-3 py-2 text-xs">↻ Refresh</button></header><div id="historyList" class="space-y-3 p-4"></div></section>
     
     <section id="browseView" class="min-h-full">
-      <header class="sticky top-0 z-30 border-b border-white/5 bg-[#090b12]/95 p-4 backdrop-blur">
+      <header class="sticky top-0 z-30 border-b border-white/5 bg-[#090b12]/95 px-4 pt-16 pb-4 backdrop-blur">
         <div class="mb-4 flex items-end justify-between">
           <div id="browseTitleContainer">
             <p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Explore</p>
@@ -65,7 +66,7 @@
     </section>
 
     <section id="moreView" class="hidden min-h-full">
-      <header class="border-b border-white/5 px-4 py-4">
+      <header class="border-b border-white/5 px-4 pt-16 pb-4">
         <p class="text-[10px] font-bold uppercase tracking-[.24em] text-lime-300">Personal</p>
         <h1 class="mt-1 text-2xl font-bold">Account</h1>
       </header>
@@ -127,7 +128,7 @@
   </nav>
   
   <section id="detailsView" class="fixed inset-0 z-50 hidden flex-col overflow-y-auto bg-[#090b12] pb-10">
-    <header class="sticky top-0 z-20 flex items-center border-b border-white/5 bg-[#090b12]/95 p-4 backdrop-blur">
+    <header class="sticky top-0 z-20 flex items-center border-b border-white/5 bg-[#090b12]/95 px-4 pt-16 pb-4 backdrop-blur">
       <button onclick="closeDetails()" class="mr-3 text-xl text-lime-200">‹</button>
       <span id="detailsHeaderTitle" class="truncate font-semibold"></span>
     </header>
@@ -159,7 +160,8 @@
   </section>
   
   <section id="readerView" class="fixed inset-0 z-[60] hidden flex-col">
-    <header id="readerTopBar" class="reader-bar absolute left-0 right-0 top-0 z-[70] flex items-center justify-between border-b border-white/10 px-4 py-3">
+    <!-- FIX: Changed py-3 to pt-16 pb-3 so the Webtoon and Pro buttons are clickable -->
+    <header id="readerTopBar" class="reader-bar absolute left-0 right-0 top-0 z-[70] flex items-center justify-between border-b border-white/10 px-4 pt-16 pb-3">
       <button onclick="closeReader()" class="text-xl text-lime-200">‹</button>
       <div class="min-w-0 px-3 text-center">
         <p id="readerTitle" class="truncate text-sm font-semibold"></p>
@@ -168,7 +170,8 @@
       <button onclick="togglePremiumPanel()" class="rounded-lg border border-lime-300/20 px-2 py-1 text-xs text-lime-200">✦ Pro</button>
     </header>
     
-    <div id="readerContent" class="flex-1 overflow-y-auto pb-28 pt-14"></div>
+    <!-- FIX: Adjusted pt-14 to pt-[90px] to account for the taller header -->
+    <div id="readerContent" class="flex-1 overflow-y-auto pb-28 pt-[90px]"></div>
     
     <footer id="readerBottomBar" class="reader-bar absolute bottom-0 left-0 right-0 z-[70] border-t border-white/10 px-3 pt-3 safe-bottom">
       <div class="mb-3 flex items-center justify-between gap-2">
@@ -374,6 +377,7 @@
   async function loadHistory(){const c=$('historyList');c.innerHTML='<div class="flex flex-col items-center py-10 text-slate-400"><div class="spinner"></div><p class="mt-4 text-sm">Loading your reading history…</p></div>';try{renderRows('historyList',await(await apiFetch('/api/history')).json(),'history')}catch(e){setMessage(c,`${e.message} · Check connection, then refresh.`,true)}}
   async function deleteHistory(id,row,b){b.disabled=true;try{await apiFetch(`/api/history/${encodeURIComponent(id)}`,{method:'DELETE'});row.remove();showToast('History removed')}catch(e){b.disabled=false;showToast(e.message)}}
   
+  // FIX: Split fetching so cover/description load instantly
   async function openDetails(id){
     currentMangaId=String(id);
     $('detailsView').classList.remove('hidden');
@@ -388,6 +392,7 @@
     $('detailGenres').replaceChildren();
     
     try{
+      // 1. Fetch basic info (Fast)
       const d=await(await apiFetch(`/api/manga/${encodeURIComponent(id)}`)).json();
       if(currentMangaId!==String(id))return;
       
@@ -402,8 +407,16 @@
       $('detailGenres').innerHTML='';
       (d.genre||[]).forEach(g=>{const x=document.createElement('span');x.className='rounded-full border border-white/10 px-3 py-1 text-xs';x.textContent=g;$('detailGenres').appendChild(x)});
       $('addToLibraryBtn').textContent=libraryIds.has(String(id))?'✓ In library · Remove':'＋ Add to library';
+
+      // 2. Fetch chapters and history in parallel (Slow)
+      const chaptersReq = apiFetch(`/api/manga/${encodeURIComponent(id)}/chapters`).then(r=>r.json()).catch(()=>[]);
+      const historyReq = apiFetch('/api/history').then(r=>r.json()).catch(()=>[]);
       
-      currentChapters=d.chapters||[];
+      const [chapters, history] = await Promise.all([chaptersReq, historyReq]);
+      
+      if(currentMangaId!==String(id))return;
+
+      currentChapters = chapters || [];
       window.currentChapters = currentChapters;
       
       $('chapterCount').textContent=`Chapters · ${currentChapters.length}`;
@@ -423,28 +436,22 @@
       });
       if(!currentChapters.length)c.textContent='No chapters available.';
 
-      try {
-        const history = await (await apiFetch('/api/history')).json();
-        const lastRead = history.find(h => String(h.mangaId) === String(id));
-        
-        if (lastRead) {
-          const lastIndex = currentChapters.findIndex(ch => String(ch.id) === String(lastRead.lastChapterId));
-          if (lastIndex !== -1) {
-            const resumeBtn = document.createElement('button');
-            resumeBtn.className = 'w-full rounded-xl bg-lime-300 py-3 font-bold text-black flex items-center justify-center gap-2';
-            resumeBtn.innerHTML = `<span style="font-size:18px;">▶</span> Resume Chapter ${currentChapters[lastIndex].number || (lastIndex + 1)}`;
-            resumeBtn.onclick = () => openReader(lastIndex);
-            $('resumeContainer').appendChild(resumeBtn);
-          }
-        } else if (currentChapters.length > 0) {
-          const startBtn = document.createElement('button');
-          startBtn.className = 'w-full rounded-xl bg-lime-300 py-3 font-bold text-black flex items-center justify-center gap-2';
-          startBtn.innerHTML = `<span style="font-size:18px;">▶</span> Start Reading`;
-          startBtn.onclick = () => openReader(0);
-          $('resumeContainer').appendChild(startBtn);
+      const lastRead = history.find(h => String(h.mangaId) === String(id));
+      if (lastRead) {
+        const lastIndex = currentChapters.findIndex(ch => String(ch.id) === String(lastRead.lastChapterId));
+        if (lastIndex !== -1) {
+          const resumeBtn = document.createElement('button');
+          resumeBtn.className = 'w-full rounded-xl bg-lime-300 py-3 font-bold text-black flex items-center justify-center gap-2';
+          resumeBtn.innerHTML = `<span style="font-size:18px;">▶</span> Resume Chapter ${currentChapters[lastIndex].number || (lastIndex + 1)}`;
+          resumeBtn.onclick = () => openReader(lastIndex);
+          $('resumeContainer').appendChild(resumeBtn);
         }
-      } catch (e) {
-        console.warn("Could not check history for resume", e);
+      } else if (currentChapters.length > 0) {
+        const startBtn = document.createElement('button');
+        startBtn.className = 'w-full rounded-xl bg-lime-300 py-3 font-bold text-black flex items-center justify-center gap-2';
+        startBtn.innerHTML = `<span style="font-size:18px;">▶</span> Start Reading`;
+        startBtn.onclick = () => openReader(0);
+        $('resumeContainer').appendChild(startBtn);
       }
       
     }catch(e){
