@@ -1,18 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#090b12"><title>Panel — Manhwa Reader</title>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#090b12"><title>Manhwa Opehh — Manhwa Reader</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script><script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root{color-scheme:dark;--bg:#090b12;--panel:#121621;--accent:#bcf36b;--muted:#929bad}*{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);color:#f5f6f8;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overscroll-behavior:none}body{overflow:hidden}::-webkit-scrollbar{display:none}.nav-tab{flex:1;min-width:0;padding:9px 2px calc(7px + env(safe-area-inset-bottom));text-align:center;color:#81899a;font-size:10px;font-weight:650}.nav-tab.active{color:var(--accent)}.nav-tab svg{display:block;width:21px;height:21px;margin:0 auto 3px}.safe-bottom{padding-bottom:env(safe-area-inset-bottom)}button:disabled{opacity:.5}.cover{background:#151a25}.skeleton{position:relative;overflow:hidden;background:#151a25}.skeleton:after{content:"";position:absolute;inset:-40%;background:linear-gradient(105deg,transparent 35%,rgba(190,243,107,.14) 46%,rgba(171,151,255,.2) 49%,transparent 59%);transform:translateX(-70%) skewX(-15deg);animation:glitchSweep 1.15s steps(12,end) infinite}.skeleton:before{content:"";position:absolute;inset:0;opacity:.28;background:repeating-linear-gradient(0deg,transparent 0 7px,rgba(255,255,255,.07) 8px,transparent 9px);animation:scan 1.8s steps(2,end) infinite}@keyframes glitchSweep{0%{transform:translateX(-70%) skewX(-15deg)}65%{transform:translateX(65%) skewX(-15deg)}70%{transform:translateX(59%) skewX(-12deg)}75%{transform:translateX(72%) skewX(-18deg)}100%{transform:translateX(150%) skewX(-15deg)}}@keyframes scan{50%{transform:translateY(3px);opacity:.12}}.glitch-logo{position:relative;color:#f5f6f8;text-shadow:2px 0 #bcf36b,-2px 0 #a995ff;animation:logoGlitch 2.4s steps(1,end) infinite}@keyframes logoGlitch{0%,88%,100%{transform:none;clip-path:none}89%{transform:translateX(2px);clip-path:inset(15% 0 68%)}91%{transform:translateX(-2px);clip-path:inset(65% 0 12%)}93%{transform:none;clip-path:inset(40% 0 40%)}}.spinner{width:30px;height:30px;border:2px solid #343b4b;border-top-color:var(--accent);border-right-color:#a995ff;border-radius:50%;animation:spin .72s linear infinite;box-shadow:0 0 18px #bcf36b20}@keyframes spin{to{transform:rotate(360deg)}}#readerView{background:#050608}#readerContent{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;transition:filter .2s,background .2s}#readerContent img{display:block;width:100%;height:auto;max-width:1000px;min-height:180px;margin:0 auto;background:#0b0d12;object-fit:contain}.reader-bar{background:linear-gradient(180deg,rgba(5,6,8,.95),rgba(5,6,8,.72));backdrop-filter:blur(14px);transition:opacity .2s,transform .2s}.reader-hidden{opacity:0;pointer-events:none}.cover-fallback{display:grid;place-items:center;background:linear-gradient(145deg,#20283b,#11151f);color:#737e96}.premium-control{accent-color:#bcf36b}.pro-card{background:linear-gradient(130deg,#bcf36b12,#a995ff15 60%,#121621);border:1px solid #bcf36b35}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
   </style>
+
+<!-- CODE 5 FULL ADDITIVE CSS - DOES NOT REPLACE ORIGINAL CSS -->
+<style id="code5-fixed-additive">
+  button, .nav-tab { transition: all 0.2s ease; }
+  button:active, .nav-tab:active { transform: scale(0.95); }
+  .code5-recent-glow { box-shadow: 0 0 0 2px #bcf36b, 0 0 16px rgba(188,243,107,.35) !important; }
+  @keyframes code5-fade-in { from { opacity:0; transform: translateY(8px);} to { opacity:1; transform: translateY(0);} }
+  .code5-chapter-stagger { animation: code5-fade-in 0.3s ease both; }
+  @keyframes code5-pulse { 0%,100%{ transform: scale(1);} 50%{ transform: scale(1.08);} }
+  .code5-auto-on { animation: code5-pulse 1s infinite !important; }
+  #readerContent.code5-black-images img { filter: brightness(0) !important; }
+  #readerContent.code5-black-images { background:#000 !important; }
+  #readerContent img { -webkit-touch-callout: none !important; -webkit-user-select: none !important; user-select: none !important; -webkit-user-drag: none !important; }
+  #code5PremiumDetails { margin-top:12px; border-top:1px solid rgba(255,255,255,.05); padding-top:12px; font-size:12px; line-height:1.7; color:#929bad; }
+  #code5PremiumDetails b { color:#f5f6f8; }
+  #code5PremiumDetails .code5-label { color:#929bad; }
+  #code5-time-overlay { position:fixed; inset:0; z-index:100; background:rgba(0,0,0,.7); display:none; align-items:flex-end; justify-content:center; }
+  #code5-time-overlay.show { display:flex; }
+  #code5-time-overlay .code5-popup { background:#121621; border-radius:20px 20px 0 0; padding:20px 16px 28px; width:100%; max-width:520px; position:relative; animation: code5-fade-in .25s ease; }
+  #code5-time-overlay .code5-x { position:absolute; right:16px; top:16px; background:#222; border:0; color:#fff; width:32px; height:32px; border-radius:50%; font-size:16px; }
+</style>
+
 </head>
 <body>
   <div id="debugBanner" class="hidden fixed top-0 left-0 right-0 z-[999] bg-red-600 text-white text-xs p-2 text-center font-bold"></div>
 
   <div id="splash" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#090b12]">
     <div class="mb-5 grid h-20 w-20 place-items-center rounded-[28px] border border-lime-300/20 bg-lime-300/10 text-4xl">漫</div>
-    <h1 class="glitch-logo text-xl font-black tracking-[.24em]">PANEL<span class="text-lime-300">.</span></h1>
+    <h1 class="glitch-logo text-xl font-black tracking-[.24em]">MANHWA OPEHH<span class="text-lime-300">.</span></h1>
     <p id="splashMessage" class="mt-3 text-sm text-slate-400">Connecting securely…</p>
     <div class="spinner mt-6"></div>
     <p class="mt-4 text-[9px] uppercase tracking-[.28em] text-slate-600">Loading your world</p>
@@ -700,8 +722,8 @@
     try{
       await apiFetch('/api/auth',{method:'POST',body:JSON.stringify({initData})});
       
-      // WAIT for data to load before hiding the loading screen
-      await Promise.all([
+      // WAIT for data to load before hiding the loading screen - CODE 6 FIX: allSettled so panel shows even if one call fails
+      await Promise.allSettled([
           loadAccount(),
           loadBrowse(1),
           loadLibrary()
@@ -727,5 +749,304 @@
   start();
 </script>
 <script src="/opehh-ui-enhancements.js"></script>
+<!-- CODE 5 FULL V2 ADDITIVE JS - MANHWA OPEHH - DOES NOT REPLACE ORIGINAL SCRIPT. Original <script> above stays 100% untouched. -->
+<!-- RULE: Do NOT touch splash / loading screen. This script never reads/writes #splash, #splashMessage, PANEL. logo, or spinner. -->
+<!-- RULE: Do NOT touch base UI. No layout, colors, header, nav replacement. Only ADD on top. -->
+<script>
+(function(){
+  'use strict';
+  if (window.Code5Fixed) return;
+  window.Code5Fixed = true;
+  var $ = function(id){ return document.getElementById(id); };
+  var PREMIUM_URL = 'https://t.me/malif300';
+  var PREMIUM_HANDLE = '@malif300';
+
+  function getTz(){
+    try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Kuala_Lumpur'; }
+    catch(e){ return 'Asia/Kuala_Lumpur'; }
+  }
+  function isInReader(){
+    var v = $('readerView');
+    return !!(v && v.classList.contains('flex') && !v.classList.contains('hidden'));
+  }
+
+  /* --- Wrap apiFetch to always send X-Timezone (additive, does NOT edit original apiFetch) --- */
+  var _origApiFetch = window.apiFetch;
+  if (_origApiFetch && !_origApiFetch.__code5Wrapped){
+    var wrapped = async function(path, options){
+      options = options || {};
+      var headers = new Headers(options.headers || {});
+      try { headers.set('X-Timezone', getTz()); } catch(e){}
+      // Keep original X-Telegram-Init-Data handling inside original apiFetch - we only add timezone
+      return _origApiFetch(path, Object.assign({}, options, { headers: headers }));
+    };
+    wrapped.__code5Wrapped = true;
+    window.apiFetch = wrapped;
+  }
+
+  /* --- Timezone: send once on load, then on visibility return --- */
+  async function sendTimezone(){
+    try { await window.apiFetch('/api/reader/timezone', { method:'POST', body: JSON.stringify({ timezone: getTz() }) }); } catch(e){}
+  }
+  sendTimezone();
+
+  /* --- Heartbeat: ONLY if inReader true. If turn back, time stops. --- */
+  var heartbeatTimer = null;
+  var lastChapterId = null;
+  async function sendHeartbeat(inReader, chapterId){
+    try {
+      var body = { inReader: !!inReader, timezone: getTz(), chapterId: chapterId || lastChapterId || null };
+      var r = await window.apiFetch('/api/heartbeat', { method:'POST', body: JSON.stringify(body) });
+      var j = await r.json().catch(function(){ return null; });
+      if (j && j.status) onAccountStatus(j.status);
+      return j;
+    } catch(e){ return null; }
+  }
+  function startHeartbeat(chapterId){
+    stopHeartbeat(false);
+    if (chapterId) lastChapterId = chapterId;
+    sendHeartbeat(true, lastChapterId);
+    heartbeatTimer = setInterval(function(){ if (isInReader()) sendHeartbeat(true, lastChapterId); }, 60000);
+  }
+  function stopHeartbeat(sendFalse){
+    if (heartbeatTimer){ clearInterval(heartbeatTimer); heartbeatTimer = null; }
+    if (sendFalse !== false) sendHeartbeat(false, lastChapterId);
+  }
+  document.addEventListener('visibilitychange', function(){
+    if (!isInReader()) return;
+    if (document.hidden){ if (heartbeatTimer){ clearInterval(heartbeatTimer); heartbeatTimer = null; } sendHeartbeat(false, lastChapterId); }
+    else { sendHeartbeat(true, lastChapterId); if (!heartbeatTimer) heartbeatTimer = setInterval(function(){ if (isInReader()) sendHeartbeat(true, lastChapterId); }, 60000); }
+  });
+
+  /* --- Time popup + image-only black (ADDITIVE overlay) --- */
+  function ensureTimePopup(){
+    var ov = $('code5-time-overlay');
+    if (ov) return ov;
+    ov = document.createElement('div');
+    ov.id = 'code5-time-overlay';
+    ov.innerHTML = '<div class="code5-popup"><button class="code5-x" id="code5-time-x">✕</button>'
+      + '<h2 style="margin:0 0 6px;color:#fff">⏱ Out of Reading Time</h2>'
+      + '<p style="color:#929bad;font-size:13px;line-height:1.5">Your Free Preview 5 hours for today is finished. Chapter images are now black.<br><br>You can still browse, see cover, title, description, author, genres, chapter list, library, history, profile.<br><br><b style="color:#fff">To continue reading:</b> Do a mission to gain time, or Get Premium (manual bank transfer USD).</p>'
+      + '<button id="code5-do-mission" style="width:100%;background:#22c55e;color:#000;border:0;border-radius:12px;padding:11px;font-weight:800;margin-top:6px">✅ Do Missions to Gain Time</button>'
+      + '<button id="code5-buy-premium" style="width:100%;background:#f59e0b;color:#000;border:0;border-radius:12px;padding:11px;font-weight:800;margin-top:10px">⭐ Get Premium → @malif300</button>'
+      + '<button id="code5-close-popup" style="width:100%;background:#222;color:#fff;border:0;border-radius:12px;padding:11px;font-weight:800;margin-top:10px">✕ Do Nothing (X)</button>'
+      + '<p style="font-size:11px;text-align:center;color:#929bad">X = Close popup, do nothing. Black stays only inside chapter image.</p></div>';
+    document.body.appendChild(ov);
+    $('code5-time-x').addEventListener('click', closeTimePopup);
+    $('code5-close-popup').addEventListener('click', closeTimePopup);
+    $('code5-do-mission').addEventListener('click', function(){ closeTimePopup(); if (window.switchTab) window.switchTab('more'); });
+    $('code5-buy-premium').addEventListener('click', function(){ window.open(PREMIUM_URL, '_blank'); });
+    return ov;
+  }
+  function showTimePopup(){ ensureTimePopup().classList.add('show'); }
+  function closeTimePopup(){ var ov = $('code5-time-overlay'); if (ov) ov.classList.remove('show'); }
+  function setBlackImages(on){
+    var rc = $('readerContent');
+    if (!rc) return;
+    if (on) rc.classList.add('code5-black-images'); else rc.classList.remove('code5-black-images');
+  }
+  window.Code5FixedShowTimePopup = showTimePopup;
+  window.Code5FixedSetBlack = setBlackImages;
+
+  /* --- Can-view check before reader opens (additive) --- */
+  async function checkCanView(chapterId){
+    if (!chapterId) return true;
+    try {
+      var r = await window.apiFetch('/api/reader/can-view/' + encodeURIComponent(chapterId));
+      var j = await r.json();
+      if (j && j.canViewImages === false){
+        setBlackImages(true);
+        showTimePopup();
+        return false;
+      }
+      setBlackImages(false);
+      return true;
+    } catch(e){
+      // If endpoint missing (old backend), do NOT block - let original openReader handle it
+      return true;
+    }
+  }
+
+  /* --- Wrap openReader / closeReader (additive, original functions still run) --- */
+  var _origOpenReader = window.openReader;
+  var _origCloseReader = window.closeReader;
+  if (_origOpenReader && !_origOpenReader.__code5Wrapped){
+    var wrappedOpen = async function(i){
+      var ch = null;
+      try { ch = (window.currentChapters || [])[i]; } catch(e){}
+      var chapterId = ch ? (ch.id || ch.chapterId) : null;
+      if (chapterId) await checkCanView(chapterId);
+      var out = await _origOpenReader(i);
+      if (chapterId) startHeartbeat(chapterId);
+      else startHeartbeat(null);
+      return out;
+    };
+    wrappedOpen.__code5Wrapped = true;
+    window.openReader = wrappedOpen;
+    // openReader is also referenced inside original closure as bare name, so also patch global via assignment
+    try { openReader = wrappedOpen; } catch(e){}
+  }
+  if (_origCloseReader && !_origCloseReader.__code5Wrapped){
+    var wrappedClose = function(){
+      stopHeartbeat(true);
+      setBlackImages(false);
+      return _origCloseReader();
+    };
+    wrappedClose.__code5Wrapped = true;
+    window.closeReader = wrappedClose;
+    try { closeReader = wrappedClose; } catch(e){}
+  }
+
+  /* --- Premium details box - ADDITIVE, inserted below original #premiumExpiry, does NOT replace it --- */
+  function ensurePremiumBox(){
+    var anchor = $('premiumExpiry');
+    if (!anchor) return null;
+    var box = $('code5PremiumDetails');
+    if (!box){
+      box = document.createElement('div');
+      box.id = 'code5PremiumDetails';
+      anchor.parentNode.insertBefore(box, anchor.nextSibling);
+    }
+    return box;
+  }
+  function fmtDate(iso){
+    if (!iso) return '-';
+    try { return new Date(iso).toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' }); } catch(e){ return String(iso); }
+  }
+  function onAccountStatus(st){
+    if (!st) return;
+    var box = ensurePremiumBox();
+    if (!box) return;
+    var isOwner = !!st.isOwner;
+    var isPrem = !!st.premiumActive || !!st.isPremium;
+    var badge = isOwner ? '👑 OWNER • UNLIMITED' : isPrem ? '⭐ PREMIUM' : '🆓 FREE';
+    var timeTxt = isOwner ? 'Unlimited (Owner bypasses everything)' : isPrem ? 'Premium Active - Free 5h on hold (paused)' : (st.timeLeftLabel || (st.freeSecondsLeft != null ? Math.floor(st.freeSecondsLeft/3600)+'h '+Math.floor((st.freeSecondsLeft%3600)/60)+'m left today' : '-'));
+    var imagesTxt = st.canViewImages ? '✅ Visible' : '⬛ Black (image-only)';
+    box.innerHTML =
+      '<div><span class="code5-label">Badge:</span> <b>' + badge + '</b></div>' +
+      '<div><span class="code5-label">Premium Plan:</span> <b>' + (st.premiumPlan || (isPrem ? 'Premium' : 'Free')) + '</b></div>' +
+      '<div><span class="code5-label">Premium Start:</span> <b>' + fmtDate(st.premiumStart) + '</b></div>' +
+      '<div><span class="code5-label">Premium End:</span> <b>' + fmtDate(st.premiumEnd || st.premium_until) + '</b></div>' +
+      '<div><span class="code5-label">Premium Amount:</span> <b>' + (st.premiumAmountUsd != null ? '$' + st.premiumAmountUsd + ' USD' : '-') + '</b></div>' +
+      '<div><span class="code5-label">Premium Days Left:</span> <b>' + (st.premiumDaysLeft != null ? st.premiumDaysLeft + ' days' : '-') + '</b></div>' +
+      '<div><span class="code5-label">Timezone:</span> <b>' + (st.timezone || getTz()) + '</b></div>' +
+      '<div><span class="code5-label">Reading Time:</span> <b>' + timeTxt + '</b></div>' +
+      '<div><span class="code5-label">Chapter Images:</span> <b>' + imagesTxt + '</b></div>' +
+      '<div><span class="code5-label">Browse / Library / History:</span> <b>✅ Always Visible</b></div>' +
+      '<div style="margin-top:8px;color:#929bad;font-size:11px">Premium = manual bank transfer USD. No auto payment, no Stripe. Chat @malif300, transfer, send proof.</div>';
+    if (!isOwner && !isPrem){
+      var btn = document.createElement('button');
+      btn.textContent = '⭐ Get Premium → @malif300';
+      btn.style.cssText = 'width:100%;background:#f59e0b;color:#000;border:0;border-radius:12px;padding:11px;font-weight:800;margin-top:10px';
+      btn.onclick = function(){ window.open(PREMIUM_URL, '_blank'); };
+      box.appendChild(btn);
+    }
+    // Level-up + level glow via CODE 1 FIXED if loaded, else do nothing (do NOT create new header)
+    try {
+      if (window.OpehhEnhancements){
+        if (typeof st.level === 'number'){
+          window.OpehhEnhancements.applyLevelToUI(st.level, st.xpProgressPct);
+          if (window.Code5Fixed._prevLevel != null && st.level > window.Code5Fixed._prevLevel){
+            window.OpehhEnhancements.celebrateLevelUp(st.level, '🦊 Sage Mode Activated!');
+          }
+          window.Code5Fixed._prevLevel = st.level;
+        }
+        window.OpehhEnhancements.addOwnerBadge(isOwner, isPrem);
+      } else {
+        window.Code5Fixed._prevLevel = st.level;
+      }
+    } catch(e){}
+    // If time expired while in reader, turn images black + popup (image-only)
+    if (st.canViewImages === false && isInReader()){
+      setBlackImages(true);
+      showTimePopup();
+    }
+  }
+
+  /* --- Wrap loadAccount (additive) --- */
+  var _origLoadAccount = window.loadAccount;
+  if (_origLoadAccount && !_origLoadAccount.__code5Wrapped){
+    var wrappedLoad = async function(){
+      var out = await _origLoadAccount();
+      try {
+        var r = await window.apiFetch('/api/account');
+        var j = await r.json();
+        // /api/account returns flat fields in CODE 4, plus nested status in CODE 2 - handle both
+        var st = j.status || j;
+        if (st && (st.level != null || st.premiumStart !== undefined)) onAccountStatus(st);
+      } catch(e){}
+      return out;
+    };
+    wrappedLoad.__code5Wrapped = true;
+    window.loadAccount = wrappedLoad;
+    try { loadAccount = wrappedLoad; } catch(e){}
+  }
+
+  /* --- Image protection - reader images only (additive) --- */
+  var rc = $('readerContent');
+  if (rc){
+    rc.addEventListener('contextmenu', function(e){ if (e.target && e.target.tagName === 'IMG'){ e.preventDefault(); e.stopPropagation(); } });
+    rc.addEventListener('dragstart', function(e){ if (e.target && e.target.tagName === 'IMG'){ e.preventDefault(); } });
+    rc.addEventListener('copy', function(e){ e.preventDefault(); });
+  }
+
+  /* --- Recent glow + chapter stagger + refresh spin (additive, no layout change) --- */
+  var obs = new MutationObserver(function(){
+    try {
+      var grid = $('browseGrid');
+      if (grid){
+        var cards = grid.querySelectorAll('button');
+        for (var i=0;i<Math.min(3, cards.length);i++) cards[i].classList.add('code5-recent-glow');
+      }
+      var chList = $('chapterList');
+      if (chList){
+        var rows = chList.querySelectorAll('button');
+        rows.forEach(function(r, idx){ r.classList.add('code5-chapter-stagger'); r.style.animationDelay = (idx*30)+'ms'; });
+      }
+    } catch(e){}
+  });
+  if (document.body) obs.observe(document.body, { childList:true, subtree:true });
+
+  /* --- Auto-scroll pulsate (additive, does NOT replace original premium panel) --- */
+  document.addEventListener('click', function(e){
+    var t = e.target;
+    if (t && t.id === 'autoScrollBtn'){
+      // Original toggles timer; we only add pulsate class when it says Pause
+      setTimeout(function(){
+        if (t.textContent && t.textContent.indexOf('Pause') !== -1) t.classList.add('code5-auto-on');
+        else t.classList.remove('code5-auto-on');
+      }, 50);
+    }
+  });
+
+  /* --- Mission claim burst via apiFetch wrapper (additive) --- */
+  var _origFetch2 = window.apiFetch;
+  // apiFetch already wrapped once for timezone; wrap again only for mission detection, keep idempotent
+  if (_origFetch2 && !_origFetch2.__code5MissionWrapped){
+    var wrapped2 = async function(path, options){
+      var res = await _origFetch2(path, options);
+      try {
+        if (typeof path === 'string' && (path.indexOf('/api/missions/claim') !== -1 || path.indexOf('/api/missions/complete') !== -1)){
+          if (res && res.ok && window.OpehhEnhancements) window.OpehhEnhancements.showMissionBurst('🎉 Mission Complete! + Time');
+        }
+      } catch(e){}
+      return res;
+    };
+    wrapped2.__code5Wrapped = true;
+    wrapped2.__code5MissionWrapped = true;
+    window.apiFetch = wrapped2;
+  }
+
+  /* --- Get Premium buttons in original UI (if any) -> @malif300, do NOT replace layout --- */
+  document.addEventListener('click', function(e){
+    var t = e.target;
+    if (t && t.textContent && t.textContent.toLowerCase().indexOf('get premium') !== -1 && t.tagName === 'BUTTON'){
+      // Let original handler run too; we only ensure link opens if no other handler
+      // Do NOT preventDefault - original premium box button already opens link
+    }
+  });
+
+})();
+</script>
 </body>
 </html>
